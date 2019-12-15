@@ -27,11 +27,12 @@ import de.quantummaid.messagemaid.useCases.payloadAndErrorPayload.PayloadAndErro
 import de.quantummaid.messagemaid.useCases.useCaseBus.UseCaseBus;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-import static de.quantummaid.messagemaid.shared.environment.TestEnvironmentProperty.RESULT;
-import static de.quantummaid.messagemaid.shared.environment.TestEnvironmentProperty.TEST_OBJECT;
+import static de.quantummaid.messagemaid.shared.environment.TestEnvironmentProperty.*;
+import static de.quantummaid.messagemaid.useCases.specialInvocations.UseCaseTestInvocation.USE_CASE_INVOCATIONS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -48,6 +49,24 @@ public final class SpecialInvocationUseCaseInvoker {
                 testEnvironment.setPropertyIfNotSet(RESULT, payload);
             } catch (final ExecutionException e) {
                 testEnvironment.setPropertyIfNotSet(RESULT, e);
+            } catch (final InterruptedException | TimeoutException e) {
+                throw new RuntimeException(e);
+            }
+            return null;
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    public static SpecialInvocationUseCaseInvoker whenBothUseCasesAreInvoked() {
+        return new SpecialInvocationUseCaseInvoker((useCaseBus, testEnvironment) -> {
+            final List<UseCaseTestInvocation> useCaseTestInvocations = (List<UseCaseTestInvocation>) testEnvironment.getProperty(USE_CASE_INVOCATIONS);
+            try {
+                for (final UseCaseTestInvocation useCaseTestInvocation : useCaseTestInvocations) {
+                    final PayloadAndErrorPayload<?, ?> payload = useCaseTestInvocation.execute();
+                    testEnvironment.addToListProperty(RESULT, payload);
+                }
+            } catch (final ExecutionException e) {
+                testEnvironment.setPropertyIfNotSet(EXCEPTION, e);
             } catch (final InterruptedException | TimeoutException e) {
                 throw new RuntimeException(e);
             }

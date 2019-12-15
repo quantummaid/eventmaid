@@ -33,6 +33,7 @@ import de.quantummaid.messagemaid.useCases.building.*;
 import java.util.Map;
 
 import static de.quantummaid.messagemaid.configuration.AsynchronousConfiguration.constantPoolSizeAsynchronousConfiguration;
+import static de.quantummaid.messagemaid.messageBus.MessageBusBuilder.aMessageBus;
 import static de.quantummaid.messagemaid.messageBus.MessageBusType.ASYNCHRONOUS;
 import static de.quantummaid.messagemaid.shared.environment.TestEnvironment.emptyTestEnvironment;
 import static de.quantummaid.messagemaid.shared.environment.TestEnvironmentProperty.MOCK;
@@ -53,7 +54,7 @@ public final class UseCaseInvocationSetupBuilder {
         this.testEnvironment = emptyTestEnvironment();
         this.invocationConfiguration = invocationConfiguration;
         this.extraInvocationConfiguration = extraInvocationConfiguration();
-        this.messageBusBuilder = MessageBusBuilder.aMessageBus();
+        this.messageBusBuilder = aMessageBus();
     }
 
     public static UseCaseInvocationSetupBuilder aUseCaseAdapterFor(final UseCaseInvocationConfiguration invocationConfiguration) {
@@ -160,7 +161,7 @@ public final class UseCaseInvocationSetupBuilder {
 
     private MessageBus createMessageBus() {
         final AsynchronousConfiguration asynchronousConfiguration = constantPoolSizeAsynchronousConfiguration(3);
-        this.messageBusBuilder = MessageBusBuilder.aMessageBus();
+        this.messageBusBuilder = aMessageBus();
         return messageBusBuilder.forType(ASYNCHRONOUS)
                 .withAsynchronousConfiguration(asynchronousConfiguration)
                 .build();

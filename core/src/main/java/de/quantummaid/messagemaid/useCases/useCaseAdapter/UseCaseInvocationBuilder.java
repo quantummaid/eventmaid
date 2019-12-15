@@ -198,13 +198,13 @@ public final class UseCaseInvocationBuilder implements Step1Builder, Instantiati
         public Step3Builder<U> forType(final EventType eventType) {
             return new Step3Builder<>() {
                 @Override
-                public InstantiationBuilder callingTheSingleUseCaseMethod() {
+                public Step1Builder callingTheSingleUseCaseMethod() {
                     final SinglePublicUseCaseMethodCaller<U> caller = singlePublicUseCaseMethodCaller(useCaseClass);
                     return callingBy(caller);
                 }
 
                 @Override
-                public InstantiationBuilder callingBy(final Caller<U> caller) {
+                public Step1Builder callingBy(final Caller<U> caller) {
                     lowLevelUseCaseAdapterBuilder.addUseCase(useCaseClass, eventType, caller);
                     return UseCaseInvocationBuilder.this;
                 }

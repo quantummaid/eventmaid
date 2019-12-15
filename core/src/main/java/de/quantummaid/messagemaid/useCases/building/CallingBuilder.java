@@ -47,7 +47,7 @@ public interface CallingBuilder<U> {
      * @param caller the {@link BiFunction} invoking the use case
      * @return the next step in the fluent builder interface
      */
-    default InstantiationBuilder calling(final BiFunction<U, Object, Map<String, Object>> caller) {
+    default Step1Builder calling(final BiFunction<U, Object, Map<String, Object>> caller) {
         return callingBy((useCase, event, callingContext) -> {
             final Map<String, Object> responseMap = caller.apply(useCase, event);
             return responseMap;
@@ -61,7 +61,7 @@ public interface CallingBuilder<U> {
      * @param caller the {@code BiConsumer} invoking the use case
      * @return the next step in the fluent builder interface
      */
-    default InstantiationBuilder callingVoid(final BiConsumer<U, Object> caller) {
+    default Step1Builder callingVoid(final BiConsumer<U, Object> caller) {
         return callingBy((usecase, event, callingContext) -> {
             caller.accept(usecase, event);
             return emptyMap();
@@ -75,7 +75,7 @@ public interface CallingBuilder<U> {
      *
      * @return the next step in the fluent builder interface
      */
-    InstantiationBuilder callingTheSingleUseCaseMethod();
+    Step1Builder callingTheSingleUseCaseMethod();
 
     /**
      * With this method the use case is invoked as defined in the given {@link Caller}.
@@ -83,5 +83,5 @@ public interface CallingBuilder<U> {
      * @param caller the caller to use
      * @return the next step in the fluent builder interface
      */
-    InstantiationBuilder callingBy(Caller<U> caller);
+    Step1Builder callingBy(Caller<U> caller);
 }

@@ -115,4 +115,6 @@
     <suppress checks="[IllegalCatch|FileLength]" files="ChannelSetupBuilde.java"/>
 
     <suppress checks="ClassFanOutComplexity" files="UseCaseInvocationBuilder.java"/>
+
+    <suppress checks="MethodLength" files="SpecialInvocationUseCaseBuilder.java"/>
 </suppressions>

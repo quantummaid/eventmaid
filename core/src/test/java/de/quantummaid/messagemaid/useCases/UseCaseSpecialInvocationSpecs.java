@@ -22,28 +22,38 @@
 package de.quantummaid.messagemaid.useCases;
 
 import de.quantummaid.messagemaid.shared.exceptions.TestException;
-import de.quantummaid.messagemaid.useCases.specialInvocations.Given;
-import de.quantummaid.messagemaid.useCases.specialInvocations.SpecialInvocationUseCaseBuilder;
-import de.quantummaid.messagemaid.useCases.specialInvocations.SpecialInvocationUseCaseInvoker;
-import de.quantummaid.messagemaid.useCases.specialInvocations.SpecialInvocationValidator;
 import org.junit.jupiter.api.Test;
+
+import static de.quantummaid.messagemaid.useCases.specialInvocations.Given.given;
+import static de.quantummaid.messagemaid.useCases.specialInvocations.SpecialInvocationUseCaseBuilder.aUseCaseAdapter;
+import static de.quantummaid.messagemaid.useCases.specialInvocations.SpecialInvocationUseCaseInvoker.whenBothUseCasesAreInvoked;
+import static de.quantummaid.messagemaid.useCases.specialInvocations.SpecialInvocationUseCaseInvoker.whenTheUSeCaseIsInvoked;
+import static de.quantummaid.messagemaid.useCases.specialInvocations.SpecialInvocationValidator.*;
 
 public class UseCaseSpecialInvocationSpecs {
 
     @Test
     void testUseCaseAdapter_canHandleExceptionDuringInitialization() {
         final TestException expectedException = new TestException();
-        Given.given(SpecialInvocationUseCaseBuilder.aUseCaseAdapter()
+        given(aUseCaseAdapter()
                 .forAnUseCaseThrowingAnExceptionDuringInitialization(expectedException))
-                .when(SpecialInvocationUseCaseInvoker.whenTheUSeCaseIsInvoked())
-                .then(SpecialInvocationValidator.expectExecutionExceptionContaining(expectedException));
+                .when(whenTheUSeCaseIsInvoked())
+                .then(expectExecutionExceptionContaining(expectedException));
     }
 
     @Test
     void testUseCaseAdapter_canHandleExceptionDuringStaticInitializer() {
-        Given.given(SpecialInvocationUseCaseBuilder.aUseCaseAdapter()
+        given(aUseCaseAdapter()
                 .forAnUseCaseThrowingAnExceptionDuringStaticInitializer())
-                .when(SpecialInvocationUseCaseInvoker.whenTheUSeCaseIsInvoked())
-                .then(SpecialInvocationValidator.expectExecutionExceptionContainingExceptionClass(TestException.class));
+                .when(whenTheUSeCaseIsInvoked())
+                .then(expectExecutionExceptionContainingExceptionClass(TestException.class));
+    }
+
+    @Test
+    void testUseCaseAdapter_canAcceptTwoUseCases() {
+        given(aUseCaseAdapter()
+                .withToUseCasesDefined())
+                .when(whenBothUseCasesAreInvoked())
+                .then(expectedBothUseCaseToBeInvoked());
     }
 }

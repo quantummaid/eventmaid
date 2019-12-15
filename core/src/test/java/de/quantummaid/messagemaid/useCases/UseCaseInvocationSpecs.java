@@ -29,90 +29,95 @@ import de.quantummaid.messagemaid.useCases.givenWhenThen.UseCaseInvocationValida
 import de.quantummaid.messagemaid.useCases.building.*;
 import org.junit.jupiter.api.Test;
 
+import static de.quantummaid.messagemaid.useCases.givenWhenThen.Given.given;
+import static de.quantummaid.messagemaid.useCases.givenWhenThen.UseCaseInvocationActionBuilder.*;
+import static de.quantummaid.messagemaid.useCases.givenWhenThen.UseCaseInvocationSetupBuilder.*;
+import static de.quantummaid.messagemaid.useCases.givenWhenThen.UseCaseInvocationValidationBuilder.*;
+
 
 public interface UseCaseInvocationSpecs {
 
     //UseCaseAdapter + UseCaseBus
     @Test
     default void testUseCaseAdapter_canInvokeUseCaseUsingTheAutomaticMethod(final UseCaseInvocationConfiguration configuration) {
-        Given.given(UseCaseInvocationSetupBuilder.aUseCaseAdapterFor(configuration)
+        given(aUseCaseAdapterFor(configuration)
                 .invokedUsingTheSingleUseCaseMethod())
-                .when(UseCaseInvocationActionBuilder.theAssociatedEventIsSend())
-                .then(UseCaseInvocationValidationBuilder.expectTheUseCaseToBeInvokedOnce());
+                .when(theAssociatedEventIsSend())
+                .then(expectTheUseCaseToBeInvokedOnce());
     }
 
     @Test
     default void testUseCaseAdapter_explicitMappingCanBeDefined(final UseCaseInvocationConfiguration configuration) {
-        Given.given(UseCaseInvocationSetupBuilder.aUseCaseAdapterFor(configuration)
+        given(aUseCaseAdapterFor(configuration)
                 .invokingTheUseCaseUsingTheDefinedMapping())
-                .when(UseCaseInvocationActionBuilder.theAssociatedEventIsSend())
-                .then(UseCaseInvocationValidationBuilder.expectTheUseCaseToBeInvokedOnce());
+                .when(theAssociatedEventIsSend())
+                .then(expectTheUseCaseToBeInvokedOnce());
     }
 
     @Test
     default void testUseCaseAdapter_canUseCustomInstantiation(final UseCaseInvocationConfiguration configuration) {
-        Given.given(UseCaseInvocationSetupBuilder.aUseCaseAdapterFor(configuration)
+        given(aUseCaseAdapterFor(configuration)
                 .invokedUsingTheSingleUseCaseMethodButACustomInstantiationMechanism())
-                .when(UseCaseInvocationActionBuilder.theAssociatedEventIsSend())
-                .then(UseCaseInvocationValidationBuilder.expectTheUseCaseToBeInvokedOnce());
+                .when(theAssociatedEventIsSend())
+                .then(expectTheUseCaseToBeInvokedOnce());
     }
 
     //errors
     @Test
     default void testUseCaseAdapter_failsForMissingRequestSerializationMapping(final UseCaseInvocationConfiguration configuration) {
-        Given.given(UseCaseInvocationSetupBuilder.aUseCaseAdapterFor(configuration)
+        given(aUseCaseAdapterFor(configuration)
                 .invokingTheUseCaseUsingAMissingRequestSerializationDefinition())
-                .when(UseCaseInvocationActionBuilder.anEventWithMissingMappingIsSend())
-                .then(UseCaseInvocationValidationBuilder.expectAnExecutionExceptionCauseByExceptionOfType(MissingRequestSerializationException.class));
+                .when(anEventWithMissingMappingIsSend())
+                .then(expectAnExecutionExceptionCauseByExceptionOfType(MissingRequestSerializationException.class));
     }
 
     @Test
     default void testUseCaseAdapter_failsForMissingRequestDeserializationMapping(final UseCaseInvocationConfiguration configuration) {
-        Given.given(UseCaseInvocationSetupBuilder.aUseCaseAdapterFor(configuration)
+        given(aUseCaseAdapterFor(configuration)
                 .invokingTheUseCaseUsingAMissingParameterDeserializationDefinition())
-                .when(UseCaseInvocationActionBuilder.anEventWithMissingMappingIsSend())
-                .then(UseCaseInvocationValidationBuilder.expectAnErrorPayloadOfType(MissingRequestDeserializationException.class));
+                .when(anEventWithMissingMappingIsSend())
+                .then(expectAnErrorPayloadOfType(MissingRequestDeserializationException.class));
     }
 
     @Test
     default void testUseCaseAdapter_failsForMissingResponseSerializationMapping(final UseCaseInvocationConfiguration configuration) {
-        Given.given(UseCaseInvocationSetupBuilder.aUseCaseAdapterFor(configuration)
+        given(aUseCaseAdapterFor(configuration)
                 .invokingTheUseCaseUsingAMissingResponseSerializationDefinition())
-                .when(UseCaseInvocationActionBuilder.anEventWithMissingMappingIsSend())
-                .then(UseCaseInvocationValidationBuilder.expectAnErrorPayloadOfType(MissingResponseSerializationException.class));
+                .when(anEventWithMissingMappingIsSend())
+                .then(expectAnErrorPayloadOfType(MissingResponseSerializationException.class));
     }
 
     @Test
     default void testUseCaseAdapter_failsForMissingExceptionSerializationMapping(final UseCaseInvocationConfiguration configuration) {
-        Given.given(UseCaseInvocationSetupBuilder.aUseCaseAdapterFor(configuration)
+        given(aUseCaseAdapterFor(configuration)
                 .throwingAnExceptionWithoutMappingWhenInvokingTheUseCase())
-                .when(UseCaseInvocationActionBuilder.anEventWithMissingMappingIsSend())
-                .then(UseCaseInvocationValidationBuilder.expectAnErrorPayloadOfType(MissingExceptionSerializationException.class));
+                .when(anEventWithMissingMappingIsSend())
+                .then(expectAnErrorPayloadOfType(MissingExceptionSerializationException.class));
     }
 
     @Test
     default void testUseCaseAdapter_failsForMissingResponseDeserializationMapping(final UseCaseInvocationConfiguration configuration) {
-        Given.given(UseCaseInvocationSetupBuilder.aUseCaseAdapterFor(configuration)
+        given(aUseCaseAdapterFor(configuration)
                 .invokingTheUseCaseUsingAMissingResponseDeserializationDefinition())
-                .when(UseCaseInvocationActionBuilder.anEventWithMissingMappingIsSend())
-                .then(UseCaseInvocationValidationBuilder.expectAnExecutionExceptionCauseByExceptionOfType(MissingResponseDeserializationException.class));
+                .when(anEventWithMissingMappingIsSend())
+                .then(expectAnExecutionExceptionCauseByExceptionOfType(MissingResponseDeserializationException.class));
     }
 
     //MessageFunction + directly using MessageBus
     @Test
     default void testUseCaseAdapter_canBeUsedInCombinationWithAMessageFunction(final UseCaseInvocationConfiguration configuration) {
-        Given.given(UseCaseInvocationSetupBuilder.aUseCaseAdapterFor(configuration)
+        given(aUseCaseAdapterFor(configuration)
                 .invokedUsingTheSingleUseCaseMethod())
-                .when(UseCaseInvocationActionBuilder.theRequestIsExecutedUsingAMessageFunction())
-                .then(UseCaseInvocationValidationBuilder.expectTheResponseToBeReceivedByTheMessageFunction());
+                .when(theRequestIsExecutedUsingAMessageFunction())
+                .then(expectTheResponseToBeReceivedByTheMessageFunction());
     }
 
     @Test
     default void testUseCaseAdapter_canAMessageFunctionAndACustomMapping(final UseCaseInvocationConfiguration configuration) {
-        Given.given(UseCaseInvocationSetupBuilder.aUseCaseAdapterFor(configuration)
+        given(aUseCaseAdapterFor(configuration)
                 .invokingTheUseCaseUsingTheDefinedMapping())
-                .when(UseCaseInvocationActionBuilder.theRequestIsExecutedUsingAMessageFunction())
-                .then(UseCaseInvocationValidationBuilder.expectTheResponseToBeReceivedByTheMessageFunction());
+                .when(theRequestIsExecutedUsingAMessageFunction())
+                .then(expectTheResponseToBeReceivedByTheMessageFunction());
     }
 
 

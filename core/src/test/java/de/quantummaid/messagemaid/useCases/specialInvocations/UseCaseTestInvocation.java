@@ -19,12 +19,15 @@
  * under the License.
  */
 
-package de.quantummaid.messagemaid.useCases.building;
+package de.quantummaid.messagemaid.useCases.specialInvocations;
 
-/**
- * This step allows to add a new use case invocation definition with {@link InvokingUseCaseStepBuilder#invokingUseCase(Class)} or
- * do not add further definitions and continue with the methods of
- * {@link InstantiationBuilder}.
- */
-public interface Step1Builder extends InvokingUseCaseStepBuilder, InstantiationBuilder {
+import de.quantummaid.messagemaid.useCases.payloadAndErrorPayload.PayloadAndErrorPayload;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
+public interface UseCaseTestInvocation {
+    String USE_CASE_INVOCATIONS = "use case invocations";
+
+    PayloadAndErrorPayload<?, ?> execute() throws InterruptedException, ExecutionException, TimeoutException;
 }
