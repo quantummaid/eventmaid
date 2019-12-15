@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2019 Richard Hauswald - https://quantummaid.de/.
+  ~
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements.  See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership.  The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+<suppressions>
+    <suppress checks="HideUtilityClassConstructor" files="FilterApplierFactory.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="StringValidator.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="QueryResolverFactory.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="ConstraintEnforcerFactory.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="NotNullEnforcer.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="EventBusFactory.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="ResponseHandlingSubscriberFactory.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="ReflectionUtils.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="RequestResponseRelationMapFactory.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="DefaultActionHandlerSet.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="ForbiddenUseCaseMethods.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="TransportMechanismFactory.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="MessageBusConsumeAction.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="UseCaseInvokingResponseEventType.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="DeserializationFilters.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="SerializationFilters.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="FilterTestUtils.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="SendingTestUtils.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="ShutdownTestUtils.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="SubscriptionTestUtils.java"/>
+    <suppress checks="HideUtilityClassConstructor" files=".*TestProperties.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="SharedTestValidations.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="PipeChannelMessageBusSharedTestValidations.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="PipeMessageBusSetupActions.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="MessageBusTestActions.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="SimpleTestRequest.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="ChannelTestActions.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="MessageFunctionBuilder.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="EventTypeMapper.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="EndingEvent.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="TestEvent.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="TestConstraint.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="UseCaseInvocationTestProperties.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="AsynchronousSendingTestUtils.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="TestFilter.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="PipeChannelMessageBusSharedTestProperties.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="ChannelTestValidations.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="PollingUtils.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="MessageBusTestValidations.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="VoidReturnRequest.java"/>
+
+    <suppress checks="ParameterNumber" files="MessageStatistics.java"/>
+    <suppress checks="ParameterNumber" files="UseCaseAdapterImpl.java"/>
+
+    <suppress checks="IllegalCatch" files="SynchronousDelivery.java"/>
+    <suppress checks="IllegalCatch" files="EventToUseCaseDispatcherBuilder.java"/>
+    <suppress checks="IllegalCatch" files="ChannelImpl.java"/>
+    <suppress checks="IllegalCatch" files="SerializedMessageBusImpl.java"/>
+    <suppress checks="IllegalCatch" files="UseCaseRequestExecutingSubscriber.java"/>
+    <suppress checks="IllegalCatch" files="ErrorListenerDelegatingMessageBusExceptionHandler.java"/>
+    <suppress checks="IllegalCatch" files="MessageFunctionImpl.java"/>
+
+    <suppress checks="VisibilityModifierCheck" files="AbstractSharedAnswerImpl.java"/>
+
+    <suppress checks="ParameterNumber" files="ChannelImpl.java"/>
+    <suppress checks="ParameterNumber" files="ProcessingContext.java"/>
+
+    <suppress checks="MethodName" files=".*.java"/>
+
+    <suppress checks="[MagicNumber|MethodCount|FileLength]" files=".*Specs.java"/>
+    <suppress checks="FileLength" files="MessageBusActionBuilder.java"/>
+    <suppress checks="[ExecutableStatementCount|MethodLength]" files=".*ConfigurationResolver.java"/>
+    <suppress checks="HideUtilityClassConstructor" files="[Given|When|Then].java"/>
+
+    <suppress checks="ChannelTestValidations" files="ChannelTestActions.java"/>
+    <suppress checks="[HideUtilityClassConstructor|AnonInnerLength]" files="MessageBusTestExceptionHandler.java"/>
+    <suppress checks="[HideUtilityClassConstructor|AnonInnerLength]" files="TestChannelErrorHandler.java"/>
+
+    <suppress checks="MagicNumber" files="AsynchronousSendingTestUtils.java"/>
+    <suppress checks="MagicNumber" files="PipeMessageBusTestActions.java"/>
+    <suppress checks="MagicNumber" files="SerializedMessageBusActionBuilder.java"/>
+    <suppress checks="MagicNumber" files="ShutdownTestUtils.java"/>
+
+    <suppress checks="MethodCount" files="MessageBusActionBuilder.java"/>
+    <suppress checks="MethodCount" files="MessageBusSetupBuilder.java"/>
+    <suppress checks="MethodCount" files="MessageBusSetupBuilder.java"/>
+    <suppress checks="MethodCount" files="MessageBusValidationBuilder.java"/>
+    <suppress checks="MethodCount" files="ChannelValidationBuilder.java"/>
+    <suppress checks="MethodCount" files="TestMessageFunctionValidationBuilder.java"/>
+    <suppress checks="MethodCount" files="MessageBusTestActions.java"/>
+
+    <suppress checks="[IllegalCatch|MethodCount]" files="SendingTestUtils.java"/>
+    <suppress checks="[FileLength|MethodCount|IllegalCatch]" files="ChannelSetupBuilder.java"/>
+    <suppress checks="[MagicNumber|MethodCount]" files="ChannelActionBuilder.java"/>
+    <suppress checks="[IllegalCatch|MagicNumber]" files="Then.java"/>
+    <suppress checks="[IllegalCatch|MagicNumber]" files="TestMessageFunctionActionBuilder.java"/>
+    <suppress checks="IllegalCatch" files="TestMessageFunctionValidationBuilder.java"/>
+    <suppress checks="IllegalCatch" files="ShutdownTestUtils.java"/>
+    <suppress checks="[IllegalCatch|FileLength]" files="ChannelSetupBuilde.java"/>
+
+    <suppress checks="ClassFanOutComplexity" files="UseCaseInvocationBuilder.java"/>
+</suppressions>
