@@ -33,7 +33,7 @@
     <packaging>pom</packaging>
     <groupId>de.quantummaid.messagemaid</groupId>
     <artifactId>messagemaid-parent</artifactId>
-    <version>1.0.10</version>
+    <version>1.0.11</version>
     <modules>
         <module>core</module>
     </modules>

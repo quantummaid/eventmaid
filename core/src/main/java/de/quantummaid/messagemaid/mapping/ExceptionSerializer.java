@@ -22,11 +22,12 @@
 package de.quantummaid.messagemaid.mapping;
 
 import de.quantummaid.messagemaid.internal.collections.predicatemap.PredicateMap;
-import de.quantummaid.messagemaid.internal.enforcing.NotNullEnforcer;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
+
+import static de.quantummaid.messagemaid.internal.enforcing.NotNullEnforcer.ensureNotNull;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ExceptionSerializer {
@@ -34,7 +35,7 @@ public final class ExceptionSerializer {
     private final PredicateMap<Exception, Mapifier<Exception>> mapifiers;
 
     public static ExceptionSerializer exceptionSerializer(final PredicateMap<Exception, Mapifier<Exception>> mapifierMap) {
-        NotNullEnforcer.ensureNotNull(mapifierMap, "mapifiers");
+        ensureNotNull(mapifierMap, "mapifiers");
         return new ExceptionSerializer(mapifierMap);
     }
 

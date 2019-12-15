@@ -23,22 +23,19 @@ package de.quantummaid.messagemaid.useCases.useCaseAdapter;
 
 import de.quantummaid.messagemaid.internal.collections.filtermap.FilterMapBuilder;
 import de.quantummaid.messagemaid.internal.collections.predicatemap.PredicateMapBuilder;
-import de.quantummaid.messagemaid.mapping.*;
+import de.quantummaid.messagemaid.mapping.Demapifier;
+import de.quantummaid.messagemaid.mapping.Mapifier;
 import de.quantummaid.messagemaid.messageBus.MessageBus;
 import de.quantummaid.messagemaid.processingContext.EventType;
 import de.quantummaid.messagemaid.serializedMessageBus.SerializedMessageBus;
 import de.quantummaid.messagemaid.useCases.building.*;
 import de.quantummaid.messagemaid.useCases.useCaseAdapter.parameterInjecting.ParameterInjectionInformation;
-import de.quantummaid.messagemaid.useCases.useCaseAdapter.parameterInjecting.ParameterInjector;
-import de.quantummaid.messagemaid.useCases.useCaseAdapter.parameterInjecting.ParameterInjectorBuilder;
 import de.quantummaid.messagemaid.useCases.useCaseAdapter.usecaseCalling.Caller;
 import de.quantummaid.messagemaid.useCases.useCaseAdapter.usecaseCalling.SinglePublicUseCaseMethodCaller;
 import de.quantummaid.messagemaid.useCases.useCaseAdapter.usecaseInstantiating.UseCaseInstantiator;
 import de.quantummaid.messagemaid.useCases.useCaseBus.UseCaseBus;
 import lombok.RequiredArgsConstructor;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -46,9 +43,9 @@ import java.util.function.Predicate;
 
 import static de.quantummaid.messagemaid.internal.collections.filtermap.FilterMapBuilder.filterMapBuilder;
 import static de.quantummaid.messagemaid.internal.collections.predicatemap.PredicateMapBuilder.predicateMapBuilder;
-import static de.quantummaid.messagemaid.mapping.Deserializer.deserializer;
-import static de.quantummaid.messagemaid.mapping.ExceptionSerializer.exceptionSerializer;
-import static de.quantummaid.messagemaid.mapping.Serializer.serializer;
+import static de.quantummaid.messagemaid.useCases.useCaseAdapter.LowLevelUseCaseAdapterBuilder.aLowLevelUseCaseInvocationBuilder;
+import static de.quantummaid.messagemaid.useCases.useCaseAdapter.usecaseCalling.SinglePublicUseCaseMethodCaller.singlePublicUseCaseMethodCaller;
+import static de.quantummaid.messagemaid.useCases.useCaseBus.UseCaseBus.useCaseBus;
 import static lombok.AccessLevel.PRIVATE;
 
 /**
@@ -59,15 +56,12 @@ public final class UseCaseInvocationBuilder implements Step1Builder, Instantiati
         RequestDeserializationStep1Builder, RequestSerializationStep1Builder,
         ResponseSerializationStep1Builder, ExceptionSerializationStep1Builder, ResponseDeserializationStep1Builder,
         FinalStepBuilder {
-    private final List<UseCaseCallingInformation<?>> useCaseCallingInformationList = new LinkedList<>();
+    private final LowLevelUseCaseAdapterBuilder lowLevelUseCaseAdapterBuilder = aLowLevelUseCaseInvocationBuilder();
     private final PredicateMapBuilder<Object, Mapifier<Object>> requestSerializers = predicateMapBuilder();
     private final FilterMapBuilder<Class<?>, Map<String, Object>, Demapifier<?>> requestDeserializers = filterMapBuilder();
     private final FilterMapBuilder<Class<?>, Map<String, Object>, Demapifier<?>> responseDeserializers = filterMapBuilder();
     private final PredicateMapBuilder<Object, Mapifier<Object>> responseSerializers = predicateMapBuilder();
     private final PredicateMapBuilder<Exception, Mapifier<Exception>> exceptionSerializers = predicateMapBuilder();
-    private final ParameterInjectorBuilder parameterInjectorBuilder = ParameterInjectorBuilder.aParameterInjectorBuilder();
-
-    private UseCaseInstantiator useCaseInstantiator;
 
     /**
      * Starts the configuration of a {@link UseCaseAdapter}.
@@ -88,8 +82,13 @@ public final class UseCaseInvocationBuilder implements Step1Builder, Instantiati
     }
 
     @Override
+    public <U> Step2Builder<U> invokingUseCase(final Class<U> useCaseClass) {
+        return new UseCaseCallingBuilder<>(useCaseClass);
+    }
+
+    @Override
     public RequestSerializationStep1Builder obtainingUseCaseInstancesUsing(final UseCaseInstantiator useCaseInstantiator) {
-        this.useCaseInstantiator = useCaseInstantiator;
+        lowLevelUseCaseAdapterBuilder.setUseCaseInstantiator(useCaseInstantiator);
         return this;
     }
 
@@ -120,11 +119,6 @@ public final class UseCaseInvocationBuilder implements Step1Builder, Instantiati
     public ResponseSerializationStep1Builder deserializeRequestsToUseCaseParametersPerDefault(final Demapifier<Object> mapper) {
         requestDeserializers.setDefaultValue(mapper);
         return this;
-    }
-
-    @Override
-    public <U> Step2Builder<U> invokingUseCase(final Class<U> useCaseClass) {
-        return new UseCaseCallingBuilder<>(useCaseClass);
     }
 
     @Override
@@ -175,7 +169,7 @@ public final class UseCaseInvocationBuilder implements Step1Builder, Instantiati
     @Override
     public <T> FinalStepBuilder injectParameterForClass(final Class<T> parameterClass,
                                                         final Function<ParameterInjectionInformation, T> injectionFunction) {
-        parameterInjectorBuilder.withAnInjection(parameterClass, injectionFunction);
+        lowLevelUseCaseAdapterBuilder.injectForClass(parameterClass, injectionFunction);
         return this;
     }
 
@@ -183,20 +177,17 @@ public final class UseCaseInvocationBuilder implements Step1Builder, Instantiati
     public UseCaseBus build(final MessageBus messageBus) {
         final UseCaseAdapter useCaseAdapter = buildAsStandaloneAdapter();
         final SerializedMessageBus serializedMessageBus = useCaseAdapter.attachAndEnhance(messageBus);
-        return UseCaseBus.useCaseBus(serializedMessageBus);
+        return useCaseBus(serializedMessageBus);
     }
 
     @Override
     public UseCaseAdapter buildAsStandaloneAdapter() {
-        final Serializer requestSerializer = serializer(requestSerializers.build());
-        final Deserializer requestDeserializer = deserializer(requestDeserializers.build());
-        final Serializer responseSerializer = serializer(responseSerializers.build());
-        final ExceptionSerializer exceptionSerializer = exceptionSerializer(exceptionSerializers.build());
-        final Deserializer responseDeserializer = deserializer(responseDeserializers.build());
-        final ParameterInjector parameterInjector = parameterInjectorBuilder.build();
-        return UseCaseAdapterImpl.useCaseAdapterImpl(useCaseCallingInformationList, useCaseInstantiator,
-                requestSerializer, requestDeserializer, responseSerializer, exceptionSerializer, responseDeserializer,
-                parameterInjector);
+        lowLevelUseCaseAdapterBuilder.setRequestSerializers(requestSerializers);
+        lowLevelUseCaseAdapterBuilder.setRequestDeserializers(requestDeserializers);
+        lowLevelUseCaseAdapterBuilder.setReseponseSerializers(responseSerializers);
+        lowLevelUseCaseAdapterBuilder.setExceptionSerializers(exceptionSerializers);
+        lowLevelUseCaseAdapterBuilder.setResponseDeserializers(responseDeserializers);
+        return lowLevelUseCaseAdapterBuilder.build();
     }
 
     @RequiredArgsConstructor(access = PRIVATE)
@@ -208,15 +199,13 @@ public final class UseCaseInvocationBuilder implements Step1Builder, Instantiati
             return new Step3Builder<>() {
                 @Override
                 public InstantiationBuilder callingTheSingleUseCaseMethod() {
-                    final SinglePublicUseCaseMethodCaller<U> caller = SinglePublicUseCaseMethodCaller.singlePublicUseCaseMethodCaller(useCaseClass);
+                    final SinglePublicUseCaseMethodCaller<U> caller = singlePublicUseCaseMethodCaller(useCaseClass);
                     return callingBy(caller);
                 }
 
                 @Override
                 public InstantiationBuilder callingBy(final Caller<U> caller) {
-                    final UseCaseCallingInformation<U> invocationInformation = UseCaseCallingInformation.useCaseInvocationInformation(useCaseClass,
-                            eventType, caller);
-                    useCaseCallingInformationList.add(invocationInformation);
+                    lowLevelUseCaseAdapterBuilder.addUseCase(useCaseClass, eventType, caller);
                     return UseCaseInvocationBuilder.this;
                 }
             };

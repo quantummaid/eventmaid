@@ -22,11 +22,12 @@
 package de.quantummaid.messagemaid.mapping;
 
 import de.quantummaid.messagemaid.internal.collections.predicatemap.PredicateMap;
-import de.quantummaid.messagemaid.internal.enforcing.NotNullEnforcer;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
+
+import static de.quantummaid.messagemaid.internal.enforcing.NotNullEnforcer.ensureNotNull;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Serializer {
@@ -34,7 +35,7 @@ public final class Serializer {
     private final PredicateMap<Object, Mapifier<Object>> mapifiers;
 
     public static Serializer serializer(final PredicateMap<Object, Mapifier<Object>> mapifierPredicateMap) {
-        NotNullEnforcer.ensureNotNull(mapifierPredicateMap, "mapifiers");
+        ensureNotNull(mapifierPredicateMap, "mapifiers");
         return new Serializer(mapifierPredicateMap);
     }
 

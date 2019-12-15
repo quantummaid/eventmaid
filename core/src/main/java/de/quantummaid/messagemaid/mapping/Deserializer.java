@@ -22,11 +22,12 @@
 package de.quantummaid.messagemaid.mapping;
 
 import de.quantummaid.messagemaid.internal.collections.filtermap.FilterMap;
-import de.quantummaid.messagemaid.internal.enforcing.NotNullEnforcer;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
+
+import static de.quantummaid.messagemaid.internal.enforcing.NotNullEnforcer.ensureNotNull;
 
 /**
  * The {@code Deserializer} takes a target {@link Class} and a {@link Map} to create a new object of the given class based on the
@@ -46,7 +47,7 @@ public final class Deserializer {
      */
     public static Deserializer deserializer(
             final FilterMap<Class<?>, Map<String, Object>, Demapifier<?>> requestMappers) {
-        NotNullEnforcer.ensureNotNull(requestMappers, "demapifierMap");
+        ensureNotNull(requestMappers, "demapifierMap");
         return new Deserializer(requestMappers);
     }
 

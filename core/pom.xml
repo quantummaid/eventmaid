@@ -27,10 +27,10 @@
     <parent>
         <groupId>de.quantummaid.messagemaid</groupId>
         <artifactId>messagemaid-parent</artifactId>
-        <version>1.0.10</version>
+        <version>1.0.11</version>
     </parent>
     <artifactId>core</artifactId>
-    <version>1.0.10</version>
+    <version>${parent.version}</version>
     <name>MessageMaid - Core Library</name>
 
     <packaging>jar</packaging>
