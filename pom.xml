@@ -27,13 +27,13 @@
     <parent>
         <groupId>de.quantummaid</groupId>
         <artifactId>quantummaid-opensource-parent</artifactId>
-        <version>1.0.0</version>
+        <version>0.9.1</version>
     </parent>
 
     <packaging>pom</packaging>
     <groupId>de.quantummaid.messagemaid</groupId>
     <artifactId>messagemaid-parent</artifactId>
-    <version>1.0.12</version>
+    <version>0.9.0</version>
     <modules>
         <module>core</module>
     </modules>
@@ -42,16 +42,20 @@
     <description>
         MessageMaid provides extensible messaging support on a use case and architectural level.
     </description>
+
     <url>https://github.com/quantummaid/messagemaid/</url>
+
     <scm>
         <url>https://github.com/quantummaid/messagemaid</url>
         <connection>scm:git:git://github.com/quantummaid/messagemaid.git</connection>
         <developerConnection>scm:git:git@github.com:quantummaid/messagemaid.git</developerConnection>
     </scm>
+
     <organization>
         <name>Richard Hauswald</name>
         <url>https://www.quantummaid.de</url>
     </organization>
+
     <developers>
         <developer>
             <name>Richard Hauswald</name>
@@ -60,6 +64,7 @@
             <organizationUrl>https://www.quantummaid.de</organizationUrl>
         </developer>
     </developers>
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -67,6 +72,10 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <properties>
+        <plugin-update-file-checksum>35fe547b725ca8e71b0d13c8c21894df</plugin-update-file-checksum>
+    </properties>
 
     <distributionManagement>
         <repository>
