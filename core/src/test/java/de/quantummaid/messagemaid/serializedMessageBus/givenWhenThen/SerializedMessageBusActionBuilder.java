@@ -52,6 +52,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @RequiredArgsConstructor(access = PRIVATE)
 public final class SerializedMessageBusActionBuilder {
+    private static final int DEFAULT_WAITING_TIMEOUT = 25;
     private final TestAction<SerializedMessageBus> testAction;
 
     public static SerializedMessageBusActionBuilder aMapDataIsSend() {
@@ -176,7 +177,7 @@ public final class SerializedMessageBusActionBuilder {
             testEnvironment.setPropertyIfNotSet(SEND_DATA, data);
             try {
                 final PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> result =
-                        serializedMessageBus.invokeAndWait(eventType, data, 10, MILLISECONDS);
+                        serializedMessageBus.invokeAndWait(eventType, data, DEFAULT_WAITING_TIMEOUT, MILLISECONDS);
                 testEnvironment.setPropertyIfNotSet(RESULT, result);
             } catch (final InterruptedException | ExecutionException | TimeoutException e) {
                 testEnvironment.setPropertyIfNotSet(EXCEPTION, e);
@@ -210,7 +211,7 @@ public final class SerializedMessageBusActionBuilder {
                 final Class<ErrorTestMessage> eClass = ErrorTestMessage.class;
                 final TimeUnit unit = MILLISECONDS;
                 final PayloadAndErrorPayload<TestMessageOfInterest, ErrorTestMessage> result = serializedMessageBus
-                        .invokeAndWaitDeserialized(eventType, message, TestMessageOfInterest.class, eClass, 10, unit);
+                        .invokeAndWaitDeserialized(eventType, message, TestMessageOfInterest.class, eClass, DEFAULT_WAITING_TIMEOUT, unit);
                 testEnvironment.setPropertyIfNotSet(RESULT, result);
             } catch (final InterruptedException | ExecutionException | TimeoutException e) {
                 testEnvironment.setPropertyIfNotSet(EXCEPTION, e);
@@ -242,7 +243,7 @@ public final class SerializedMessageBusActionBuilder {
             testEnvironment.setPropertyIfNotSet(SEND_DATA, message);
             try {
                 final PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> result = serializedMessageBus
-                        .invokeAndWaitSerializedOnly(eventType, message, 10, MILLISECONDS);
+                        .invokeAndWaitSerializedOnly(eventType, message, DEFAULT_WAITING_TIMEOUT, MILLISECONDS);
                 testEnvironment.setPropertyIfNotSet(RESULT, result);
             } catch (final InterruptedException | ExecutionException | TimeoutException e) {
                 testEnvironment.setPropertyIfNotSet(EXCEPTION, e);
@@ -266,13 +267,13 @@ public final class SerializedMessageBusActionBuilder {
     public static SerializedMessageBusActionBuilder anObjectWithoutKnownSerializationIsSendWithTimeout() {
         return sendObjectWithoutKnownSerialization((eventType, serializedMessageBus, object) -> {
             return serializedMessageBus
-                    .invokeAndWaitDeserialized(eventType, object, Object.class, Object.class, 10, MILLISECONDS);
+                    .invokeAndWaitDeserialized(eventType, object, Object.class, Object.class, DEFAULT_WAITING_TIMEOUT, MILLISECONDS);
         });
     }
 
     public static SerializedMessageBusActionBuilder aObjectWithoutKnownSerializationIsSendForInvokeAndSerializeOnlyWithTimeout() {
         return sendObjectWithoutKnownSerialization((eventType, serializedMessageBus, object) -> {
-            return serializedMessageBus.invokeAndWaitSerializedOnly(eventType, object, 10, MILLISECONDS);
+            return serializedMessageBus.invokeAndWaitSerializedOnly(eventType, object, DEFAULT_WAITING_TIMEOUT, MILLISECONDS);
         });
     }
 
@@ -287,7 +288,7 @@ public final class SerializedMessageBusActionBuilder {
         return sendTestMessageResultingInSomeError((eventType, serializedMessageBus, object) -> {
             final Class<InvalidTestMessage> responseClasses = InvalidTestMessage.class;
             return serializedMessageBus
-                    .invokeAndWaitDeserialized(eventType, object, responseClasses, responseClasses, 10, MILLISECONDS);
+                    .invokeAndWaitDeserialized(eventType, object, responseClasses, responseClasses, DEFAULT_WAITING_TIMEOUT, MILLISECONDS);
         });
     }
 
