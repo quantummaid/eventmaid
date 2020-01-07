@@ -26,19 +26,19 @@
     <parent>
         <groupId>de.quantummaid</groupId>
         <artifactId>quantummaid-opensource-parent</artifactId>
-        <version>0.9.5</version>
+        <version>0.9.6</version>
     </parent>
 
     <groupId>de.quantummaid.messagemaid</groupId>
     <artifactId>messagemaid-parent</artifactId>
-    <version>0.9.3</version>
+    <version>0.9.4</version>
     <packaging>pom</packaging>
 
     <name>messagemaid</name>
     <description>
         MessageMaid provides extensible messaging support on a use case and architectural level.
     </description>
-    <url>https://github.com/quantummaid/messagemaid/</url>
+    <url>https://github.com/quantummaid/messagemaid</url>
     <organization>
         <name>Richard Hauswald</name>
         <url>https://www.quantummaid.de</url>
