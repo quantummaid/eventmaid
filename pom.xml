@@ -31,7 +31,7 @@
 
     <groupId>de.quantummaid.messagemaid</groupId>
     <artifactId>messagemaid-parent</artifactId>
-    <version>0.9.5</version>
+    <version>0.9.6</version>
     <packaging>pom</packaging>
 
     <name>messagemaid</name>

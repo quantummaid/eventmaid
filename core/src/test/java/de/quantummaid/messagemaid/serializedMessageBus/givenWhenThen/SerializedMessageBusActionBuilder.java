@@ -52,7 +52,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @RequiredArgsConstructor(access = PRIVATE)
 public final class SerializedMessageBusActionBuilder {
-    private static final int DEFAULT_WAITING_TIMEOUT = 25;
+    private static final int DEFAULT_WAITING_TIMEOUT = 50;
     private final TestAction<SerializedMessageBus> testAction;
 
     public static SerializedMessageBusActionBuilder aMapDataIsSend() {
