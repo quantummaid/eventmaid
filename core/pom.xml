@@ -26,11 +26,11 @@
     <parent>
         <groupId>de.quantummaid.messagemaid</groupId>
         <artifactId>messagemaid-parent</artifactId>
-        <version>0.9.10</version>
+        <version>0.9.11</version>
     </parent>
 
     <artifactId>core</artifactId>
-    <version>0.9.10</version>
+    <version>0.9.11</version>
     <packaging>jar</packaging>
 
     <name>MessageMaid - Core Library</name>
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.10</version>
+            <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
