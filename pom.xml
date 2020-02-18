@@ -26,12 +26,12 @@
     <parent>
         <groupId>de.quantummaid</groupId>
         <artifactId>quantummaid-opensource-parent</artifactId>
-        <version>0.9.12</version>
+        <version>0.9.13</version>
     </parent>
 
     <groupId>de.quantummaid.messagemaid</groupId>
     <artifactId>messagemaid-parent</artifactId>
-    <version>0.9.12</version>
+    <version>0.9.13</version>
     <packaging>pom</packaging>
 
     <name>messagemaid</name>
