@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2019 Richard Hauswald - https://quantummaid.de/.
+  ~ Copyright (c) 2020 Richard Hauswald - https://quantummaid.de/.
   ~
   ~ Licensed to the Apache Software Foundation (ASF) under one
   ~ or more contributor license agreements.  See the NOTICE file
@@ -24,16 +24,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>de.quantummaid.messagemaid</groupId>
-        <artifactId>messagemaid-parent</artifactId>
-        <version>0.9.13</version>
+        <groupId>de.quantummaid.eventmaid</groupId>
+        <artifactId>eventmaid-parent</artifactId>
+        <version>0.9.14</version>
     </parent>
 
     <artifactId>core</artifactId>
-    <version>0.9.13</version>
+    <version>0.9.14</version>
     <packaging>jar</packaging>
 
-    <name>MessageMaid - Core Library</name>
+    <name>EventMaid - Core Library</name>
 
     <properties>
         <checkstyle.suppressions.location>

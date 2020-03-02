@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2019 Richard Hauswald - https://quantummaid.de/.
+  ~ Copyright (c) 2020 Richard Hauswald - https://quantummaid.de/.
   ~
   ~ Licensed to the Apache Software Foundation (ASF) under one
   ~ or more contributor license agreements.  See the NOTICE file
@@ -26,66 +26,66 @@
         xsi:schemaLocation="https://github.com/spotbugs/filter/3.0.0 https://raw.githubusercontent.com/spotbugs/spotbugs/3.1.0/spotbugs/etc/findbugsfilter.xsd">
 
     <Match>
-        <Class name="de.quantummaid.messagemaid.internal.pipe.statistics.PipeStatistics"/>
+        <Class name="de.quantummaid.eventmaid.internal.pipe.statistics.PipeStatistics"/>
         <Method name="equals"/>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
     </Match>
     <Match>
-        <Class name="de.quantummaid.messagemaid.internal.pipe.statistics.PipeStatistics"/>
+        <Class name="de.quantummaid.eventmaid.internal.pipe.statistics.PipeStatistics"/>
         <Method name="hashCode"/>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
     </Match>
 
     <Match>
-        <Class name="de.quantummaid.messagemaid.channel.statistics.ChannelStatistics"/>
+        <Class name="de.quantummaid.eventmaid.channel.statistics.ChannelStatistics"/>
         <Method name="equals"/>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
     </Match>
     <Match>
-        <Class name="de.quantummaid.messagemaid.channel.statistics.ChannelStatistics"/>
+        <Class name="de.quantummaid.eventmaid.channel.statistics.ChannelStatistics"/>
         <Method name="hashCode"/>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
     </Match>
     <Match>
-        <Class name="de.quantummaid.messagemaid.channel.ChannelStatistics"/>
+        <Class name="de.quantummaid.eventmaid.channel.ChannelStatistics"/>
         <Method name="equals"/>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
     </Match>
     <Match>
-        <Class name="de.quantummaid.messagemaid.channel.ChannelStatistics"/>
-        <Method name="hashCode"/>
-        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
-    </Match>
-
-    <Match>
-        <Class name="de.quantummaid.messagemaid.messageBus.statistics.MessageBusStatistics"/>
-        <Method name="equals"/>
-        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
-    </Match>
-    <Match>
-        <Class name="de.quantummaid.messagemaid.messageBus.statistics.MessageBusStatistics"/>
+        <Class name="de.quantummaid.eventmaid.channel.ChannelStatistics"/>
         <Method name="hashCode"/>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
     </Match>
 
     <Match>
-        <Class name="de.quantummaid.messagemaid.internal.pipe.statistics.PipeStatistics"/>
+        <Class name="de.quantummaid.eventmaid.messageBus.statistics.MessageBusStatistics"/>
         <Method name="equals"/>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
     </Match>
     <Match>
-        <Class name="de.quantummaid.messagemaid.internal.pipe.statistics.PipeStatistics"/>
+        <Class name="de.quantummaid.eventmaid.messageBus.statistics.MessageBusStatistics"/>
         <Method name="hashCode"/>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
     </Match>
 
     <Match>
-        <Class name="de.quantummaid.messagemaid.channel.givenWhenThen.TestChannelErrorHandler$3"/>
+        <Class name="de.quantummaid.eventmaid.internal.pipe.statistics.PipeStatistics"/>
+        <Method name="equals"/>
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
+    </Match>
+    <Match>
+        <Class name="de.quantummaid.eventmaid.internal.pipe.statistics.PipeStatistics"/>
+        <Method name="hashCode"/>
+        <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
+    </Match>
+
+    <Match>
+        <Class name="de.quantummaid.eventmaid.channel.givenWhenThen.TestChannelErrorHandler$3"/>
         <Bug pattern="BC_UNCONFIRMED_CAST"/>
     </Match>
 
     <Match>
-        <Class name="de.quantummaid.messagemaid.useCases.exceptionThrowing.ExceptionThrowingConfigurationResolver$ExpectedExceptionAllowMessageBusExceptionHandler"/>
+        <Class name="de.quantummaid.eventmaid.useCases.exceptionThrowing.ExceptionThrowingConfigurationResolver$ExpectedExceptionAllowMessageBusExceptionHandler"/>
         <Bug pattern="BC_UNCONFIRMED_CAST"/>
     </Match>
 

@@ -1,15 +1,15 @@
-# MessageMaid
-MessageMaid is a library for building messaging architectures.
+# EventMaid
+EventMaid is a library for building messaging architectures.
 
 It provides components to integrate parts of your business 
 logic in a loosely coupled fashion. This allows for applications to be highly
 extensible and easily tested.
 
 ## Maven Dependency
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.quantummaid.messagemaid/core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.messagemaid.messagemaid/core)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.quantummaid.eventmaid/core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.eventmaid.eventmaid/core)
 ```
 <dependency>
-    <groupId>de.quantummaid.messagemaid</groupId>
+    <groupId>de.quantummaid.eventmaid</groupId>
     <artifactId>core</artifactId>
     <version>...</version>
 </dependency>
@@ -45,10 +45,10 @@ But also the communication between use cases is greatly simplified with a Messag
 at the scope of Domain Objects messaging patterns can provide loosely coupling and dynamism.
 
 ## Installation
-To use MessageMaid add the following Maven depedency to your 'pom.xml`:
+To use EventMaid add the following Maven depedency to your 'pom.xml`:
 ```java
 <dependency>
-    <groupId>de.quantummaid.messagemaid</groupId>
+    <groupId>de.quantummaid.eventmaid</groupId>
     <artifactId>core</artifactId>
     <version>1.0.2</version>
 </dependency>
@@ -59,7 +59,7 @@ To use MessageMaid add the following Maven depedency to your 'pom.xml`:
 ### Channel
 A common task in message driven architectures is sending messages from a bunch of producers to 
 an arbitrary amount of consumers, handling errors and allowing to add Filters dynamically.
-In MessageMaid Channels provide these kind of properties:
+In EventMaid Channels provide these kind of properties:
  - add or remove sender and receiver dynamically
  - define the type of send messages, when sender and receiver have agreed on the format of the send messages
  - change the messages during the transportation via Filter: changing the contents of the message, blocking invalid messages,...
@@ -307,7 +307,7 @@ try {
 ```
 
 These methods follow the contract, that classes from the standard java library with
-these sort of methods abide to. Channel (as all closable Classes in MessageMaid) 
+these sort of methods abide to. Channel (as all closable Classes in EventMaid) 
 also implement the `AutoClosable` interface and can be used in a try-with-resources statement.
 
 #### Configuring the Channel
@@ -1206,7 +1206,7 @@ is cancelled, no `FollowUpActions` will be executed.
 ### Use case invocation
 In [qcec](#qcec) we have seen, how to use messaging in the scope of a single use case. But
 invoking use cases using messaging provides the same benefits: low coupling and high
-extensibility. MessageMaid provides several concepts to ease the configuration of the 
+extensibility. EventMaid provides several concepts to ease the configuration of the 
 application's use case invocation.
 
 #### UseCaseBus
