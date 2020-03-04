@@ -50,7 +50,7 @@ To use EventMaid add the following Maven depedency to your 'pom.xml`:
 <dependency>
     <groupId>de.quantummaid.eventmaid</groupId>
     <artifactId>core</artifactId>
-    <version>1.0.2</version>
+    <version>0.9.14</version>
 </dependency>
 ```
 
