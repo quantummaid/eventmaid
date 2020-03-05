@@ -36,7 +36,6 @@ import de.quantummaid.eventmaid.useCases.useCaseAdapter.usecaseInstantiating.Use
 import de.quantummaid.eventmaid.useCases.useCaseBus.UseCaseBus;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -58,8 +57,8 @@ public final class UseCaseInvocationBuilder implements Step1Builder, Instantiati
         FinalStepBuilder {
     private final LowLevelUseCaseAdapterBuilder lowLevelUseCaseAdapterBuilder = aLowLevelUseCaseInvocationBuilder();
     private final PredicateMapBuilder<Object, Mapifier<Object>> requestSerializers = predicateMapBuilder();
-    private final FilterMapBuilder<Class<?>, Map<String, Object>, Demapifier<?>> requestDeserializers = filterMapBuilder();
-    private final FilterMapBuilder<Class<?>, Map<String, Object>, Demapifier<?>> responseDeserializers = filterMapBuilder();
+    private final FilterMapBuilder<Class<?>, Object, Demapifier<?>> requestDeserializers = filterMapBuilder();
+    private final FilterMapBuilder<Class<?>, Object, Demapifier<?>> responseDeserializers = filterMapBuilder();
     private final PredicateMapBuilder<Object, Mapifier<Object>> responseSerializers = predicateMapBuilder();
     private final PredicateMapBuilder<Exception, Mapifier<Exception>> exceptionSerializers = predicateMapBuilder();
 
@@ -108,7 +107,7 @@ public final class UseCaseInvocationBuilder implements Step1Builder, Instantiati
 
     @Override
     public <T> RequestDeserializationStep2Builder<T> deserializeRequestsToUseCaseParametersThat(
-            final BiPredicate<Class<?>, Map<String, Object>> filter) {
+            final BiPredicate<Class<?>, Object> filter) {
         return requestMapper -> {
             requestDeserializers.put(filter, requestMapper);
             return this;
@@ -153,7 +152,7 @@ public final class UseCaseInvocationBuilder implements Step1Builder, Instantiati
 
     @Override
     public <T> ResponseDeserializationStep2Builder<T> deserializingUseCaseResponsesOfThat(
-            final BiPredicate<Class<?>, Map<String, Object>> filter) {
+            final BiPredicate<Class<?>, Object> filter) {
         return mapper -> {
             responseDeserializers.put(filter, mapper);
             return this;

@@ -69,20 +69,21 @@ public class SeveralParameterInvocationConfiguration implements UseCaseInvocatio
         };
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DeAndSerializationDefinition<RequestDeserializationStep1Builder> getRequestDeserializationDefinitions() {
         return requestDeserializationStep1Builder -> {
             requestDeserializationStep1Builder
                     .deserializingRequestsToUseCaseParametersOfType(SeveralParameterUseCaseRequest1.class)
                     .using((targetType, map) -> {
-                        final int intParameter = parseInt(map.get(PARAMETER_MAP_PROPERTY_NAME_INT) + "");
-                        final boolean booleanParameter = valueOf(map.get(PARAMETER_MAP_PROPERTY_NAME_BOOLEAN) + "");
+                        final int intParameter = parseInt(((Map<Object, Object>) map).get(PARAMETER_MAP_PROPERTY_NAME_INT) + "");
+                        final boolean booleanParameter = valueOf(((Map<Object, Object>) map).get(PARAMETER_MAP_PROPERTY_NAME_BOOLEAN) + "");
                         return SeveralParameterUseCaseRequest1.severalParameterUseCaseRequest1(intParameter, booleanParameter);
                     })
                     .deserializingRequestsToUseCaseParametersOfType(SeveralParameterUseCaseRequest2.class)
                     .using((targetType, map) -> {
-                        final String stringParameter = String.valueOf(map.get(PARAMETER_MAP_PROPERTY_NAME_STRING));
-                        final Object objectParameter = map.get(PARAMETER_MAP_PROPERTY_NAME_OBJECT);
+                        final String stringParameter = String.valueOf(((Map<Object, Object>) map).get(PARAMETER_MAP_PROPERTY_NAME_STRING));
+                        final Object objectParameter = ((Map<Object, Object>) map).get(PARAMETER_MAP_PROPERTY_NAME_OBJECT);
                         return SeveralParameterUseCaseRequest2.severalParameterUseCaseRequest2(stringParameter, objectParameter);
                     });
         };
@@ -108,15 +109,16 @@ public class SeveralParameterInvocationConfiguration implements UseCaseInvocatio
         };
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DeAndSerializationDefinition<ResponseDeserializationStep1Builder> getResponseDeserializationDefinitions() {
         return responseDeserializationStep1Builder -> {
             responseDeserializationStep1Builder.deserializingUseCaseResponsesOfType(SeveralParameterUseCaseResponse.class)
                     .using((targetType, map) -> {
-                        final int intParameter = parseInt(map.get(PARAMETER_MAP_PROPERTY_NAME_INT) + "");
-                        final boolean booleanParameter = valueOf(map.get(PARAMETER_MAP_PROPERTY_NAME_BOOLEAN) + "");
-                        final String stringParameter = String.valueOf(map.get(PARAMETER_MAP_PROPERTY_NAME_STRING));
-                        final Object objectParameter = map.get(PARAMETER_MAP_PROPERTY_NAME_OBJECT);
+                        final int intParameter = parseInt(((Map<Object, Object>) map).get(PARAMETER_MAP_PROPERTY_NAME_INT) + "");
+                        final boolean booleanParameter = valueOf(((Map<Object, Object>) map).get(PARAMETER_MAP_PROPERTY_NAME_BOOLEAN) + "");
+                        final String stringParameter = String.valueOf(((Map<Object, Object>) map).get(PARAMETER_MAP_PROPERTY_NAME_STRING));
+                        final Object objectParameter = ((Map<Object, Object>) map).get(PARAMETER_MAP_PROPERTY_NAME_OBJECT);
                         return SeveralParameterUseCaseResponse.severalParameterUseCaseResponse(intParameter, booleanParameter, objectParameter, stringParameter);
                     });
         };

@@ -22,11 +22,10 @@
 package de.quantummaid.eventmaid.useCases.useCaseBus;
 
 import de.quantummaid.eventmaid.processingContext.EventType;
-import de.quantummaid.eventmaid.useCases.payloadAndErrorPayload.PayloadAndErrorPayload;
 import de.quantummaid.eventmaid.serializedMessageBus.SerializedMessageBus;
+import de.quantummaid.eventmaid.useCases.payloadAndErrorPayload.PayloadAndErrorPayload;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -58,14 +57,14 @@ class UseCaseBusImpl implements UseCaseBus {
     }
 
     @Override
-    public PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> invokeAndWaitNotDeserialized(
+    public PayloadAndErrorPayload<Object, Object> invokeAndWaitNotDeserialized(
             final EventType eventType,
             final Object data) throws InterruptedException, ExecutionException {
         return serializedMessageBus.invokeAndWaitSerializedOnly(eventType, data);
     }
 
     @Override
-    public PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> invokeAndWaitNotDeserialized(
+    public PayloadAndErrorPayload<Object, Object> invokeAndWaitNotDeserialized(
             final EventType eventType,
             final Object data,
             final long timeout,

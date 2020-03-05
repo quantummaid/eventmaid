@@ -25,8 +25,6 @@ import de.quantummaid.eventmaid.internal.collections.predicatemap.PredicateMap;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Map;
-
 import static de.quantummaid.eventmaid.internal.enforcing.NotNullEnforcer.ensureNotNull;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -39,7 +37,7 @@ public final class ExceptionSerializer {
         return new ExceptionSerializer(mapifierMap);
     }
 
-    public Map<String, Object> serializeException(final Exception returnValue) {
+    public Object serializeException(final Exception returnValue) {
         final Mapifier<Exception> mapper = mapifiers.get(returnValue);
         return mapper.map(returnValue);
     }

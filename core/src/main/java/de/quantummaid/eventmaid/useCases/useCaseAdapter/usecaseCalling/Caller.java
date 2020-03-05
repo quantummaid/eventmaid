@@ -39,13 +39,13 @@ public interface Caller<U> {
     /**
      * Invokes the use case with the data from the event.
      *
-     * @param useCase             the use case instance
-     * @param event               the data for the use case
-     * @param callingContext      contains objects for serialization or parameter injection
+     * @param useCase        the use case instance
+     * @param event          the data for the use case
+     * @param callingContext contains objects for serialization or parameter injection
      * @return the serialized return value
-     * @throws Exception          all exceptions declared by the use case method are rethrown
+     * @throws Exception all exceptions declared by the use case method are rethrown
      */
-    Map<String, Object> call(U useCase,
-                             Object event,
-                             CallingContext callingContext) throws Exception;
+    Object call(U useCase,
+                Object event,
+                CallingContext callingContext) throws Exception;
 }

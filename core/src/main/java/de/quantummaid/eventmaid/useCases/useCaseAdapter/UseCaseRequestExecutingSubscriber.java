@@ -83,8 +83,8 @@ final class UseCaseRequestExecutingSubscriber implements Subscriber<ProcessingCo
         final Class<?> useCaseClass = useCaseCallingInformation.getUseCaseClass();
         final Object useCase = useCaseInstantiator.instantiate(useCaseClass);
         final Map<String, Object> payload = processingContext.getPayload();
-        Map<String, Object> serializedReturnValue = null;
-        Map<String, Object> serializedException = null;
+        Object serializedReturnValue = null;
+        Object serializedException = null;
         try {
             serializedReturnValue = caller.call(useCase, payload, callingContext);
         } catch (final Exception e) {

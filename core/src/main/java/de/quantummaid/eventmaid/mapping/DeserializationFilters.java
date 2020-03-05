@@ -23,7 +23,6 @@ package de.quantummaid.eventmaid.mapping;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.Map;
 import java.util.function.BiPredicate;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -43,7 +42,7 @@ public final class DeserializationFilters {
      * @param <T>  the type, the to apply the deserialization on
      * @return a filter checking if the object of deserialize is of the given type
      */
-    public static <T extends Class<?>> BiPredicate<T, Map<String, Object>> areOfType(final T type) {
+    public static <T extends Class<?>> BiPredicate<T, Object> areOfType(final T type) {
         return (requestedType, map) -> {
             if (requestedType == null || requestedType.equals(Void.class)) {
                 return type == null || type.equals(Void.class);

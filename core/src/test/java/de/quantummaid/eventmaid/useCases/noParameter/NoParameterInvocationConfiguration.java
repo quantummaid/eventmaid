@@ -79,11 +79,12 @@ public class NoParameterInvocationConfiguration implements UseCaseInvocationConf
         };
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DeAndSerializationDefinition<ResponseDeserializationStep1Builder> getResponseDeserializationDefinitions() {
         return responseDeserializationStep1Builder -> {
             responseDeserializationStep1Builder.deserializingUseCaseResponsesOfType(String.class)
-                    .using((targetType, map) -> (String) map.get(RETURN_MAP_PROPERTY_NAME));
+                    .using((targetType, map) -> (String) ((Map<Object, Object>) map).get(RETURN_MAP_PROPERTY_NAME));
         };
     }
 
@@ -100,7 +101,6 @@ public class NoParameterInvocationConfiguration implements UseCaseInvocationConf
         return RequestExpectedResultTuple.requestExpectedResultTuple(requestObject, expectedResult);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public InstantiationBuilder applyCustomUseCaseMethodCallingConfiguration(final Step3Builder<?> step3Builder) {
         return step3Builder.callingBy((useCase, event, callingContext) -> {

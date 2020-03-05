@@ -106,6 +106,7 @@ public final class SpecialInvocationUseCaseBuilder {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public SpecialInvocationUseCaseBuilder withToUseCasesDefined() {
         final MessageBus messageBus = asynchronousMessageBus();
         final EventType type1 = eventTypeFromString("A");
@@ -124,7 +125,7 @@ public final class SpecialInvocationUseCaseBuilder {
                 .throwingAnExceptionByDefaultIfNoRequestSerializationCanBeApplied()
 
                 .deserializingRequestsToUseCaseParametersOfType(SingleParameterEvent.class).using((targetType, map) -> {
-                    return singleParameterEvent((String) map.get(mapProperty));
+                    return singleParameterEvent((String) ((Map<Object, Object>) map).get(mapProperty));
                 })
                 .throwAnExceptionByDefaultIfNoUseCaseRequestDeserializationCanBeApplied()
 
@@ -138,10 +139,10 @@ public final class SpecialInvocationUseCaseBuilder {
                 .respondingWithAWrappingMissingExceptionSerializationExceptionByDefault()
 
                 .deserializingUseCaseResponsesOfType(SingleParameterResponse.class).using((targetType, map) -> {
-                    return singleParameterResponse((String) map.get(mapProperty));
+                    return singleParameterResponse((String) ((Map<Object, Object>) map).get(mapProperty));
                 })
                 .deserializingUseCaseResponsesOfType(String.class).using((targetType, map) -> {
-                    return (String) map.get(mapProperty);
+                    return (String) ((Map<Object, Object>) map).get(mapProperty);
                 })
                 .throwAnExceptionByDefaultIfNoResponseDeserializationCanBeApplied()
                 .build(messageBus);

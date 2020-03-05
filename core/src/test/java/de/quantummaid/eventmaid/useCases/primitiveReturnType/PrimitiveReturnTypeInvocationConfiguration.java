@@ -62,12 +62,13 @@ public class PrimitiveReturnTypeInvocationConfiguration implements UseCaseInvoca
         };
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DeAndSerializationDefinition<RequestDeserializationStep1Builder> getRequestDeserializationDefinitions() {
         return requestDeserializationStep1Builder -> {
             requestDeserializationStep1Builder.deserializingRequestsToUseCaseParametersOfType(PrimitiveReturnTypeRequest.class)
                     .using((targetType, map) -> {
-                        final String stringValue = map.get(PARAMETER_MAP_PROPERTY_NAME) + "";
+                        final String stringValue = ((Map<Object, Object>) map).get(PARAMETER_MAP_PROPERTY_NAME) + "";
                         return PrimitiveReturnTypeRequest.primitiveReturnTypeRequest(Integer.parseInt(stringValue));
                     });
         };
@@ -88,11 +89,12 @@ public class PrimitiveReturnTypeInvocationConfiguration implements UseCaseInvoca
         };
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DeAndSerializationDefinition<ResponseDeserializationStep1Builder> getResponseDeserializationDefinitions() {
         return responseDeserializationStep1Builder -> {
             responseDeserializationStep1Builder.deserializingUseCaseResponsesOfType(Integer.class)
-                    .using((targetType, map) -> Integer.parseInt(map.get(RETURN_MAP_PROPERTY_NAME) + ""));
+                    .using((targetType, map) -> Integer.parseInt(((Map<Object, Object>) map).get(RETURN_MAP_PROPERTY_NAME) + ""));
         };
     }
 

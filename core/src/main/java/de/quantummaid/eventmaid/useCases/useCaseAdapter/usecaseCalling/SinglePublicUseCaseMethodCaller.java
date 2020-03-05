@@ -29,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 
 import static de.quantummaid.eventmaid.internal.reflections.ForbiddenUseCaseMethods.NOT_ALLOWED_USECASE_PUBLIC_METHODS;
 import static de.quantummaid.eventmaid.internal.reflections.ReflectionUtils.getAllPublicMethods;
@@ -72,11 +71,11 @@ public final class SinglePublicUseCaseMethodCaller<U> implements Caller<U> {
     }
 
     @Override
-    public Map<String, Object> call(final U useCase, final Object event, final CallingContext callingContext) throws Exception {
+    public Object call(final U useCase, final Object event, final CallingContext callingContext) throws Exception {
         final Deserializer deserializer = callingContext.getDeserializer();
         final Serializer serializer = callingContext.getSerializer();
         final ParameterInjector injector = callingContext.getParameterInjector();
-        final Map<String, Object> responseMap = methodInvoker.invoke(useCase, event, deserializer, serializer, injector);
+        final Object responseMap = methodInvoker.invoke(useCase, event, deserializer, serializer, injector);
         return responseMap;
     }
 }

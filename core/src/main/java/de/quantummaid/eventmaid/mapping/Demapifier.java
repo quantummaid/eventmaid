@@ -41,5 +41,5 @@ public interface Demapifier<T> {
      * @param map        a map containing necessary data
      * @return the newly created object
      */
-    T map(Class<T> targetType, Map<String, Object> map);
+    T map(Class<T> targetType, Object map);
 }

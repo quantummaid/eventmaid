@@ -28,7 +28,6 @@ import de.quantummaid.eventmaid.serializedMessageBus.SerializedMessageBus;
 import de.quantummaid.eventmaid.useCases.payloadAndErrorPayload.PayloadAndErrorPayload;
 import de.quantummaid.eventmaid.useCases.useCaseAdapter.UseCaseInvocationBuilder;
 
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -101,7 +100,7 @@ public interface UseCaseBus {
      * @throws InterruptedException if the waiting {@link Thread} was interrupted
      * @throws ExecutionException   if an exception occurred
      */
-    PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> invokeAndWaitNotDeserialized(
+    PayloadAndErrorPayload<Object, Object> invokeAndWaitNotDeserialized(
             EventType eventType,
             Object data) throws InterruptedException, ExecutionException;
 
@@ -118,7 +117,7 @@ public interface UseCaseBus {
      * @throws ExecutionException   if an exception occurred
      * @throws TimeoutException     if the timeout expires
      */
-    PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> invokeAndWaitNotDeserialized(
+    PayloadAndErrorPayload<Object, Object> invokeAndWaitNotDeserialized(
             EventType eventType,
             Object data,
             long timeout,

@@ -61,24 +61,25 @@ public class SerializedMessageBusImpl implements SerializedMessageBus {
     }
 
     @Override
-    public MessageId send(final EventType eventType, final Map<String, Object> data) {
+    public MessageId send(final EventType eventType, final Object data) {
         return messageBus.send(eventType, data);
     }
 
     @Override
-    public MessageId send(final EventType eventType, final Map<String, Object> data, final CorrelationId correlationId) {
+    public MessageId send(final EventType eventType, final Object data, final CorrelationId correlationId) {
         return messageBus.send(eventType, data, correlationId);
     }
 
     @Override
-    public MessageId send(final EventType eventType, final Map<String, Object> data, final Map<String, Object> errorData) {
+    public MessageId send(final EventType eventType, final Object data, final Object errorData) {
         final ProcessingContext<Object> processingContext = ProcessingContext.processingContextForPayloadAndError(eventType, data, errorData);
         return messageBus.send(processingContext);
     }
 
     @Override
-    public MessageId send(final EventType eventType, final Map<String, Object> data,
-                          final Map<String, Object> errorData,
+    public MessageId send(final EventType eventType,
+                          final Object data,
+                          final Object errorData,
                           final CorrelationId correlationId) {
         final ProcessingContext<Object> processingContext = ProcessingContext.processingContextForPayloadAndError(eventType, correlationId,
                 data, errorData);
@@ -87,19 +88,19 @@ public class SerializedMessageBusImpl implements SerializedMessageBus {
 
     @Override
     public MessageId serializeAndSend(final EventType eventType, final Object data) {
-        final Map<String, Object> map = requestSerializer.serialize(data);
+        final Object map = requestSerializer.serialize(data);
         return send(eventType, map);
     }
 
     @Override
     public MessageId serializeAndSend(final EventType eventType, final Object data, final CorrelationId correlationId) {
-        final Map<String, Object> map = requestSerializer.serialize(data);
+        final Object map = requestSerializer.serialize(data);
         return send(eventType, map, correlationId);
     }
 
     @Override
     public MessageId serializeAndSend(final EventType eventType, final Object data, final Object errorData) {
-        final Map<String, Object> map = requestSerializer.serialize(data);
+        final Object map = requestSerializer.serialize(data);
         return send(eventType, map, requestSerializer.serialize(errorData));
     }
 
@@ -108,14 +109,14 @@ public class SerializedMessageBusImpl implements SerializedMessageBus {
                                       final Object data,
                                       final Object errorData,
                                       final CorrelationId correlationId) {
-        final Map<String, Object> payloadMap = requestSerializer.serialize(data);
-        final Map<String, Object> errorPayloadMap = requestSerializer.serialize(errorData);
+        final Object payloadMap = requestSerializer.serialize(data);
+        final Object errorPayloadMap = requestSerializer.serialize(errorData);
         return send(eventType, payloadMap, errorPayloadMap, correlationId);
     }
 
     @Override
-    public PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> invokeAndWait(final EventType eventType,
-                                                                                          final Map<String, Object> data)
+    public PayloadAndErrorPayload<Object, Object> invokeAndWait(final EventType eventType,
+                                                                final Object data)
             throws ExecutionException, InterruptedException {
         final ResponseFuture responseFuture = messageFunction.request(eventType, data);
         try {
@@ -129,10 +130,10 @@ public class SerializedMessageBusImpl implements SerializedMessageBus {
     }
 
     @Override
-    public PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> invokeAndWait(final EventType eventType,
-                                                                                          final Map<String, Object> data,
-                                                                                          final long timeout,
-                                                                                          final TimeUnit unit)
+    public PayloadAndErrorPayload<Object, Object> invokeAndWait(final EventType eventType,
+                                                                final Object data,
+                                                                final long timeout,
+                                                                final TimeUnit unit)
             throws InterruptedException, ExecutionException, TimeoutException {
         final ResponseFuture responseFuture = messageFunction.request(eventType, data);
         try {
@@ -146,20 +147,20 @@ public class SerializedMessageBusImpl implements SerializedMessageBus {
     }
 
     @Override
-    public PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> invokeAndWaitSerializedOnly(
+    public PayloadAndErrorPayload<Object, Object> invokeAndWaitSerializedOnly(
             final EventType eventType,
             final Object data) throws InterruptedException, ExecutionException {
-        final Map<String, Object> map = serializeWithExecutionExceptionWrapper(data);
+        final Object map = serializeWithExecutionExceptionWrapper(data);
         return invokeAndWait(eventType, map);
     }
 
     @Override
-    public PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> invokeAndWaitSerializedOnly(
+    public PayloadAndErrorPayload<Object, Object> invokeAndWaitSerializedOnly(
             final EventType eventType,
             final Object data,
             final long timeout,
             final TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-        final Map<String, Object> map = serializeWithExecutionExceptionWrapper(data);
+        final Object map = serializeWithExecutionExceptionWrapper(data);
         return invokeAndWait(eventType, map, timeout, unit);
     }
 
@@ -169,8 +170,8 @@ public class SerializedMessageBusImpl implements SerializedMessageBus {
                                                                          final Class<P> responseClass,
                                                                          final Class<E> errorPayloadClass)
             throws InterruptedException, ExecutionException {
-        final Map<String, Object> map = serializeWithExecutionExceptionWrapper(data);
-        final PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> mapPayloadAndErrorPayload =
+        final Object map = serializeWithExecutionExceptionWrapper(data);
+        final PayloadAndErrorPayload<Object, Object> mapPayloadAndErrorPayload =
                 invokeAndWait(eventType, map);
         final PayloadAndErrorPayload<P, E> payloadAndErrorPayload = deserializeWithExecutionExceptionWrapper(responseClass,
                 errorPayloadClass, mapPayloadAndErrorPayload);
@@ -185,15 +186,15 @@ public class SerializedMessageBusImpl implements SerializedMessageBus {
                                                                          final long timeout,
                                                                          final TimeUnit unit)
             throws InterruptedException, ExecutionException, TimeoutException {
-        final Map<String, Object> map = serializeWithExecutionExceptionWrapper(data);
-        final PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> mapPayloadAndErrorPayload =
+        final Object map = serializeWithExecutionExceptionWrapper(data);
+        final PayloadAndErrorPayload<Object, Object> mapPayloadAndErrorPayload =
                 invokeAndWait(eventType, map, timeout, unit);
         final PayloadAndErrorPayload<P, E> payloadAndErrorPayload = deserializeWithExecutionExceptionWrapper(responseClass,
                 errorPayloadClass, mapPayloadAndErrorPayload);
         return payloadAndErrorPayload;
     }
 
-    private Map<String, Object> serializeWithExecutionExceptionWrapper(final Object data) throws ExecutionException {
+    private Object serializeWithExecutionExceptionWrapper(final Object data) throws ExecutionException {
         try {
             return requestSerializer.serialize(data);
         } catch (final Exception e) {
@@ -204,7 +205,7 @@ public class SerializedMessageBusImpl implements SerializedMessageBus {
     private <P, E> PayloadAndErrorPayload<P, E> deserializeWithExecutionExceptionWrapper(
             final Class<P> responseClass,
             final Class<E> errorPayloadClass,
-            final PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> mapPayloadAndErrorPayload)
+            final PayloadAndErrorPayload<Object, Object> mapPayloadAndErrorPayload)
             throws ExecutionException {
         try {
             return deserialize(mapPayloadAndErrorPayload, responseClass, errorPayloadClass);
@@ -258,17 +259,17 @@ public class SerializedMessageBusImpl implements SerializedMessageBus {
     }
 
     private <P, E> PayloadAndErrorPayload<P, E> deserialize(
-            final PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> mapPayloadAndErrorPayload,
+            final PayloadAndErrorPayload<Object, Object> mapPayloadAndErrorPayload,
             final Class<P> responseClass,
             final Class<E> errorPayloadClass) {
-        final Map<String, Object> payloadMap = mapPayloadAndErrorPayload.getPayload();
-        final Map<String, Object> errorPayloadMap = mapPayloadAndErrorPayload.getErrorPayload();
+        final Object payloadMap = mapPayloadAndErrorPayload.getPayload();
+        final Object errorPayloadMap = mapPayloadAndErrorPayload.getErrorPayload();
         return deserialize(payloadMap, responseClass, errorPayloadMap, errorPayloadClass);
     }
 
-    private <P, E> PayloadAndErrorPayload<P, E> deserialize(final Map<String, Object> payloadMap,
+    private <P, E> PayloadAndErrorPayload<P, E> deserialize(final Object payloadMap,
                                                             final Class<P> responseClass,
-                                                            final Map<String, Object> errorPayloadMap,
+                                                            final Object errorPayloadMap,
                                                             final Class<E> errorPayloadClass) {
         final P payload;
         if (payloadMap != null) {

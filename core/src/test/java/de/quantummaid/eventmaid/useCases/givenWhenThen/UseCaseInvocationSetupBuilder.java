@@ -90,6 +90,7 @@ public final class UseCaseInvocationSetupBuilder {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public UseCaseInvocationSetupBuilder invokingTheUseCaseUsingAMissingParameterDeserializationDefinition() {
         useCaseMethodCallingFunction = (configuration, step3Builder) -> step3Builder.callingTheSingleUseCaseMethod()
                 .obtainingUseCaseInstancesUsingTheZeroArgumentConstructor();
@@ -104,11 +105,12 @@ public final class UseCaseInvocationSetupBuilder {
         });
         extraInvocationConfiguration.addResponseDeserializationDefinitions(responseDeserializationStep1Builder -> {
             responseDeserializationStep1Builder.deserializingUseCaseResponsesOfType(MissingRequestDeserializationException.class)
-                    .using((targetType, map) -> missingDeserializationException((String) map.get(exceptionMapKey)));
+                    .using((targetType, map) -> missingDeserializationException((String) ((Map<Object, Object>) map).get(exceptionMapKey)));
         });
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public UseCaseInvocationSetupBuilder invokingTheUseCaseUsingAMissingResponseSerializationDefinition() {
         useCaseMethodCallingFunction = (configuration, step3Builder) -> step3Builder.callingTheSingleUseCaseMethod()
                 .obtainingUseCaseInstancesUsingTheZeroArgumentConstructor();
@@ -122,11 +124,12 @@ public final class UseCaseInvocationSetupBuilder {
         });
         extraInvocationConfiguration.addResponseDeserializationDefinitions(responseDeserializationStep1Builder -> {
             responseDeserializationStep1Builder.deserializingUseCaseResponsesOfType(MissingResponseSerializationException.class)
-                    .using((targetType, map) -> missingResponseSerializationException((String) map.get(exceptionMapKey)));
+                    .using((targetType, map) -> missingResponseSerializationException((String) ((Map<Object, Object>) map).get(exceptionMapKey)));
         });
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public UseCaseInvocationSetupBuilder throwingAnExceptionWithoutMappingWhenInvokingTheUseCase() {
         useCaseMethodCallingFunction = (configuration, step3Builder) -> step3Builder
                 .callingBy((useCase, event, callingContext) -> {
@@ -138,7 +141,7 @@ public final class UseCaseInvocationSetupBuilder {
             responseDeserializationStep1Builder.deserializingUseCaseResponsesOfType(MissingExceptionSerializationException.class)
                     .using((targetType, map) -> {
                         final String message =
-                                (String) map.get(MissingExceptionMappingExceptionMapifier.DEFAULT_EXCEPTION_MAPIFIER_KEY);
+                                (String) ((Map<Object, Object>) map).get(MissingExceptionMappingExceptionMapifier.DEFAULT_EXCEPTION_MAPIFIER_KEY);
                         return missingExceptionSerializationException(message);
                     });
         });

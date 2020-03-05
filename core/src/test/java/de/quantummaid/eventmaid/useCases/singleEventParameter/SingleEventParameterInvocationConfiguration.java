@@ -62,11 +62,12 @@ public class SingleEventParameterInvocationConfiguration implements UseCaseInvoc
         };
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DeAndSerializationDefinition<RequestDeserializationStep1Builder> getRequestDeserializationDefinitions() {
         return requestDeserializationStep1Builder -> {
             requestDeserializationStep1Builder.deserializingRequestsToUseCaseParametersOfType(SingleParameterEvent.class)
-                    .using((targetType, map) -> SingleParameterEvent.singleParameterEvent((String) map.get(PARAMETER_MAP_PROPERTY_NAME)));
+                    .using((targetType, map) -> SingleParameterEvent.singleParameterEvent((String) ((Map<Object, Object>) map).get(PARAMETER_MAP_PROPERTY_NAME)));
         };
     }
 
@@ -85,11 +86,12 @@ public class SingleEventParameterInvocationConfiguration implements UseCaseInvoc
         };
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DeAndSerializationDefinition<ResponseDeserializationStep1Builder> getResponseDeserializationDefinitions() {
         return responseDeserializationStep1Builder -> {
             responseDeserializationStep1Builder.deserializingUseCaseResponsesOfType(SingleParameterResponse.class)
-                    .using((targetType, map) -> singleParameterResponse((String) map.get(RETURN_MAP_PROPERTY_NAME)));
+                    .using((targetType, map) -> singleParameterResponse((String) ((Map<Object, Object>) map).get(RETURN_MAP_PROPERTY_NAME)));
         };
     }
 

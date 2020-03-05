@@ -69,7 +69,7 @@ public interface SerializedMessageBus {
      * @param data      the data to send
      * @return a unique {@code MessageId} for the message
      */
-    MessageId send(EventType eventType, Map<String, Object> data);
+    MessageId send(EventType eventType, Object data);
 
     /**
      * Sends the given data in form of a {@code Map} on the {@code MessageBus} with the {@code EventType} and
@@ -80,7 +80,7 @@ public interface SerializedMessageBus {
      * @param correlationId the {@code CorrelationId} relating to a previous {@code MessageId}
      * @return a unique {@code MessageId} for the message
      */
-    MessageId send(EventType eventType, Map<String, Object> data, CorrelationId correlationId);
+    MessageId send(EventType eventType, Object data, CorrelationId correlationId);
 
     /**
      * Sends the given data and error data both in form of a {@code Map} on the {@code MessageBus} with the {@code EventType}.
@@ -90,7 +90,7 @@ public interface SerializedMessageBus {
      * @param errorData the error data to send
      * @return a unique {@code MessageId} for the message
      */
-    MessageId send(EventType eventType, Map<String, Object> data, Map<String, Object> errorData);
+    MessageId send(EventType eventType, Object data, Object errorData);
 
     /**
      * Sends the given data and error data both in form of a {@code Map} on the {@code MessageBus} with the {@code EventType}
@@ -102,7 +102,7 @@ public interface SerializedMessageBus {
      * @param correlationId the {@code CorrelationId} relating to a previous {@code MessageId}
      * @return a unique {@code MessageId} for the message
      */
-    MessageId send(EventType eventType, Map<String, Object> data, Map<String, Object> errorData, CorrelationId correlationId);
+    MessageId send(EventType eventType, Object data, Object errorData, CorrelationId correlationId);
 
     /**
      * Serializes the data to a {@link Map} and then sends it with the {@code EventType} on the {@code MessageBus}.
@@ -156,9 +156,9 @@ public interface SerializedMessageBus {
      * @throws InterruptedException if the waiting {@link Thread} is interrupted
      * @throws ExecutionException   if the message or response caused an exception
      */
-    PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> invokeAndWait(
+    PayloadAndErrorPayload<Object, Object> invokeAndWait(
             EventType eventType,
-            Map<String, Object> data) throws InterruptedException, ExecutionException;
+            Object data) throws InterruptedException, ExecutionException;
 
     /**
      * Sends the data and waits for a matching response, an exception or the timeout to expire.
@@ -172,9 +172,9 @@ public interface SerializedMessageBus {
      * @throws ExecutionException   if the message or response caused an exception
      * @throws TimeoutException     if the timeout expired
      */
-    PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> invokeAndWait(
+    PayloadAndErrorPayload<Object, Object> invokeAndWait(
             EventType eventType,
-            Map<String, Object> data,
+            Object data,
             long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
 
     /**
@@ -186,7 +186,7 @@ public interface SerializedMessageBus {
      * @throws InterruptedException if the waiting {@link Thread} is interrupted
      * @throws ExecutionException   if the message or response caused an exception
      */
-    PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> invokeAndWaitSerializedOnly(
+    PayloadAndErrorPayload<Object, Object> invokeAndWaitSerializedOnly(
             EventType eventType,
             Object data) throws InterruptedException, ExecutionException;
 
@@ -202,7 +202,7 @@ public interface SerializedMessageBus {
      * @throws ExecutionException   if the message or response caused an exception
      * @throws TimeoutException     if the timeout expired
      */
-    PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> invokeAndWaitSerializedOnly(
+    PayloadAndErrorPayload<Object, Object> invokeAndWaitSerializedOnly(
             EventType eventType,
             Object data,
             long timeout,

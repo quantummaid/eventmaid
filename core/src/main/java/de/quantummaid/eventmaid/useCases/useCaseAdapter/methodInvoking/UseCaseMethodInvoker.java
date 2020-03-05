@@ -47,10 +47,10 @@ public interface UseCaseMethodInvoker {
      * @throws ClassCastException        when the event is not a valid {@link Map} of type {@code <String, Object>}
      * @throws Exception                 all exceptions declared by the use case method are rethrown
      */
-    Map<String, Object> invoke(Object useCase,
-                               Object event,
-                               Deserializer requestDeserializer,
-                               Serializer responseSerializer,
-                               ParameterInjector parameterInjector) throws Exception;
+    Object invoke(Object useCase,
+                  Object event,
+                  Deserializer requestDeserializer,
+                  Serializer responseSerializer,
+                  ParameterInjector parameterInjector) throws Exception;
 
 }

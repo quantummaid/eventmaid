@@ -38,5 +38,5 @@ public interface Mapifier<T> {
      * @param object the object to create a {@code Map} from
      * @return a {@code Map} containing a representation of the object
      */
-    Map<String, Object> map(T object);
+    Object map(T object);
 }

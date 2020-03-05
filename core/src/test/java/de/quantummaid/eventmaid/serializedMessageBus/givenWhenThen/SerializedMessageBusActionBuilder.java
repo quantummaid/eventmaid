@@ -159,7 +159,7 @@ public final class SerializedMessageBusActionBuilder {
             data.put("someValue", new Object());
             testEnvironment.setPropertyIfNotSet(SEND_DATA, data);
             try {
-                final PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> result =
+                final PayloadAndErrorPayload<Object, Object> result =
                         serializedMessageBus.invokeAndWait(eventType, data);
                 testEnvironment.setPropertyIfNotSet(RESULT, result);
             } catch (final InterruptedException | ExecutionException e) {
@@ -176,7 +176,7 @@ public final class SerializedMessageBusActionBuilder {
             data.put("someValue", new Object());
             testEnvironment.setPropertyIfNotSet(SEND_DATA, data);
             try {
-                final PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> result =
+                final PayloadAndErrorPayload<Object, Object> result =
                         serializedMessageBus.invokeAndWait(eventType, data, DEFAULT_WAITING_TIMEOUT, MILLISECONDS);
                 testEnvironment.setPropertyIfNotSet(RESULT, result);
             } catch (final InterruptedException | ExecutionException | TimeoutException e) {
@@ -226,7 +226,7 @@ public final class SerializedMessageBusActionBuilder {
             final TestMessageOfInterest message = TestMessageOfInterest.messageOfInterest();
             testEnvironment.setPropertyIfNotSet(SEND_DATA, message);
             try {
-                final PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> result = serializedMessageBus
+                final PayloadAndErrorPayload<Object, Object> result = serializedMessageBus
                         .invokeAndWaitSerializedOnly(eventType, message);
                 testEnvironment.setPropertyIfNotSet(RESULT, result);
             } catch (final InterruptedException | ExecutionException e) {
@@ -242,7 +242,7 @@ public final class SerializedMessageBusActionBuilder {
             final TestMessageOfInterest message = TestMessageOfInterest.messageOfInterest();
             testEnvironment.setPropertyIfNotSet(SEND_DATA, message);
             try {
-                final PayloadAndErrorPayload<Map<String, Object>, Map<String, Object>> result = serializedMessageBus
+                final PayloadAndErrorPayload<Object, Object> result = serializedMessageBus
                         .invokeAndWaitSerializedOnly(eventType, message, DEFAULT_WAITING_TIMEOUT, MILLISECONDS);
                 testEnvironment.setPropertyIfNotSet(RESULT, result);
             } catch (final InterruptedException | ExecutionException | TimeoutException e) {

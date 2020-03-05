@@ -25,8 +25,6 @@ import de.quantummaid.eventmaid.internal.collections.predicatemap.PredicateMap;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Map;
-
 import static de.quantummaid.eventmaid.internal.enforcing.NotNullEnforcer.ensureNotNull;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -39,7 +37,7 @@ public final class Serializer {
         return new Serializer(mapifierPredicateMap);
     }
 
-    public Map<String, Object> serialize(final Object value) {
+    public Object serialize(final Object value) {
         final Mapifier<Object> mapifier = mapifiers.get(value);
         return mapifier.map(value);
     }

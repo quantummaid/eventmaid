@@ -37,7 +37,7 @@ import static de.quantummaid.eventmaid.internal.enforcing.NotNullEnforcer.ensure
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Deserializer {
-    private final FilterMap<Class<?>, Map<String, Object>, Demapifier<?>> demapifierMap;
+    private final FilterMap<Class<?>, Object, Demapifier<?>> demapifierMap;
 
     /**
      * Creates a new {@code Deserializer} from the given {@link FilterMap}.
@@ -46,7 +46,7 @@ public final class Deserializer {
      * @return a new {@code Deserializer}
      */
     public static Deserializer deserializer(
-            final FilterMap<Class<?>, Map<String, Object>, Demapifier<?>> requestMappers) {
+            final FilterMap<Class<?>, Object, Demapifier<?>> requestMappers) {
         ensureNotNull(requestMappers, "demapifierMap");
         return new Deserializer(requestMappers);
     }
@@ -61,7 +61,7 @@ public final class Deserializer {
      */
     @SuppressWarnings("unchecked")
     public <T> T deserialize(final Class<T> type,
-                             final Map<String, Object> map) {
+                             final Object map) {
         final Demapifier<T> demapifier = (Demapifier<T>) demapifierMap.get(type, map);
         return demapifier.map(type, map);
     }

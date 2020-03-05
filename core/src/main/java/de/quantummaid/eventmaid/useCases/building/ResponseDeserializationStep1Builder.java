@@ -53,7 +53,7 @@ public interface ResponseDeserializationStep1Builder {
      * @return the next step in the fluent builder
      */
     default <T> ResponseDeserializationStep2Builder<T> deserializingUseCaseResponsesThat(
-            final BiPredicate<Class<?>, Map<String, Object>> filter) {
+            final BiPredicate<Class<?>, Object> filter) {
         return deserializingUseCaseResponsesOfThat(filter);
     }
 
@@ -67,7 +67,7 @@ public interface ResponseDeserializationStep1Builder {
      * @return the next step in the fluent builder
      */
     <T> ResponseDeserializationStep2Builder<T> deserializingUseCaseResponsesOfThat(
-            BiPredicate<Class<?>, Map<String, Object>> filter);
+            BiPredicate<Class<?>, Object> filter);
 
     /**
      * Configures to throw an exception if no {@link Demapifier} configured matches the response.

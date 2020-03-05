@@ -56,16 +56,15 @@ public final class SerializingMethodInvoker implements UseCaseMethodInvoker {
     }
 
     @Override
-    public Map<String, Object> invoke(final Object useCase,
-                                      final Object event,
-                                      final Deserializer requestDeserializer,
-                                      final Serializer responseSerializer,
-                                      final ParameterInjector parameterInjector) throws Exception {
+    public Object invoke(final Object useCase,
+                         final Object event,
+                         final Deserializer requestDeserializer,
+                         final Serializer responseSerializer,
+                         final ParameterInjector parameterInjector) throws Exception {
         try {
             final Class<?>[] parameterTypes = useCaseMethod.getParameterTypes();
 
-            @SuppressWarnings("unchecked")
-            final Map<String, Object> map = (Map<String, Object>) event;
+            @SuppressWarnings("unchecked") final Map<String, Object> map = (Map<String, Object>) event;
             final Object[] parameters = stream(parameterTypes)
                     .map(parameterType -> {
                         if (parameterInjector.hasValueFor(parameterType)) {

@@ -65,12 +65,13 @@ public class ExceptionThrowingInvocationConfiguration implements UseCaseInvocati
         };
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DeAndSerializationDefinition<RequestDeserializationStep1Builder> getRequestDeserializationDefinitions() {
         return requestDeserializationStep1Builder -> {
             requestDeserializationStep1Builder.deserializingRequestsToUseCaseParametersOfType(ExceptionThrowingRequest.class)
                     .using((targetType, map) -> {
-                        final String message = (String) map.get(PARAMETER_MAP_PROPERTY_NAME);
+                        final String message = (String) ((Map<Object, Object>) map).get(PARAMETER_MAP_PROPERTY_NAME);
                         final TestException exceptionToThrow = TestException.testException(message);
                         return ExceptionThrowingRequest.exceptionThrowingRequest(exceptionToThrow);
                     });
@@ -92,11 +93,12 @@ public class ExceptionThrowingInvocationConfiguration implements UseCaseInvocati
         };
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DeAndSerializationDefinition<ResponseDeserializationStep1Builder> getResponseDeserializationDefinitions() {
         return responseDeserializationStep1Builder -> {
             responseDeserializationStep1Builder.deserializingUseCaseResponsesOfType(TestException.class)
-                    .using((targetType, map) -> TestException.testException((String) map.get(RETURN_MAP_PROPERTY_NAME)));
+                    .using((targetType, map) -> TestException.testException((String) ((Map<Object, Object>) map).get(RETURN_MAP_PROPERTY_NAME)));
         };
     }
 

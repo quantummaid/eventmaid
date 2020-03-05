@@ -54,7 +54,7 @@ public interface RequestDeserializationStep1Builder {
      * @return the next step in the fluent builder
      */
     <T> RequestDeserializationStep2Builder<T> deserializeRequestsToUseCaseParametersThat(
-            BiPredicate<Class<?>, Map<String, Object>> filter);
+            BiPredicate<Class<?>, Object> filter);
 
     /**
      * Configures to throw an exception if no {@link Demapifier} configured matches the request.

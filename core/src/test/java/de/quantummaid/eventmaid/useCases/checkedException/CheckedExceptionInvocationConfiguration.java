@@ -63,13 +63,14 @@ public class CheckedExceptionInvocationConfiguration implements UseCaseInvocatio
         };
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DeAndSerializationDefinition<RequestDeserializationStep1Builder> getRequestDeserializationDefinitions() {
         return requestDeserializationStep1Builder -> {
             requestDeserializationStep1Builder
                     .deserializingRequestsToUseCaseParametersOfType(CheckedExceptionThrowingRequest.class)
                     .using((targetType, map) -> {
-                        final String message = (String) map.get(PARAMETER_MAP_PROPERTY_NAME);
+                        final String message = (String) ((Map<Object, Object>) map).get(PARAMETER_MAP_PROPERTY_NAME);
                         final CheckedTestException checkedTestException = CheckedTestException.checkedTestException(message);
                         return CheckedExceptionThrowingRequest.checkedExceptionThrowingRequest(checkedTestException);
                     });
@@ -91,11 +92,12 @@ public class CheckedExceptionInvocationConfiguration implements UseCaseInvocatio
         };
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public DeAndSerializationDefinition<ResponseDeserializationStep1Builder> getResponseDeserializationDefinitions() {
         return responseDeserializationStep1Builder -> {
             responseDeserializationStep1Builder.deserializingUseCaseResponsesOfType(CheckedTestException.class)
-                    .using((targetType, map) -> CheckedTestException.checkedTestException((String) map.get(RETURN_MAP_PROPERTY_NAME)));
+                    .using((targetType, map) -> CheckedTestException.checkedTestException((String) ((Map<Object, Object>) map).get(RETURN_MAP_PROPERTY_NAME)));
         };
     }
 

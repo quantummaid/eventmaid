@@ -183,15 +183,16 @@ public final class SerializedMessageBusSetupBuilder {
         return testEnvironment.getPropertyOrSetDefault(EXPECTED_CORRELATION_ID, newUniqueCorrelationId);
     }
 
+    @SuppressWarnings("unchecked")
     private Deserializer getDeserializer() {
-        final FilterMapBuilder<Class<?>, Map<String, Object>, Demapifier<?>> deserializingFilterMapBuilder = filterMapBuilder();
+        final FilterMapBuilder<Class<?>, Object, Demapifier<?>> deserializingFilterMapBuilder = filterMapBuilder();
         deserializingFilterMapBuilder
                 .put((o, o2) -> o.equals(TestMessageOfInterest.class), (Demapifier) (targetType, map) -> {
-                    final String content = (String) map.get(PAYLOAD_SERIALIZATION_KEY);
+                    final String content = (String) ((Map<Object, Object>) map).get(PAYLOAD_SERIALIZATION_KEY);
                     return TestMessageOfInterest.messageOfInterest(content);
                 })
                 .put((o, o2) -> o.equals(ErrorTestMessage.class), (Demapifier) (targetType, map) -> {
-                    final String content = (String) map.get(ERROR_PAYLOAD_SERIALIZATION_KEY);
+                    final String content = (String) ((Map<Object, Object>) map).get(ERROR_PAYLOAD_SERIALIZATION_KEY);
                     return ErrorTestMessage.errorTestMessage(content);
                 })
                 .setDefaultValue((targetType, map) -> {

@@ -34,7 +34,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 import static de.quantummaid.eventmaid.mapping.Deserializer.deserializer;
@@ -50,10 +49,10 @@ public final class LowLevelUseCaseAdapterBuilder {
     private final List<UseCaseCallingInformation<?>> useCaseCallingInformationList = new LinkedList<>();
     private final ParameterInjectorBuilder parameterInjectorBuilder = aParameterInjectorBuilder();
     private PredicateMapBuilder<Object, Mapifier<Object>> requestSerializers;
-    private FilterMapBuilder<Class<?>, Map<String, Object>, Demapifier<?>> requestDeserializers;
+    private FilterMapBuilder<Class<?>, Object, Demapifier<?>> requestDeserializers;
     private PredicateMapBuilder<Object, Mapifier<Object>> responseSerializers;
     private PredicateMapBuilder<Exception, Mapifier<Exception>> exceptionSerializers;
-    private FilterMapBuilder<Class<?>, Map<String, Object>, Demapifier<?>> responseDeserializers;
+    private FilterMapBuilder<Class<?>, Object, Demapifier<?>> responseDeserializers;
     private UseCaseInstantiator useCaseInstantiator;
 
     public static LowLevelUseCaseAdapterBuilder aLowLevelUseCaseInvocationBuilder() {
@@ -74,7 +73,7 @@ public final class LowLevelUseCaseAdapterBuilder {
     }
 
     public void setRequestDeserializers(
-            final FilterMapBuilder<Class<?>, Map<String, Object>, Demapifier<?>> requestDeserializers) {
+            final FilterMapBuilder<Class<?>, Object, Demapifier<?>> requestDeserializers) {
         this.requestDeserializers = requestDeserializers;
     }
 
@@ -87,7 +86,7 @@ public final class LowLevelUseCaseAdapterBuilder {
     }
 
     public void setResponseDeserializers(
-            final FilterMapBuilder<Class<?>, Map<String, Object>, Demapifier<?>> responseDeserializers) {
+            final FilterMapBuilder<Class<?>, Object, Demapifier<?>> responseDeserializers) {
         this.responseDeserializers = responseDeserializers;
     }
 
