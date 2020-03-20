@@ -1,3 +1,7 @@
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.quantummaid.eventmaid/core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.eventmaid.eventmaid/core)
+
+<img src="eventmaid_logo.png" align="left"/>
+
 # EventMaid
 EventMaid is a library for building messaging architectures.
 
@@ -6,7 +10,6 @@ logic in a loosely coupled fashion. This allows for applications to be highly
 extensible and easily tested.
 
 ## Maven Dependency
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.quantummaid.eventmaid/core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.eventmaid.eventmaid/core)
 ```
 <dependency>
     <groupId>de.quantummaid.eventmaid</groupId>
