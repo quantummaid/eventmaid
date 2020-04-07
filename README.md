@@ -1,5 +1,10 @@
+[![Last Commit](https://img.shields.io/github/last-commit/quantummaid/eventmaid)](https://github.com/quantummaid/eventmaid)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.quantummaid.eventmaid/core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.eventmaid.eventmaid/core)
+[![Code Size](https://img.shields.io/github/languages/code-size/quantummaid/eventmaid)](https://github.com/quantummaid/eventmaid)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Slack](https://img.shields.io/badge/chat%20on-Slack-brightgreen)](https://join.slack.com/t/quantummaid/shared_invite/zt-cx5qd605-vG10I~WazfgH9WOnXMzl3Q)
+[![Gitter](https://img.shields.io/badge/chat%20on-Gitter-brightgreen)](https://gitter.im/quantum-maid-framework/community)
+[![Twitter](https://img.shields.io/twitter/follow/quantummaid)](https://twitter.com/quantummaid)
 
 <img src="eventmaid_logo.png" align="left"/>
 
@@ -26,7 +31,7 @@ integration it models both the carrier and the send messages as distinct
 concepts of the application. This can provide several benefits if used correctly. But it 
 can also generate overhead and complexity. This library focuses on a lightweight 
 implementation of messaging patterns to be wire use cases and objects within one application. 
-For integrating different applications (over network, shared memory, ...) other libraries exist.
+For integrating different applications (over network, shared memory, etc.) other libraries exist.
 
 This library provides implementations for typical forms of message carriers like 
 Channels or MesssageBus. Explicitly modelling these transport mechanisms as distinct
