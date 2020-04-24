@@ -22,7 +22,7 @@
 package de.quantummaid.eventmaid.filtering;
 
 import de.quantummaid.eventmaid.channel.Channel;
-import de.quantummaid.eventmaid.messageBus.MessageBus;
+import de.quantummaid.eventmaid.messagebus.MessageBus;
 
 /**
  * A {@link Channel} and a {@link MessageBus} can accept {@code Filter} to alter the flow of transported messages.

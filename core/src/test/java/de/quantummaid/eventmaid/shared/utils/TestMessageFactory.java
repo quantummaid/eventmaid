@@ -21,9 +21,9 @@
 
 package de.quantummaid.eventmaid.shared.utils;
 
-import de.quantummaid.eventmaid.shared.testMessages.InvalidTestMessage;
-import de.quantummaid.eventmaid.shared.testMessages.TestMessage;
-import de.quantummaid.eventmaid.shared.testMessages.TestMessageOfInterest;
+import de.quantummaid.eventmaid.shared.testmessages.InvalidTestMessage;
+import de.quantummaid.eventmaid.shared.testmessages.TestMessage;
+import de.quantummaid.eventmaid.shared.testmessages.TestMessageOfInterest;
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Supplier;

@@ -21,7 +21,7 @@
 
 package de.quantummaid.eventmaid.shared.utils;
 
-import de.quantummaid.eventmaid.shared.testMessages.TestMessage;
+import de.quantummaid.eventmaid.shared.testmessages.TestMessage;
 
 public interface MessageFactory {
     TestMessage createMessage();

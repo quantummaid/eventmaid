@@ -21,7 +21,7 @@
 
 package de.quantummaid.eventmaid.qcec.queryresolving;
 
-import de.quantummaid.eventmaid.messageBus.MessageBus;
+import de.quantummaid.eventmaid.messagebus.MessageBus;
 import lombok.RequiredArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;

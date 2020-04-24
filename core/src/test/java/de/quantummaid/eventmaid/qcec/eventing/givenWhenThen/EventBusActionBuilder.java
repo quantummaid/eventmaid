@@ -21,11 +21,11 @@
 
 package de.quantummaid.eventmaid.qcec.eventing.givenWhenThen;
 
-import de.quantummaid.eventmaid.shared.givenWhenThen.TestAction;
 import de.quantummaid.eventmaid.qcec.shared.TestReceiver;
 import de.quantummaid.eventmaid.qcec.shared.testEvents.TestEvent;
-import de.quantummaid.eventmaid.shared.exceptions.TestException;
 import de.quantummaid.eventmaid.shared.environment.TestEnvironmentProperty;
+import de.quantummaid.eventmaid.shared.exceptions.TestException;
+import de.quantummaid.eventmaid.shared.givenwhenthen.TestAction;
 import de.quantummaid.eventmaid.subscribing.SubscriptionId;
 import lombok.RequiredArgsConstructor;
 

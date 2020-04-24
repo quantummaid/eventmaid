@@ -22,21 +22,21 @@
 package de.quantummaid.eventmaid.internal.pipe;
 
 import de.quantummaid.eventmaid.configuration.AsynchronousConfiguration;
-import de.quantummaid.eventmaid.internal.pipe.error.ErrorThrowingPipeErrorHandler;
-import de.quantummaid.eventmaid.internal.pipe.error.PipeErrorHandler;
 import de.quantummaid.eventmaid.internal.pipe.events.PipeEventListener;
 import de.quantummaid.eventmaid.internal.pipe.events.SimplePipeEventListener;
+import de.quantummaid.eventmaid.internal.pipe.exceptions.ErrorThrowingPipeErrorHandler;
+import de.quantummaid.eventmaid.internal.pipe.exceptions.PipeErrorHandler;
+import de.quantummaid.eventmaid.internal.pipe.statistics.AtomicPipeStatisticsCollector;
 import de.quantummaid.eventmaid.internal.pipe.statistics.PipeStatisticsCollector;
 import de.quantummaid.eventmaid.internal.pipe.transport.TransportMechanism;
 import de.quantummaid.eventmaid.subscribing.Subscriber;
-import de.quantummaid.eventmaid.internal.pipe.statistics.AtomicPipeStatisticsCollector;
-import de.quantummaid.eventmaid.internal.pipe.transport.TransportMechanismFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static de.quantummaid.eventmaid.internal.pipe.PipeType.ASYNCHRONOUS;
 import static de.quantummaid.eventmaid.internal.pipe.PipeType.SYNCHRONOUS;
+import static de.quantummaid.eventmaid.internal.pipe.transport.TransportMechanismFactory.transportMechanism;
 import static lombok.AccessLevel.PRIVATE;
 
 @RequiredArgsConstructor(access = PRIVATE)
@@ -48,10 +48,6 @@ public final class PipeBuilder<T> {
     private AsynchronousConfiguration asynchronousConfiguration;
 
     public static <T> PipeBuilder<T> aPipe() {
-        return new PipeBuilder<>();
-    }
-
-    public static <T> PipeBuilder<T> aPipeForClass(final Class<T> tClass) {
         return new PipeBuilder<>();
     }
 
@@ -81,14 +77,22 @@ public final class PipeBuilder<T> {
     }
 
     public Pipe<T> build() {
-        final PipeEventListener<T> eventListener = createEventListener();
+        final PipeEventListener<T> actualEventListener = createEventListener();
         final CopyOnWriteArrayList<Subscriber<T>> subscribers = new CopyOnWriteArrayList<>();
         if (pipeType.equals(ASYNCHRONOUS) && asynchronousConfiguration == null) {
             throw new IllegalArgumentException("Asynchronous configuration required.");
         }
-        final TransportMechanism<T> tTransportMechanism = TransportMechanismFactory.transportMechanism(pipeType, eventListener, errorHandler,
-                subscribers, asynchronousConfiguration);
-        return new PipeImpl<>(tTransportMechanism, statisticsCollector, subscribers);
+        TransportMechanism<T> transportMechanism = null;
+        try {
+            transportMechanism = transportMechanism(pipeType, actualEventListener, errorHandler,
+                    subscribers, asynchronousConfiguration);
+            return new PipeImpl<>(transportMechanism, statisticsCollector, subscribers);
+        } catch (final RuntimeException e) {
+            if (transportMechanism != null) {
+                transportMechanism.close(false);
+            }
+            throw e;
+        }
     }
 
     private PipeEventListener<T> createEventListener() {

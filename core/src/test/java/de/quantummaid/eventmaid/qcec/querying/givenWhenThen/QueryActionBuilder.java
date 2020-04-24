@@ -22,10 +22,10 @@
 package de.quantummaid.eventmaid.qcec.querying.givenWhenThen;
 
 import de.quantummaid.eventmaid.qcec.querying.config.TestQueryResolver;
-import de.quantummaid.eventmaid.shared.environment.TestEnvironmentProperty;
-import de.quantummaid.eventmaid.shared.givenWhenThen.TestAction;
 import de.quantummaid.eventmaid.qcec.queryresolving.Query;
 import de.quantummaid.eventmaid.qcec.shared.testQueries.TestQuery;
+import de.quantummaid.eventmaid.shared.environment.TestEnvironmentProperty;
+import de.quantummaid.eventmaid.shared.givenwhenthen.TestAction;
 import de.quantummaid.eventmaid.subscribing.SubscriptionId;
 import lombok.RequiredArgsConstructor;
 

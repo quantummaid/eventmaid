@@ -44,19 +44,6 @@ public final class ActionHandlerSet<T> {
     }
 
     /**
-     * Factory method to create a new {@code ActionHandlerSet} based on an existing mapping.
-     *
-     * @param handlerMap map containing existing mapping.
-     * @param <T>        the type of messages of the {@code Channel}
-     * @return a new {@code ActionHandlerSet}
-     */
-    @SuppressWarnings("rawtypes")
-    public static <T> ActionHandlerSet<T> actionHandlerSet(
-            final Map<Class<? extends Action>, ActionHandler<? extends Action<T>, T>> handlerMap) {
-        return new ActionHandlerSet<>(handlerMap);
-    }
-
-    /**
      * Creates a new, empty {@code ActionHandlerSet}.
      *
      * @param <T> the type of messages of the {@code Channel}

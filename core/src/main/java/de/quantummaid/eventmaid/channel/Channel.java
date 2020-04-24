@@ -27,7 +27,7 @@ import de.quantummaid.eventmaid.filtering.Filter;
 import de.quantummaid.eventmaid.identification.CorrelationId;
 import de.quantummaid.eventmaid.identification.MessageId;
 import de.quantummaid.eventmaid.internal.autoclosable.NoErrorAutoClosable;
-import de.quantummaid.eventmaid.processingContext.ProcessingContext;
+import de.quantummaid.eventmaid.processingcontext.ProcessingContext;
 import de.quantummaid.eventmaid.subscribing.Subscriber;
 
 import java.util.List;

@@ -21,13 +21,13 @@
 
 package de.quantummaid.eventmaid.qcec.constraining.givenWhenThen;
 
-import de.quantummaid.eventmaid.qcec.domainBus.DocumentBus;
+import de.quantummaid.eventmaid.qcec.domainbus.DocumentBus;
 import de.quantummaid.eventmaid.subscribing.SubscriptionId;
 import lombok.RequiredArgsConstructor;
 
 import java.util.function.Consumer;
 
-import static de.quantummaid.eventmaid.qcec.domainBus.DocumentBusBuilder.aDefaultDocumentBus;
+import static de.quantummaid.eventmaid.qcec.domainbus.DocumentBusBuilder.aDefaultDocumentBus;
 import static lombok.AccessLevel.PRIVATE;
 
 @RequiredArgsConstructor(access = PRIVATE)

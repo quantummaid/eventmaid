@@ -43,12 +43,13 @@ public final class AtomicPipeStatisticsCollector implements PipeStatisticsCollec
 
     @Override
     public PipeStatistics getCurrentStatistics() {
-        final BigInteger acceptedMessages = asBigInt(this.acceptedMessages);
-        final BigInteger queuedMessages = asBigInt(this.queuedMessages);
-        final BigInteger successfulMessages = asBigInt(this.successfulMessages);
-        final BigInteger failedMessages = asBigInt(this.failedMessages);
+        final BigInteger acceptedMessagesSnapshot = asBigInt(this.acceptedMessages);
+        final BigInteger queuedMessagesSnapshot = asBigInt(this.queuedMessages);
+        final BigInteger successfulMessagesSnapshot = asBigInt(this.successfulMessages);
+        final BigInteger failedMessagesSnapshot = asBigInt(this.failedMessages);
         final Date timestamp = new Date();
-        return pipeStatistics(timestamp, acceptedMessages, queuedMessages, successfulMessages, failedMessages);
+        return pipeStatistics(timestamp, acceptedMessagesSnapshot, queuedMessagesSnapshot,
+                successfulMessagesSnapshot, failedMessagesSnapshot);
     }
 
     @Override

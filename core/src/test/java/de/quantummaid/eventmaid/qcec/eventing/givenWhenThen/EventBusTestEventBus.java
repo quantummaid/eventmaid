@@ -21,14 +21,14 @@
 
 package de.quantummaid.eventmaid.qcec.eventing.givenWhenThen;
 
-import de.quantummaid.eventmaid.messageBus.MessageBus;
-import de.quantummaid.eventmaid.qcec.eventBus.EventBus;
+import de.quantummaid.eventmaid.messagebus.MessageBus;
+import de.quantummaid.eventmaid.qcec.eventbus.EventBus;
 import de.quantummaid.eventmaid.subscribing.SubscriptionId;
 
 import java.util.function.Consumer;
 
-import static de.quantummaid.eventmaid.messageBus.MessageBusBuilder.aMessageBus;
-import static de.quantummaid.eventmaid.qcec.eventBus.EventBusFactory.aEventBus;
+import static de.quantummaid.eventmaid.messagebus.MessageBusBuilder.aMessageBus;
+import static de.quantummaid.eventmaid.qcec.eventbus.EventBusFactory.aEventBus;
 
 public final class EventBusTestEventBus extends TestEventBus {
     private final EventBus eventBus;

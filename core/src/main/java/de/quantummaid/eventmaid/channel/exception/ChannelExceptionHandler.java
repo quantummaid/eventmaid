@@ -22,7 +22,7 @@
 package de.quantummaid.eventmaid.channel.exception;
 
 import de.quantummaid.eventmaid.internal.exceptions.BubbleUpWrappedException;
-import de.quantummaid.eventmaid.processingContext.ProcessingContext;
+import de.quantummaid.eventmaid.processingcontext.ProcessingContext;
 
 /**
  * Whenever an exception is thrown within a {@code Filter} or the final {@code Action}, the {@code ChannelExceptionHandler} is

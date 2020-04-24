@@ -21,17 +21,17 @@
 
 package de.quantummaid.eventmaid.shared.utils;
 
-import de.quantummaid.eventmaid.processingContext.EventType;
+import de.quantummaid.eventmaid.processingcontext.EventType;
 import de.quantummaid.eventmaid.shared.environment.TestEnvironment;
 import de.quantummaid.eventmaid.shared.environment.TestEnvironmentProperty;
-import de.quantummaid.eventmaid.shared.eventType.TestEventType;
-import de.quantummaid.eventmaid.shared.pipeChannelMessageBus.testActions.CloseActions;
-import de.quantummaid.eventmaid.shared.pipeChannelMessageBus.testActions.SendingAndReceivingActions;
+import de.quantummaid.eventmaid.shared.eventtype.TestEventType;
+import de.quantummaid.eventmaid.shared.pipechannelmessagebus.testActions.CloseActions;
+import de.quantummaid.eventmaid.shared.pipechannelmessagebus.testActions.SendingAndReceivingActions;
 import de.quantummaid.eventmaid.shared.polling.PollingUtils;
 import de.quantummaid.eventmaid.shared.properties.SharedTestProperties;
 import de.quantummaid.eventmaid.shared.subscriber.BlockingTestSubscriber;
-import de.quantummaid.eventmaid.shared.testMessages.TestMessage;
-import de.quantummaid.eventmaid.shared.testMessages.TestMessageOfInterest;
+import de.quantummaid.eventmaid.shared.testmessages.TestMessage;
+import de.quantummaid.eventmaid.shared.testmessages.TestMessageOfInterest;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

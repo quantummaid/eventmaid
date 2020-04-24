@@ -23,17 +23,17 @@ package de.quantummaid.eventmaid.channel;
 
 import de.quantummaid.eventmaid.channel.action.Action;
 import de.quantummaid.eventmaid.channel.action.ActionHandlerSet;
+import de.quantummaid.eventmaid.channel.action.DefaultActionHandlerSet;
 import de.quantummaid.eventmaid.channel.exception.ChannelExceptionHandler;
 import de.quantummaid.eventmaid.channel.internal.events.ChannelEventListener;
 import de.quantummaid.eventmaid.channel.internal.statistics.ChannelStatisticsCollector;
 import de.quantummaid.eventmaid.channel.internal.statistics.PipeStatisticsBasedChannelStatisticsCollector;
+import de.quantummaid.eventmaid.configuration.AsynchronousConfiguration;
 import de.quantummaid.eventmaid.internal.pipe.Pipe;
 import de.quantummaid.eventmaid.internal.pipe.PipeBuilder;
 import de.quantummaid.eventmaid.internal.pipe.PipeType;
-import de.quantummaid.eventmaid.configuration.AsynchronousConfiguration;
-import de.quantummaid.eventmaid.internal.pipe.error.PipeErrorHandler;
-import de.quantummaid.eventmaid.processingContext.ProcessingContext;
-import de.quantummaid.eventmaid.channel.action.DefaultActionHandlerSet;
+import de.quantummaid.eventmaid.internal.pipe.exceptions.PipeErrorHandler;
+import de.quantummaid.eventmaid.processingcontext.ProcessingContext;
 
 import static de.quantummaid.eventmaid.channel.ChannelType.SYNCHRONOUS;
 import static de.quantummaid.eventmaid.channel.exception.ErrorThrowingChannelExceptionHandler.errorThrowingChannelExceptionHandler;
@@ -180,14 +180,22 @@ public class ChannelBuilder<T> {
      */
     public Channel<T> build() {
         ensureNotNull(action, "action");
-        final Pipe<ProcessingContext<T>> acceptingPipe = createAcceptingPipe();
-        final Pipe<ProcessingContext<T>> prePipe = createSynchronousPipe();
-        final Pipe<ProcessingContext<T>> processPipe = createSynchronousPipe();
-        final Pipe<ProcessingContext<T>> postPipe = createDeliveringPipe();
-        createStatisticsCollectorAndEventListenerSetup(acceptingPipe, postPipe);
-        final ActionHandlerSet<T> actionHandlerSet = createDefaultActionHandlerSetIfAbsent();
-        return ChannelImpl.channel(this.action, acceptingPipe, prePipe, processPipe, postPipe, eventListener, statisticsCollector,
-                actionHandlerSet, channelExceptionHandler);
+        Pipe<ProcessingContext<T>> acceptingPipe = null;
+        try {
+            acceptingPipe = createAcceptingPipe();
+            final Pipe<ProcessingContext<T>> prePipe = createSynchronousPipe();
+            final Pipe<ProcessingContext<T>> processPipe = createSynchronousPipe();
+            final Pipe<ProcessingContext<T>> postPipe = createDeliveringPipe();
+            createStatisticsCollectorAndEventListenerSetup(acceptingPipe, postPipe);
+            final ActionHandlerSet<T> createdActionHandlerSet = createDefaultActionHandlerSetIfAbsent();
+            return ChannelImpl.channel(this.action, acceptingPipe, prePipe, processPipe, postPipe, eventListener, statisticsCollector,
+                    createdActionHandlerSet, channelExceptionHandler);
+        } catch (final RuntimeException e) {
+            if (acceptingPipe != null) {
+                acceptingPipe.close();
+            }
+            throw e;
+        }
     }
 
     private Pipe<ProcessingContext<T>> createAcceptingPipe() {
@@ -228,10 +236,10 @@ public class ChannelBuilder<T> {
     private void createStatisticsCollectorAndEventListenerSetup(final Pipe<ProcessingContext<T>> acceptingPipe,
                                                                 final Pipe<ProcessingContext<T>> postPipe) {
         if (eventListener == null && statisticsCollector == null) {
-            final PipeStatisticsBasedChannelStatisticsCollector statisticsCollector =
+            final PipeStatisticsBasedChannelStatisticsCollector createdStatisticsCollector =
                     pipeStatisticsBasedChannelStatisticsCollector(acceptingPipe, postPipe);
-            this.statisticsCollector = statisticsCollector;
-            this.eventListener = simpleChannelEventListener(statisticsCollector);
+            this.statisticsCollector = createdStatisticsCollector;
+            this.eventListener = simpleChannelEventListener(createdStatisticsCollector);
         }
     }
 

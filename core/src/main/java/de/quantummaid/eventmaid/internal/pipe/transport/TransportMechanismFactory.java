@@ -21,10 +21,10 @@
 
 package de.quantummaid.eventmaid.internal.pipe.transport;
 
-import de.quantummaid.eventmaid.internal.pipe.PipeType;
 import de.quantummaid.eventmaid.configuration.AsynchronousConfiguration;
-import de.quantummaid.eventmaid.internal.pipe.error.PipeErrorHandler;
+import de.quantummaid.eventmaid.internal.pipe.PipeType;
 import de.quantummaid.eventmaid.internal.pipe.events.PipeEventListener;
+import de.quantummaid.eventmaid.internal.pipe.exceptions.PipeErrorHandler;
 import de.quantummaid.eventmaid.subscribing.Subscriber;
 import lombok.RequiredArgsConstructor;
 

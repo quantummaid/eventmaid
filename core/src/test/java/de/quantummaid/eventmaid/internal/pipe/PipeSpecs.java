@@ -21,12 +21,12 @@
 
 package de.quantummaid.eventmaid.internal.pipe;
 
-import de.quantummaid.eventmaid.internal.pipe.config.PipeTestConfig;
-import de.quantummaid.eventmaid.internal.pipe.givenWhenThen.Given;
-import de.quantummaid.eventmaid.internal.pipe.givenWhenThen.PipeActionBuilder;
-import de.quantummaid.eventmaid.internal.pipe.givenWhenThen.PipeSetupBuilder;
-import de.quantummaid.eventmaid.internal.pipe.givenWhenThen.PipeValidationBuilder;
 import de.quantummaid.eventmaid.exceptions.AlreadyClosedException;
+import de.quantummaid.eventmaid.internal.pipe.config.PipeTestConfig;
+import de.quantummaid.eventmaid.internal.pipe.givenwhenthen.Given;
+import de.quantummaid.eventmaid.internal.pipe.givenwhenthen.PipeActionBuilder;
+import de.quantummaid.eventmaid.internal.pipe.givenwhenthen.PipeSetupBuilder;
+import de.quantummaid.eventmaid.internal.pipe.givenwhenthen.PipeValidationBuilder;
 import org.junit.jupiter.api.Test;
 
 public interface PipeSpecs {

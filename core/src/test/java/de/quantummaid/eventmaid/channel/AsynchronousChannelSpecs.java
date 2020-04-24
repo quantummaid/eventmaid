@@ -23,10 +23,10 @@ package de.quantummaid.eventmaid.channel;
 
 import de.quantummaid.eventmaid.channel.config.AsynchronousChannelConfigResolver;
 import de.quantummaid.eventmaid.channel.config.ChannelTestConfig;
-import de.quantummaid.eventmaid.channel.givenWhenThen.ChannelActionBuilder;
-import de.quantummaid.eventmaid.channel.givenWhenThen.ChannelSetupBuilder;
-import de.quantummaid.eventmaid.channel.givenWhenThen.ChannelValidationBuilder;
-import de.quantummaid.eventmaid.channel.givenWhenThen.Given;
+import de.quantummaid.eventmaid.channel.givenwhenthen.ChannelActionBuilder;
+import de.quantummaid.eventmaid.channel.givenwhenthen.ChannelSetupBuilder;
+import de.quantummaid.eventmaid.channel.givenwhenthen.ChannelValidationBuilder;
+import de.quantummaid.eventmaid.channel.givenwhenthen.Given;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

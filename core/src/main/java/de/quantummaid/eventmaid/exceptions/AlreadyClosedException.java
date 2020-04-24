@@ -22,8 +22,8 @@
 package de.quantummaid.eventmaid.exceptions;
 
 import de.quantummaid.eventmaid.channel.Channel;
-import de.quantummaid.eventmaid.messageBus.MessageBus;
-import de.quantummaid.eventmaid.messageFunction.MessageFunction;
+import de.quantummaid.eventmaid.messagebus.MessageBus;
+import de.quantummaid.eventmaid.messagefunction.MessageFunction;
 
 /**
  * Exception, that is thrown, when a message is send on a {@link Channel}, {@link MessageBus} or {@link MessageFunction} is

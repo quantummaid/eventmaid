@@ -22,7 +22,7 @@
 package de.quantummaid.eventmaid.channel;
 
 import de.quantummaid.eventmaid.channel.action.Action;
-import de.quantummaid.eventmaid.processingContext.ProcessingContext;
+import de.quantummaid.eventmaid.processingcontext.ProcessingContext;
 
 /**
  * The {@link ProcessingContext} object stores the history of the traversed {@code Channels} in form of a linked list of

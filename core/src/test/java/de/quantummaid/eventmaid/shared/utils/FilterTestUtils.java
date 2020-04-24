@@ -21,15 +21,15 @@
 
 package de.quantummaid.eventmaid.shared.utils;
 
-import de.quantummaid.eventmaid.channel.givenWhenThen.FilterPosition;
-import de.quantummaid.eventmaid.shared.environment.TestEnvironment;
-import de.quantummaid.eventmaid.shared.pipeChannelMessageBus.testActions.FilterTestActions;
-import de.quantummaid.eventmaid.shared.pipeChannelMessageBus.testActions.SimplifiedFilterTestActions;
-import de.quantummaid.eventmaid.shared.pipeChannelMessageBus.testActions.TestFilter;
-import de.quantummaid.eventmaid.shared.properties.SharedTestProperties;
-import de.quantummaid.eventmaid.shared.testMessages.TestMessage;
+import de.quantummaid.eventmaid.channel.givenwhenthen.FilterPosition;
 import de.quantummaid.eventmaid.filtering.Filter;
-import de.quantummaid.eventmaid.processingContext.ProcessingContext;
+import de.quantummaid.eventmaid.processingcontext.ProcessingContext;
+import de.quantummaid.eventmaid.shared.environment.TestEnvironment;
+import de.quantummaid.eventmaid.shared.pipechannelmessagebus.testActions.FilterTestActions;
+import de.quantummaid.eventmaid.shared.pipechannelmessagebus.testActions.SimplifiedFilterTestActions;
+import de.quantummaid.eventmaid.shared.pipechannelmessagebus.testActions.TestFilter;
+import de.quantummaid.eventmaid.shared.properties.SharedTestProperties;
+import de.quantummaid.eventmaid.shared.testmessages.TestMessage;
 import lombok.RequiredArgsConstructor;
 
 import java.util.LinkedList;

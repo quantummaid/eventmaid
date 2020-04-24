@@ -58,12 +58,12 @@
     </Match>
 
     <Match>
-        <Class name="de.quantummaid.eventmaid.messageBus.statistics.MessageBusStatistics"/>
+        <Class name="de.quantummaid.eventmaid.messagebus.statistics.MessageBusStatistics"/>
         <Method name="equals"/>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
     </Match>
     <Match>
-        <Class name="de.quantummaid.eventmaid.messageBus.statistics.MessageBusStatistics"/>
+        <Class name="de.quantummaid.eventmaid.messagebus.statistics.MessageBusStatistics"/>
         <Method name="hashCode"/>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
     </Match>
@@ -80,12 +80,12 @@
     </Match>
 
     <Match>
-        <Class name="de.quantummaid.eventmaid.channel.givenWhenThen.TestChannelErrorHandler$3"/>
+        <Class name="de.quantummaid.eventmaid.channel.givenwhenthen.TestChannelErrorHandler$3"/>
         <Bug pattern="BC_UNCONFIRMED_CAST"/>
     </Match>
 
     <Match>
-        <Class name="de.quantummaid.eventmaid.useCases.exceptionThrowing.ExceptionThrowingConfigurationResolver$ExpectedExceptionAllowMessageBusExceptionHandler"/>
+        <Class name="de.quantummaid.eventmaid.usecases.exceptionthrowing.ExceptionThrowingConfigurationResolver$ExpectedExceptionAllowMessageBusExceptionHandler"/>
         <Bug pattern="BC_UNCONFIRMED_CAST"/>
     </Match>
 

@@ -21,7 +21,7 @@
 
 package de.quantummaid.eventmaid.channel.exception;
 
-import de.quantummaid.eventmaid.processingContext.ProcessingContext;
+import de.quantummaid.eventmaid.processingcontext.ProcessingContext;
 import lombok.RequiredArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -54,7 +54,7 @@ public final class ErrorThrowingChannelExceptionHandler<T> implements ChannelExc
         if (e instanceof RuntimeException) {
             throw (RuntimeException) e;
         } else {
-            throw new RuntimeException(e);
+            throw new ExceptionInSubscriberException(e);
         }
     }
 
@@ -63,7 +63,7 @@ public final class ErrorThrowingChannelExceptionHandler<T> implements ChannelExc
         if (e instanceof RuntimeException) {
             throw (RuntimeException) e;
         } else {
-            throw new RuntimeException(e);
+            throw new ExceptionInFilterException(e);
         }
     }
 }

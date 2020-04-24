@@ -21,15 +21,15 @@
 
 package de.quantummaid.eventmaid.channel;
 
-import de.quantummaid.eventmaid.channel.givenWhenThen.ChannelActionBuilder;
-import de.quantummaid.eventmaid.channel.givenWhenThen.ChannelSetupBuilder;
-import de.quantummaid.eventmaid.channel.givenWhenThen.ChannelValidationBuilder;
-import de.quantummaid.eventmaid.channel.givenWhenThen.Given;
-import de.quantummaid.eventmaid.shared.exceptions.TestException;
 import de.quantummaid.eventmaid.channel.action.CallNotAllowedAsFinalChannelAction;
 import de.quantummaid.eventmaid.channel.action.NoHandlerForUnknownActionException;
 import de.quantummaid.eventmaid.channel.action.ReturnWithoutCallException;
 import de.quantummaid.eventmaid.channel.config.ChannelTestConfig;
+import de.quantummaid.eventmaid.channel.givenwhenthen.ChannelActionBuilder;
+import de.quantummaid.eventmaid.channel.givenwhenthen.ChannelSetupBuilder;
+import de.quantummaid.eventmaid.channel.givenwhenthen.ChannelValidationBuilder;
+import de.quantummaid.eventmaid.channel.givenwhenthen.Given;
+import de.quantummaid.eventmaid.shared.exceptions.TestException;
 import org.junit.jupiter.api.Test;
 
 public interface ChannelSpecs {

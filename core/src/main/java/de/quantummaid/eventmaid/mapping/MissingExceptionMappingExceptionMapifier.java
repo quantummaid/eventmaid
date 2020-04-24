@@ -21,7 +21,7 @@
 
 package de.quantummaid.eventmaid.mapping;
 
-import de.quantummaid.eventmaid.useCases.building.MissingExceptionSerializationException;
+import de.quantummaid.eventmaid.usecases.building.MissingExceptionSerializationException;
 
 import java.util.HashMap;
 import java.util.Map;
