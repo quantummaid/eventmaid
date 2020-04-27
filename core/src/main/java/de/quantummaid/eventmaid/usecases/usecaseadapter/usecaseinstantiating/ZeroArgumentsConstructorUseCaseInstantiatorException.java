@@ -30,7 +30,7 @@ public final class ZeroArgumentsConstructorUseCaseInstantiatorException extends 
         super(message, cause);
     }
 
-    static ZeroArgumentsConstructorUseCaseInstantiatorException zeroArgumentsConstructorUseCaseInstantiatorException(
+    public static ZeroArgumentsConstructorUseCaseInstantiatorException zeroArgumentsConstructorUseCaseInstantiatorException(
             final Class<?> type, final Throwable cause) {
         return new ZeroArgumentsConstructorUseCaseInstantiatorException("Exception during instantiation " +
                 "of " + type.getName() + " using zero argument constructor", cause);

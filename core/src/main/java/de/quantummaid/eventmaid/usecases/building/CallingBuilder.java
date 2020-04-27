@@ -26,12 +26,6 @@ import de.quantummaid.eventmaid.usecases.usecaseadapter.UseCaseInvocationBuilder
 import de.quantummaid.eventmaid.usecases.usecaseadapter.UseCaseInvokingResponseEventType;
 import de.quantummaid.eventmaid.usecases.usecaseadapter.usecasecalling.Caller;
 
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-
-import static java.util.Collections.emptyMap;
-
 /**
  * This interface defines how a use case should be invoked. All responses are send back on the same {@link SerializedMessageBus}
  * with the {@link UseCaseInvokingResponseEventType#USE_CASE_RESPONSE_EVENT_TYPE}.
@@ -39,31 +33,6 @@ import static java.util.Collections.emptyMap;
  * @param <U> the type of the currently configured use case
  */
 public interface CallingBuilder<U> {
-
-    /**
-     * The given {@link BiFunction} gets access to the current use case instance and the event. It should invoke the use case
-     * and return the serialized return value.
-     *
-     * @param caller the {@link BiFunction} invoking the use case
-     * @return the next step in the fluent builder interface
-     */
-    default Step1Builder calling(final BiFunction<U, Object, Map<String, Object>> caller) {
-        return callingBy((useCase, event, callingContext) -> caller.apply(useCase, event));
-    }
-
-    /**
-     * This method allows for calling use cases without a return value. The {@code BiConsumer} gets access to the current use
-     * case instance and event.
-     *
-     * @param caller the {@code BiConsumer} invoking the use case
-     * @return the next step in the fluent builder interface
-     */
-    default Step1Builder callingVoid(final BiConsumer<U, Object> caller) {
-        return callingBy((usecase, event, callingContext) -> {
-            caller.accept(usecase, event);
-            return emptyMap();
-        });
-    }
 
     /**
      * This method invokes the only public method on the current use case instance. All parameters of the method are deserialized

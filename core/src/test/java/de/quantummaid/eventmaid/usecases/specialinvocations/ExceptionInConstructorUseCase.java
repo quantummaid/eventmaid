@@ -19,12 +19,15 @@
  * under the License.
  */
 
-package de.quantummaid.eventmaid.usecases.usecaseadapter.parameterinjecting;
+package de.quantummaid.eventmaid.usecases.specialinvocations;
 
-import static java.lang.String.format;
+public class ExceptionInConstructorUseCase {
 
-public class NoInjectionDefinedException extends RuntimeException {
-    public NoInjectionDefinedException(final Class<?> parameterClass) {
-        super(format("No parameter injection defined for %s.", parameterClass));
+    public static ExceptionInConstructorUseCase init(final RuntimeException e) {
+        throw e;
+    }
+
+    public void method() {
+        throw new IllegalStateException("Should not be called");
     }
 }

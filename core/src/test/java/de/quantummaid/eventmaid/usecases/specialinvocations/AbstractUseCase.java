@@ -19,17 +19,11 @@
  * under the License.
  */
 
-package de.quantummaid.eventmaid.serializedmessagebus;
+package de.quantummaid.eventmaid.usecases.specialinvocations;
 
-public final class MissingErrorPayloadClassForDeserialization extends RuntimeException {
+public abstract class AbstractUseCase {
 
-    private MissingErrorPayloadClassForDeserialization(final String message) {
-        super(message);
+    public void method() {
+        throw new IllegalStateException("Should not be called");
     }
-
-    public static MissingErrorPayloadClassForDeserialization missingErrorPayloadClassForDeserialization() {
-        final String message = "Received message with error payload, but no class for error response was given.";
-        return new MissingErrorPayloadClassForDeserialization(message);
-    }
-
 }

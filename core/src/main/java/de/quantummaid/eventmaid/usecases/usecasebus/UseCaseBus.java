@@ -44,26 +44,6 @@ public interface UseCaseBus {
     }
 
     /**
-     * Invokes the correct use case based on the {@code EventType} with the send data. The method waits until a response is
-     * received or an exception occurred. The response is deserialized based on the given classes.
-     *
-     * @param eventType         the {@code EventType} to send the request on
-     * @param data              the request data
-     * @param payloadClass      the class to serialize the response payload to
-     * @param errorPayloadClass the class to serialize the error response payload to
-     * @param <P>               the type to serialize the response payload to
-     * @param <E>               the type to serialize the error response payload to
-     * @return the serialized response
-     * @throws InterruptedException if the waiting {@link Thread} was interrupted
-     * @throws ExecutionException   if an exception occurred
-     */
-    <P, E> PayloadAndErrorPayload<P, E> invokeAndWait(
-            EventType eventType,
-            Object data,
-            Class<P> payloadClass,
-            Class<E> errorPayloadClass) throws InterruptedException, ExecutionException;
-
-    /**
      * Invokes the correct use case based on the {@code EventType} with the send data, which is serialized before sending it. The
      * method waits until a response is received, an exception occurred or the timeout expired. The response is deserialized
      * based on the given classes.
@@ -89,20 +69,6 @@ public interface UseCaseBus {
             long timeout,
             TimeUnit unit)
             throws InterruptedException, ExecutionException, TimeoutException;
-
-    /**
-     * Invokes the correct use case based on the {@code EventType} with the send data, which is serialized before sending it. The
-     * method waits until a response is received or an exception occurred. The response is not deserialized.
-     *
-     * @param eventType the {@code EventType} to send the request on
-     * @param data      the request data
-     * @return the raw response
-     * @throws InterruptedException if the waiting {@link Thread} was interrupted
-     * @throws ExecutionException   if an exception occurred
-     */
-    PayloadAndErrorPayload<Object, Object> invokeAndWaitNotDeserialized(
-            EventType eventType,
-            Object data) throws InterruptedException, ExecutionException;
 
     /**
      * Invokes the correct use case based on the {@code EventType} with the send data, which is serialized before sending it. The

@@ -23,9 +23,9 @@ package de.quantummaid.eventmaid.mapping;
 
 import de.quantummaid.eventmaid.usecases.building.MissingExceptionSerializationException;
 
-import java.util.HashMap;
 import java.util.Map;
 
+import static de.quantummaid.eventmaid.mapping.ExceptionMapifier.defaultExceptionMapifier;
 import static java.lang.String.format;
 
 /**
@@ -40,6 +40,8 @@ public class MissingExceptionMappingExceptionMapifier implements Mapifier<Except
      */
     public static final String DEFAULT_EXCEPTION_MAPIFIER_KEY = "Exception";
 
+    private final ExceptionMapifier exceptionMapifier = defaultExceptionMapifier();
+
     /**
      * Factory method to create a new {@link ExceptionMapifier}
      *
@@ -51,12 +53,9 @@ public class MissingExceptionMappingExceptionMapifier implements Mapifier<Except
 
     @Override
     public Map<String, Object> map(final Exception cause) {
-        final Map<String, Object> map = new HashMap<>();
         final Class<? extends Exception> causeClass = cause.getClass();
         final String message = format("No response mapper found for exception of class %s.", causeClass);
         final MissingExceptionSerializationException exception = MissingExceptionSerializationException.missingExceptionSerializationException(message);
-        final String exceptionMessage = exception.getMessage();
-        map.put(DEFAULT_EXCEPTION_MAPIFIER_KEY, exceptionMessage);
-        return map;
+        return exceptionMapifier.map(exception);
     }
 }

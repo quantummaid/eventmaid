@@ -292,6 +292,14 @@ public final class SerializedMessageBusActionBuilder {
         });
     }
 
+    public static SerializedMessageBusActionBuilder anObjectWithoutSpecifyingClassOfResponseErrorClassIsSendWithTimeout() {
+        return sendTestMessageResultingInSomeError((eventType, serializedMessageBus, object) -> {
+            final Class<InvalidTestMessage> responseClasses = InvalidTestMessage.class;
+            return serializedMessageBus
+                    .invokeAndWaitDeserialized(eventType, object, responseClasses, null, DEFAULT_WAITING_TIMEOUT, MILLISECONDS);
+        });
+    }
+
     private static SerializedMessageBusActionBuilder sendObjectWithoutKnownSerialization(final InvokeAndWaitCall<Object> call) {
         return new SerializedMessageBusActionBuilder((serializedMessageBus, testEnvironment) -> {
             final EventType eventType = testEnvironment.getPropertyOrSetDefault(EVENT_TYPE, testEventType());

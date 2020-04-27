@@ -19,22 +19,17 @@
  * under the License.
  */
 
-package de.quantummaid.eventmaid.serializedmessagebus.asynchronous;
+package de.quantummaid.eventmaid.serializedmessagebus;
 
-import de.quantummaid.eventmaid.serializedmessagebus.givenwhenthen.SerializedMessageBusTestConfig;
-import de.quantummaid.eventmaid.shared.config.AbstractTestConfigProvider;
+public final class MissingErrorPayloadClassForDeserializationException extends RuntimeException {
 
-import static de.quantummaid.eventmaid.serializedmessagebus.givenwhenthen.SerializedMessageBusTestConfig.asynchronousMessageBusTestConfig;
-
-public class AsynchronousSerializedMessageBusConfigurationResolver extends AbstractTestConfigProvider {
-
-    @Override
-    protected Class<?> forConfigClass() {
-        return SerializedMessageBusTestConfig.class;
+    private MissingErrorPayloadClassForDeserializationException(final String message) {
+        super(message);
     }
 
-    @Override
-    protected Object testConfig() {
-        return asynchronousMessageBusTestConfig();
+    public static MissingErrorPayloadClassForDeserializationException missingErrorPayloadClassForDeserializationException() {
+        final String message = "Received message with error payload, but no class for error response was given.";
+        return new MissingErrorPayloadClassForDeserializationException(message);
     }
+
 }

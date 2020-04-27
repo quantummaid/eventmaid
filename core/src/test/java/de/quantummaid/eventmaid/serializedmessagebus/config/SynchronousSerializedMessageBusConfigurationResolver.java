@@ -1,4 +1,4 @@
-package de.quantummaid.eventmaid.serializedmessagebus.synchronous;
+package de.quantummaid.eventmaid.serializedmessagebus.config;
 
 import de.quantummaid.eventmaid.serializedmessagebus.givenwhenthen.SerializedMessageBusTestConfig;
 import de.quantummaid.eventmaid.shared.config.AbstractTestConfigProvider;

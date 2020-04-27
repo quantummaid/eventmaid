@@ -182,10 +182,10 @@ public class ChannelBuilder<T> {
         ensureNotNull(action, "action");
         Pipe<ProcessingContext<T>> acceptingPipe = null;
         try {
-            acceptingPipe = createAcceptingPipe();
-            final Pipe<ProcessingContext<T>> prePipe = createSynchronousPipe();
-            final Pipe<ProcessingContext<T>> processPipe = createSynchronousPipe();
-            final Pipe<ProcessingContext<T>> postPipe = createDeliveringPipe();
+            acceptingPipe = createAcceptingPipe(); // NOSONAR
+            final Pipe<ProcessingContext<T>> prePipe = createSynchronousPipe(); // NOSONAR
+            final Pipe<ProcessingContext<T>> processPipe = createSynchronousPipe(); // NOSONAR
+            final Pipe<ProcessingContext<T>> postPipe = createDeliveringPipe(); // NOSONAR
             createStatisticsCollectorAndEventListenerSetup(acceptingPipe, postPipe);
             final ActionHandlerSet<T> createdActionHandlerSet = createDefaultActionHandlerSetIfAbsent();
             return ChannelImpl.channel(this.action, acceptingPipe, prePipe, processPipe, postPipe, eventListener, statisticsCollector,
@@ -220,7 +220,7 @@ public class ChannelBuilder<T> {
     private Pipe<ProcessingContext<T>> createDeliveringPipe() {
         return PipeBuilder.<ProcessingContext<T>>aPipe()
                 .ofType(PipeType.SYNCHRONOUS)
-                .withErrorHandler(new PipeErrorHandler<ProcessingContext<T>>() {
+                .withErrorHandler(new PipeErrorHandler<>() {
                     @Override
                     public boolean shouldErrorBeHandledAndDeliveryAborted(final ProcessingContext<T> m, final Exception e) {
                         return channelExceptionHandler.shouldSubscriberErrorBeHandledAndDeliveryAborted(m, e);

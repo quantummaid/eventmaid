@@ -23,13 +23,14 @@ package de.quantummaid.eventmaid.channel;
 
 import de.quantummaid.eventmaid.channel.config.ChannelTestConfig;
 import de.quantummaid.eventmaid.channel.config.SynchronousChannelConfigResolver;
-import de.quantummaid.eventmaid.channel.givenwhenthen.ChannelActionBuilder;
-import de.quantummaid.eventmaid.channel.givenwhenthen.ChannelSetupBuilder;
-import de.quantummaid.eventmaid.channel.givenwhenthen.ChannelValidationBuilder;
-import de.quantummaid.eventmaid.channel.givenwhenthen.Given;
 import de.quantummaid.eventmaid.shared.exceptions.TestException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import static de.quantummaid.eventmaid.channel.givenwhenthen.ChannelActionBuilder.*;
+import static de.quantummaid.eventmaid.channel.givenwhenthen.ChannelSetupBuilder.aConfiguredChannel;
+import static de.quantummaid.eventmaid.channel.givenwhenthen.ChannelValidationBuilder.*;
+import static de.quantummaid.eventmaid.channel.givenwhenthen.Given.given;
 
 @ExtendWith(SynchronousChannelConfigResolver.class)
 public class SynchronousChannelSpecs implements ChannelSpecs {
@@ -38,53 +39,70 @@ public class SynchronousChannelSpecs implements ChannelSpecs {
     @Test
     public void testChannel_synchronousConfigDoesNotQueueMessages(final ChannelTestConfig channelTestConfig) {
         final int numberOfSendMessages = 7;
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withSubscriptionAsAction())
-                .when(ChannelActionBuilder.severalMessagesAreSendAsynchronouslyThatWillBeBlocked(numberOfSendMessages)
-                        .andThen(ChannelActionBuilder.theNumberOfQueuedMessagesIsQueried()))
-                .then(ChannelValidationBuilder.expectTheResult(0));
+                .when(severalMessagesAreSendAsynchronouslyThatWillBeBlocked(numberOfSendMessages)
+                        .andThen(theNumberOfQueuedMessagesIsQueried()))
+                .then(expectTheResult(0));
     }
 
     //shutdown
     @Test
     public void testChannel_closeWithoutFinishingRemainingTasks_hasNoEffectForSynchronousConfig(final ChannelTestConfig config) {
         final int numberOfMessages = 7;
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(config)
+        given(aConfiguredChannel(config)
                 .withSubscriptionAsAction())
-                .when(ChannelActionBuilder.severalMessagesAreSendAsynchronouslyBeforeTheChannelIsClosedWithoutFinishingRemainingTasks(numberOfMessages)
-                        .andThen(ChannelActionBuilder.theNumberOfMessagesIsQueriedThatAreStillDeliveredSuccessfully()))
-                .then(ChannelValidationBuilder.expectTheResult(numberOfMessages)
-                        .and(ChannelValidationBuilder.expectTheChannelToBeShutdown()));
+                .when(severalMessagesAreSendAsynchronouslyBeforeTheChannelIsClosedWithoutFinishingRemainingTasks(numberOfMessages)
+                        .andThen(theNumberOfMessagesIsQueriedThatAreStillDeliveredSuccessfully()))
+                .then(expectTheResult(numberOfMessages)
+                        .and(expectTheChannelToBeShutdown()));
     }
 
-    //errors
+    //error handling
     @Test
     public void testMessageBus_exceptionHandlerIsCalledOnceEvenIfExceptionIsRethrown(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAnExceptionInFinalAction()
                 .withAnExceptionHandlerRethrowingExceptions())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectADeliveryExceptionOfType(TestException.class));
+                .when(aMessageIsSend())
+                .then(expectADeliveryExceptionOfType(TestException.class));
     }
 
     @Test
     public void testMessageBus_exceptionIsAlsoThrownBySendMethod(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAnExceptionInFinalAction()
                 .withAnExceptionHandlerRethrowingExceptions())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectADeliveryExceptionOfType(TestException.class));
+                .when(aMessageIsSend())
+                .then(expectADeliveryExceptionOfType(TestException.class));
+    }
+
+    @Test
+    public void testSynchronousChannel_throwsExceptionOccurredDuringDelivery(final ChannelTestConfig channelTestConfig) {
+        given(aConfiguredChannel(channelTestConfig)
+                .withAnExceptionInFinalAction())
+                .when(aMessageIsSend())
+                .then(expectTheExceptionClass(TestException.class));
+    }
+
+    @Test
+    public void testSynchronousChannel_throwsExceptionOccurredDuringFiltering(final ChannelTestConfig channelTestConfig) {
+        final TestException expectedException = new TestException();
+        given(aConfiguredChannel(channelTestConfig)
+                .withAnErrorThrowingFilter(expectedException))
+                .when(aMessageIsSend())
+                .then(expectTheException(expectedException));
     }
 
     //await
     @Test
     public void testChannel_awaitsWithoutFinishingTasks_succeedsDespiteNotFinished(final ChannelTestConfig channelTestConfig) {
         final int numberOfMessages = 7;
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withSubscriptionAsAction())
-                .when(ChannelActionBuilder.severalMessagesAreSendAsynchronouslyBeforeTheChannelIsClosedWithoutFinishingRemainingTasks(numberOfMessages)
-                        .andThen(ChannelActionBuilder.theShutdownIsAwaited()))
-                .then(ChannelValidationBuilder.expectTheShutdownToBeSucceededInTime());
+                .when(severalMessagesAreSendAsynchronouslyBeforeTheChannelIsClosedWithoutFinishingRemainingTasks(numberOfMessages)
+                        .andThen(theShutdownIsAwaited()))
+                .then(expectTheShutdownToBeSucceededInTime());
     }
 
 }

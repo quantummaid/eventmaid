@@ -60,9 +60,10 @@ public final class ZeroArgumentsConstructorUseCaseInstantiator implements UseCas
             } else {
                 throw zeroArgumentsConstructorUseCaseInstantiatorException(type, e);
             }
-        } catch (final NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+        } catch (final InvocationTargetException e) {
+            throw zeroArgumentsConstructorUseCaseInstantiatorException(type, e.getTargetException());
+        } catch (final NoSuchMethodException | InstantiationException | IllegalAccessException e) {
             throw zeroArgumentsConstructorUseCaseInstantiatorException(type, e);
         }
     }
-
 }

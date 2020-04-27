@@ -41,26 +41,10 @@ class UseCaseBusImpl implements UseCaseBus {
             final EventType eventType,
             final Object data,
             final Class<P> payloadClass,
-            final Class<E> errorPayloadClass) throws InterruptedException, ExecutionException {
-        return serializedMessageBus.invokeAndWaitDeserialized(eventType, data, payloadClass, errorPayloadClass);
-    }
-
-    @Override
-    public <P, E> PayloadAndErrorPayload<P, E> invokeAndWait(
-            final EventType eventType,
-            final Object data,
-            final Class<P> payloadClass,
             final Class<E> errorPayloadClass,
             final long timeout,
             final TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         return serializedMessageBus.invokeAndWaitDeserialized(eventType, data, payloadClass, errorPayloadClass, timeout, unit);
-    }
-
-    @Override
-    public PayloadAndErrorPayload<Object, Object> invokeAndWaitNotDeserialized(
-            final EventType eventType,
-            final Object data) throws InterruptedException, ExecutionException {
-        return serializedMessageBus.invokeAndWaitSerializedOnly(eventType, data);
     }
 
     @Override

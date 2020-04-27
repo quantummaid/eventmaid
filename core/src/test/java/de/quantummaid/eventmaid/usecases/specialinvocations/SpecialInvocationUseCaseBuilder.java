@@ -62,14 +62,13 @@ public final class SpecialInvocationUseCaseBuilder {
     public SpecialInvocationUseCaseBuilder forAnUseCaseThrowingAnExceptionDuringInitialization(
             final RuntimeException exceptionToThrow) {
         final MessageBus messageBus = asynchronousMessageBus();
-        final EventType type = eventTypeFromString("Test");
         final UseCaseBus useCaseBus = anUseCaseAdapter()
-                .invokingUseCase(ExceptionDuringInitializationUseCase.class).forType(type).callingTheSingleUseCaseMethod()
+                .invokingUseCase(ExceptionInConstructorUseCase.class).forType("Test").callingTheSingleUseCaseMethod()
                 .obtainingUseCaseInstancesUsing(new UseCaseInstantiator() {
                     @SuppressWarnings("unchecked")
                     @Override
                     public <T> T instantiate(final Class<T> type) {
-                        return (T) ExceptionDuringInitializationUseCase.init(exceptionToThrow);
+                        return (T) ExceptionInConstructorUseCase.init(exceptionToThrow);
                     }
                 })
                 .serializingUseCaseRequestOntoTheBusOfTypeVoid().using(object -> emptyMap())
@@ -82,15 +81,14 @@ public final class SpecialInvocationUseCaseBuilder {
                 .build(messageBus);
         testEnvironment.setPropertyIfNotSet(MOCK, messageBus);
         testEnvironment.setPropertyIfNotSet(SUT, useCaseBus);
-        testEnvironment.setPropertyIfNotSet(TEST_OBJECT, type);
+        testEnvironment.setPropertyIfNotSet(TEST_OBJECT, eventTypeFromString("Test"));
         return this;
     }
 
     public SpecialInvocationUseCaseBuilder forAnUseCaseThrowingAnExceptionDuringStaticInitializer() {
         final MessageBus messageBus = asynchronousMessageBus();
-        final EventType type = eventTypeFromString("Test");
         final UseCaseBus useCaseBus = anUseCaseAdapter()
-                .invokingUseCase(ExceptionInStaticInitializerUseCase.class).forType(type).callingTheSingleUseCaseMethod()
+                .invokingUseCase(ExceptionInStaticInitializerUseCase.class).forType("Test").callingTheSingleUseCaseMethod()
                 .obtainingUseCaseInstancesUsingTheZeroArgumentConstructor()
                 .serializingUseCaseRequestOntoTheBusOfTypeVoid().using(object -> emptyMap())
                 .throwingAnExceptionByDefaultIfNoRequestSerializationCanBeApplied()
@@ -102,12 +100,12 @@ public final class SpecialInvocationUseCaseBuilder {
                 .build(messageBus);
         testEnvironment.setPropertyIfNotSet(MOCK, messageBus);
         testEnvironment.setPropertyIfNotSet(SUT, useCaseBus);
-        testEnvironment.setPropertyIfNotSet(TEST_OBJECT, type);
+        testEnvironment.setPropertyIfNotSet(TEST_OBJECT, eventTypeFromString("Test"));
         return this;
     }
 
     @SuppressWarnings("unchecked")
-    public SpecialInvocationUseCaseBuilder withToUseCasesDefined() {
+    public SpecialInvocationUseCaseBuilder withTwoUseCasesDefined() {
         final MessageBus messageBus = asynchronousMessageBus();
         final EventType type1 = eventTypeFromString("A");
         final EventType type2 = eventTypeFromString("B");
@@ -156,6 +154,48 @@ public final class SpecialInvocationUseCaseBuilder {
                     return useCaseBus.invokeAndWait(type2, singleParameterEvent, SingleParameterResponse.class, null, 1, SECONDS);
                 });
         testEnvironment.setProperty(USE_CASE_INVOCATIONS, eventTypes);
+        return this;
+    }
+
+    public SpecialInvocationUseCaseBuilder forAnUseCaseThrowingAnExceptionDuringZeroArgsConstructorWhenUsing0ArgsInstantiator(
+            final RuntimeException exceptionToThrow) {
+        ExceptionInZeroArgsConstructorUseCase.setExceptionToThrow(exceptionToThrow);
+        final MessageBus messageBus = asynchronousMessageBus();
+        final EventType type = eventTypeFromString("Test");
+        final UseCaseBus useCaseBus = anUseCaseAdapter()
+                .invokingUseCase(ExceptionInZeroArgsConstructorUseCase.class).forType(type).callingTheSingleUseCaseMethod()
+                .obtainingUseCaseInstancesUsingTheZeroArgumentConstructor()
+                .serializingUseCaseRequestOntoTheBusOfTypeVoid().using(object -> emptyMap())
+                .throwingAnExceptionByDefaultIfNoRequestSerializationCanBeApplied()
+                .throwAnExceptionByDefaultIfNoUseCaseRequestDeserializationCanBeApplied()
+                .serializingResponseObjectsOfTypeVoid().using(object -> emptyMap())
+                .throwingAnExceptionByDefaultIfNoResponseSerializationCanBeApplied()
+                .respondingWithAWrappingMissingExceptionSerializationExceptionByDefault()
+                .throwAnExceptionByDefaultIfNoResponseDeserializationCanBeApplied()
+                .build(messageBus);
+        testEnvironment.setPropertyIfNotSet(MOCK, messageBus);
+        testEnvironment.setPropertyIfNotSet(SUT, useCaseBus);
+        testEnvironment.setPropertyIfNotSet(TEST_OBJECT, type);
+        return this;
+    }
+
+    public SpecialInvocationUseCaseBuilder forAnUseCaseThrowingAnExceptionDuringInstantiationWhenUsing0ArgsInstantiator() {
+        final MessageBus messageBus = asynchronousMessageBus();
+        final EventType type = eventTypeFromString("Test");
+        final UseCaseBus useCaseBus = anUseCaseAdapter()
+                .invokingUseCase(AbstractUseCase.class).forType(type).callingTheSingleUseCaseMethod()
+                .obtainingUseCaseInstancesUsingTheZeroArgumentConstructor()
+                .serializingUseCaseRequestOntoTheBusOfTypeVoid().using(object -> emptyMap())
+                .throwingAnExceptionByDefaultIfNoRequestSerializationCanBeApplied()
+                .throwAnExceptionByDefaultIfNoUseCaseRequestDeserializationCanBeApplied()
+                .serializingResponseObjectsOfTypeVoid().using(object -> emptyMap())
+                .throwingAnExceptionByDefaultIfNoResponseSerializationCanBeApplied()
+                .respondingWithAWrappingMissingExceptionSerializationExceptionByDefault()
+                .throwAnExceptionByDefaultIfNoResponseDeserializationCanBeApplied()
+                .build(messageBus);
+        testEnvironment.setPropertyIfNotSet(MOCK, messageBus);
+        testEnvironment.setPropertyIfNotSet(SUT, useCaseBus);
+        testEnvironment.setPropertyIfNotSet(TEST_OBJECT, type);
         return this;
     }
 

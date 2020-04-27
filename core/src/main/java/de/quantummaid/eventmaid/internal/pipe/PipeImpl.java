@@ -22,6 +22,8 @@
 package de.quantummaid.eventmaid.internal.pipe;
 
 import de.quantummaid.eventmaid.exceptions.AlreadyClosedException;
+import de.quantummaid.eventmaid.internal.exceptions.BubbleUpWrappedException;
+import de.quantummaid.eventmaid.internal.pipe.exceptions.PipeErrorHandler;
 import de.quantummaid.eventmaid.internal.pipe.statistics.PipeStatistics;
 import de.quantummaid.eventmaid.internal.pipe.statistics.PipeStatisticsCollector;
 import de.quantummaid.eventmaid.internal.pipe.transport.TransportMechanism;
@@ -39,21 +41,33 @@ public final class PipeImpl<T> implements Pipe<T> {
     private final TransportMechanism<T> transportMechanism;
     private final PipeStatisticsCollector statisticsCollector;
     private final List<Subscriber<T>> subscribers;
+    private final PipeErrorHandler<T> errorHandler;
     private volatile boolean closedAlreadyCalled;
 
-    public PipeImpl(final TransportMechanism<T> transportMechanism, final PipeStatisticsCollector statisticsCollector,
-                    final List<Subscriber<T>> subscribers) {
+    public PipeImpl(final TransportMechanism<T> transportMechanism,
+                    final PipeStatisticsCollector statisticsCollector,
+                    final List<Subscriber<T>> subscribers,
+                    final PipeErrorHandler<T> errorHandler) {
         this.transportMechanism = transportMechanism;
         this.statisticsCollector = statisticsCollector;
         this.subscribers = subscribers;
+        this.errorHandler = errorHandler;
     }
 
     @Override
     public void send(final T message) {
         if (!closedAlreadyCalled) {
-            transportMechanism.transport(message);
+            transport(message);
         } else {
             throw new AlreadyClosedException();
+        }
+    }
+
+    private void transport(final T message) {
+        try {
+            transportMechanism.transport(message);
+        } catch (final BubbleUpWrappedException e) {
+            errorHandler.handleBubbledUpException(message, e);
         }
     }
 

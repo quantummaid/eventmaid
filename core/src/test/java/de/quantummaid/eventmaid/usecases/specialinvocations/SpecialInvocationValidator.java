@@ -25,12 +25,14 @@ import de.quantummaid.eventmaid.shared.environment.TestEnvironment;
 import de.quantummaid.eventmaid.shared.givenwhenthen.TestValidation;
 import de.quantummaid.eventmaid.shared.validations.SharedTestValidations;
 import de.quantummaid.eventmaid.usecases.payloadanderrorpayload.PayloadAndErrorPayload;
+import de.quantummaid.eventmaid.usecases.usecaseadapter.usecaseinstantiating.ZeroArgumentsConstructorUseCaseInstantiatorException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static de.quantummaid.eventmaid.shared.environment.TestEnvironmentProperty.RESULT;
+import static de.quantummaid.eventmaid.shared.validations.SharedTestValidations.assertEquals;
 import static de.quantummaid.eventmaid.shared.validations.SharedTestValidations.assertNoExceptionThrown;
 import static de.quantummaid.eventmaid.usecases.noparameter.NoParameterUseCase.NO_PARAMETER_USE_CASE_RETURN_VALUE;
 import static de.quantummaid.eventmaid.usecases.singleeventparameter.SingleParameterResponse.singleParameterResponse;
@@ -75,6 +77,32 @@ public final class SpecialInvocationValidator {
             final PayloadAndErrorPayload<?, ?> singleParameterUseCaseResult = result.get(1);
             final Object singleParameterResponse = singleParameterUseCaseResult.getPayload();
             SharedTestValidations.assertEquals(singleParameterResponse, singleParameterResponse("Test"));
+        });
+    }
+
+    public static SpecialInvocationValidator expectExecutionExceptionContainingAnZeroArgumentsConstructorExceptionContaining(
+            final RuntimeException expectedException) {
+        return asValidation(testEnvironment -> {
+            SharedTestValidations.assertResultOfClass(testEnvironment, ExecutionException.class);
+            final ExecutionException executionException = testEnvironment.getPropertyAsType(RESULT, ExecutionException.class);
+            final Throwable cause = executionException.getCause();
+            assertEquals(cause.getClass(), ZeroArgumentsConstructorUseCaseInstantiatorException.class);
+            final ZeroArgumentsConstructorUseCaseInstantiatorException exception =
+                    (ZeroArgumentsConstructorUseCaseInstantiatorException) executionException.getCause();
+            SharedTestValidations.assertEquals(exception.getCause(), expectedException);
+        });
+    }
+
+    public static SpecialInvocationValidator expectExecutionExceptionContainingAn0ArgumentsConstructorExceptionContainingClass(
+            final Class<?> expectedExceptionClass) {
+        return asValidation(testEnvironment -> {
+            SharedTestValidations.assertResultOfClass(testEnvironment, ExecutionException.class);
+            final ExecutionException executionException = testEnvironment.getPropertyAsType(RESULT, ExecutionException.class);
+            final Throwable cause = executionException.getCause();
+            assertEquals(cause.getClass(), ZeroArgumentsConstructorUseCaseInstantiatorException.class);
+            final ZeroArgumentsConstructorUseCaseInstantiatorException exception =
+                    (ZeroArgumentsConstructorUseCaseInstantiatorException) executionException.getCause();
+            SharedTestValidations.assertEquals(exception.getCause().getClass(), expectedExceptionClass);
         });
     }
 

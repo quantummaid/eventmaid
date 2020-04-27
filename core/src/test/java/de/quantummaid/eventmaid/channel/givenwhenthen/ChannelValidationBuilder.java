@@ -30,7 +30,6 @@ import de.quantummaid.eventmaid.shared.environment.TestEnvironmentProperty;
 import de.quantummaid.eventmaid.shared.givenwhenthen.TestValidation;
 import de.quantummaid.eventmaid.shared.polling.PollingUtils;
 import de.quantummaid.eventmaid.shared.testmessages.TestMessage;
-import de.quantummaid.eventmaid.shared.validations.SharedTestValidations;
 import de.quantummaid.eventmaid.subscribing.Subscriber;
 import de.quantummaid.eventmaid.subscribing.SubscriptionId;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +44,7 @@ import static de.quantummaid.eventmaid.shared.environment.TestEnvironmentPropert
 import static de.quantummaid.eventmaid.shared.pipechannelmessagebus.PipeChannelMessageBusSharedTestValidations.*;
 import static de.quantummaid.eventmaid.shared.polling.PollingUtils.pollUntil;
 import static de.quantummaid.eventmaid.shared.properties.SharedTestProperties.*;
-import static de.quantummaid.eventmaid.shared.validations.SharedTestValidations.assertPropertyTrue;
+import static de.quantummaid.eventmaid.shared.validations.SharedTestValidations.*;
 import static lombok.AccessLevel.PRIVATE;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -59,21 +58,21 @@ public final class ChannelValidationBuilder {
 
     public static ChannelValidationBuilder expectTheMessageToBeConsumed() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
-            SharedTestValidations.assertResultAndExpectedResultAreEqual(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
+            assertResultAndExpectedResultAreEqual(testEnvironment);
         });
     }
 
     public static ChannelValidationBuilder expectTheMessageToBeConsumedByTheSecondChannel() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
-            SharedTestValidations.assertResultAndExpectedResultAreEqual(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
+            assertResultAndExpectedResultAreEqual(testEnvironment);
         });
     }
 
     public static ChannelValidationBuilder expectAllChannelsToBeContainedInTheHistory() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             final List<Channel<TestMessage>> expectedTraversedChannels = getTestPropertyAsListOfChannel(testEnvironment,
                     ChannelTestProperties.ALL_CHANNELS);
             assertResultTraversedAllChannelBasedOnTheirDefaultActions(testEnvironment, expectedTraversedChannels);
@@ -82,7 +81,7 @@ public final class ChannelValidationBuilder {
 
     public static ChannelValidationBuilder expectTheMessageToHaveReturnedSuccessfully() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             final Channel<TestMessage> firstChannel = getTestPropertyAsChannel(testEnvironment, SUT);
             final Channel<TestMessage> callTargetChannel = getTestPropertyAsChannel(testEnvironment, ChannelTestProperties.CALL_TARGET_CHANNEL);
             final Channel<TestMessage> returningTargetChannel = getTestPropertyAsChannel(testEnvironment, ChannelTestProperties.RETURNING_CHANNEL);
@@ -96,7 +95,7 @@ public final class ChannelValidationBuilder {
 
     public static ChannelValidationBuilder expectTheMessageToHaveReturnedFromAllCalls() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             final Channel<TestMessage> initialChannel = getTestPropertyAsChannel(testEnvironment, SUT);
             final List<Channel<TestMessage>> callTargetLists = getTestPropertyAsListOfChannel(testEnvironment,
                     ChannelTestProperties.CALL_TARGET_CHANNEL);
@@ -115,33 +114,33 @@ public final class ChannelValidationBuilder {
 
     public static ChannelValidationBuilder expectNoMessageToBeDelivered() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             pollUntil(() -> testEnvironment.has(SINGLE_SEND_MESSAGE));
-            SharedTestValidations.assertNoResultSet(testEnvironment);
+            assertNoResultSet(testEnvironment);
         });
     }
 
     public static ChannelValidationBuilder expectAExceptionOfType(final Class<?> expectedExceptionClass) {
-        return aValidation(testEnvironment -> SharedTestValidations.assertExceptionThrownOfType(testEnvironment, expectedExceptionClass));
+        return aValidation(testEnvironment -> assertExceptionThrownOfType(testEnvironment, expectedExceptionClass));
     }
 
     public static ChannelValidationBuilder expectADeliveryExceptionOfType(final Class<?> expectedExceptionClass) {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertExceptionThrownOfType(testEnvironment, expectedExceptionClass);
+            assertExceptionThrownOfType(testEnvironment, expectedExceptionClass);
             assertPropertyTrue(testEnvironment, EXCEPTION_OCCURRED_DURING_DELIVERY);
         });
     }
 
     public static ChannelValidationBuilder expectTheChangedActionToBeExecuted() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
-            SharedTestValidations.assertResultAndExpectedResultAreEqual(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
+            assertResultAndExpectedResultAreEqual(testEnvironment);
         });
     }
 
     public static ChannelValidationBuilder expectAllFilterToBeInCorrectOrderInChannel() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             final List<Filter<ProcessingContext<TestMessage>>> expectedFilter = getTestPropertyAsListOfFilter(testEnvironment,
                     EXPECTED_RESULT);
             assertFilterAsExpected(testEnvironment, expectedFilter);
@@ -150,14 +149,14 @@ public final class ChannelValidationBuilder {
 
     public static ChannelValidationBuilder expectTheFilterInOrderAsAdded() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             assertResultEqualToExpectedFilter(testEnvironment);
         });
     }
 
     public static ChannelValidationBuilder expectTheAllRemainingFilter() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             final List<Filter<ProcessingContext<TestMessage>>> expectedFilter = getTestPropertyAsListOfFilter(testEnvironment,
                     EXPECTED_FILTER);
             assertFilterAsExpected(testEnvironment, expectedFilter);
@@ -166,36 +165,40 @@ public final class ChannelValidationBuilder {
 
     public static ChannelValidationBuilder expectTheMetaDataChangePersist() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             assertMetaDatumOfResultSetAsExpected(testEnvironment);
         });
     }
 
     public static ChannelValidationBuilder expectTheResult(final Object expectedResult) {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
-            SharedTestValidations.assertResultEqualsExpected(testEnvironment, expectedResult);
+            assertNoExceptionThrown(testEnvironment);
+            assertResultEqualsExpected(testEnvironment, expectedResult);
         });
     }
 
     public static ChannelValidationBuilder expectTheDeliveryExceptionCatched(final Class<?> expectedResultClass) {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
-            SharedTestValidations.assertResultOfClass(testEnvironment, expectedResultClass);
+            assertNoExceptionThrown(testEnvironment);
+            assertResultOfClass(testEnvironment, expectedResultClass);
             assertPropertyTrue(testEnvironment, EXCEPTION_OCCURRED_DURING_DELIVERY);
         });
     }
 
     public static ChannelValidationBuilder expectTheFilterExceptionCatched(final Class<?> expectedResultClass) {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
-            SharedTestValidations.assertResultOfClass(testEnvironment, expectedResultClass);
+            assertNoExceptionThrown(testEnvironment);
+            assertResultOfClass(testEnvironment, expectedResultClass);
             assertPropertyTrue(testEnvironment, EXCEPTION_OCCURRED_INSIDE_FILTER);
         });
     }
 
-    public static ChannelValidationBuilder expectTheException(final Class<?> expectedExceptionClass) {
-        return aValidation(testEnvironment -> SharedTestValidations.assertExceptionThrownOfType(testEnvironment, expectedExceptionClass));
+    public static ChannelValidationBuilder expectTheExceptionClass(final Class<?> expectedExceptionClass) {
+        return aValidation(testEnvironment -> assertExceptionThrownOfType(testEnvironment, expectedExceptionClass));
+    }
+
+    public static ChannelValidationBuilder expectTheException(final Exception e) {
+        return aValidation(testEnvironment -> assertExceptionThrown(testEnvironment, e));
     }
 
     public static ChannelValidationBuilder expectTheMessageToBeReceivedByAllRemainingSubscriber() {
@@ -213,7 +216,7 @@ public final class ChannelValidationBuilder {
 
     public static ChannelValidationBuilder expectTheProcessingContextObjectToBeReceivedByAllSubscriber() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             final ProcessingContext<?> processingContext = getExpectedProcessingContext(testEnvironment);
             final List<?> expectedTestMessages = Collections.singletonList(processingContext);
             assertExpectedReceiverReceivedAllMessages(testEnvironment, expectedTestMessages);
@@ -230,7 +233,7 @@ public final class ChannelValidationBuilder {
             final Subscription<TestMessage> subscription = (Subscription<TestMessage>) channel.getDefaultAction();
             final List<Subscriber<?>> subscribers = subscription.getAllSubscribers();
             final List<Subscriber<?>> expectedSubscribers = getPropertyAsListOfSubscriber(testEnvironment);
-            SharedTestValidations.assertEquals(subscribers.size(), expectedSubscribers.size());
+            assertEquals(subscribers.size(), expectedSubscribers.size());
             for (final Subscriber<?> expectedSubscriber : expectedSubscribers) {
                 final SubscriptionId expectedSubscriptionId = expectedSubscriber.getSubscriptionId();
                 subscribers.stream()
@@ -243,37 +246,37 @@ public final class ChannelValidationBuilder {
 
     public static ChannelValidationBuilder expectTheChannelToBeShutdown() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             assertIsShutdown(testEnvironment);
         });
     }
 
     public static ChannelValidationBuilder expectTheShutdownToBeSucceededInTime() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             assertIsShutdown(testEnvironment);
-            SharedTestValidations.assertResultEqualsExpected(testEnvironment, true);
+            assertResultEqualsExpected(testEnvironment, true);
         });
     }
 
     public static ChannelValidationBuilder expectTheShutdownToBeFailed() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             assertIsShutdown(testEnvironment);
-            SharedTestValidations.assertResultEqualsExpected(testEnvironment, false);
+            assertResultEqualsExpected(testEnvironment, false);
         });
     }
 
     public static ChannelValidationBuilder expectOnlyTheFirstSubscriberToBeCalled() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             assertOnlyFirstSubscriberReceivedMessage(testEnvironment);
         });
     }
 
     public static ChannelValidationBuilder expectTheMessageToHaveTheSameMessageIdAndAMatchingGeneratedCorrelationId() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             final ProcessingContext<?> result = getResultProcessingContext(testEnvironment);
             assertTheMessageToHaveTheSameMessageIdAndAMatchingGeneratedCorrelationId(testEnvironment, result);
         });
@@ -281,7 +284,7 @@ public final class ChannelValidationBuilder {
 
     public static ChannelValidationBuilder expectTheCorrelationIdToBeSetWhenReceived() {
         return aValidation(testEnvironment -> {
-            SharedTestValidations.assertNoExceptionThrown(testEnvironment);
+            assertNoExceptionThrown(testEnvironment);
             final ProcessingContext<?> result = getResultProcessingContext(testEnvironment);
             assertTheCorrelationIdToBeSetWhenReceived(testEnvironment, result);
         });

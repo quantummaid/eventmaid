@@ -23,107 +23,108 @@ package de.quantummaid.eventmaid.internal.pipe;
 
 import de.quantummaid.eventmaid.exceptions.AlreadyClosedException;
 import de.quantummaid.eventmaid.internal.pipe.config.PipeTestConfig;
-import de.quantummaid.eventmaid.internal.pipe.givenwhenthen.Given;
-import de.quantummaid.eventmaid.internal.pipe.givenwhenthen.PipeActionBuilder;
-import de.quantummaid.eventmaid.internal.pipe.givenwhenthen.PipeSetupBuilder;
-import de.quantummaid.eventmaid.internal.pipe.givenwhenthen.PipeValidationBuilder;
 import org.junit.jupiter.api.Test;
+
+import static de.quantummaid.eventmaid.internal.pipe.givenwhenthen.Given.given;
+import static de.quantummaid.eventmaid.internal.pipe.givenwhenthen.PipeActionBuilder.*;
+import static de.quantummaid.eventmaid.internal.pipe.givenwhenthen.PipeSetupBuilder.aConfiguredPipe;
+import static de.quantummaid.eventmaid.internal.pipe.givenwhenthen.PipeValidationBuilder.*;
 
 public interface PipeSpecs {
 
     //sending and subscribe
     @Test
     default void testPipe_canSendSingleMessageToOneReceiver(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig)
+        given(aConfiguredPipe(testConfig)
                 .withASingleSubscriber())
-                .when(PipeActionBuilder.aSingleMessageIsSend())
-                .then(PipeValidationBuilder.expectTheMessageToBeReceived());
+                .when(aSingleMessageIsSend())
+                .then(expectTheMessageToBeReceived());
     }
 
     @Test
     default void testPipe_canSendSeveralMessagesToSeveralSubscriber(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig)
+        given(aConfiguredPipe(testConfig)
                 .withSeveralSubscriber(5))
-                .when(PipeActionBuilder.severalMessagesAreSend(10))
-                .then(PipeValidationBuilder.expectAllMessagesToBeReceivedByAllSubscribers());
+                .when(severalMessagesAreSend(10))
+                .then(expectAllMessagesToBeReceivedByAllSubscribers());
     }
 
     @Test
     default void testPipe_canSendMessagesAsynchronously(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig)
+        given(aConfiguredPipe(testConfig)
                 .withSeveralSubscriber(8))
-                .when(PipeActionBuilder.severalMessagesAreSendAsynchronously(10, 10))
-                .then(PipeValidationBuilder.expectAllMessagesToBeReceivedByAllSubscribers());
+                .when(severalMessagesAreSendAsynchronously(10, 10))
+                .then(expectAllMessagesToBeReceivedByAllSubscribers());
     }
 
     @Test
     default void testPipe_subscriberCanInterruptDeliveringMessage(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig)
+        given(aConfiguredPipe(testConfig)
                 .withSeveralDeliveryInterruptingSubscriber(5))
-                .when(PipeActionBuilder.severalMessagesAreSend(10))
-                .then(PipeValidationBuilder.expectEachMessagesToBeReceivedByOnlyOneSubscriber());
+                .when(severalMessagesAreSend(10))
+                .then(expectEachMessagesToBeReceivedByOnlyOneSubscriber());
     }
 
     @Test
     default void testPipe_canQueryAllSubscriber(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig)
+        given(aConfiguredPipe(testConfig)
                 .withSeveralSubscriber(8))
-                .when(PipeActionBuilder.theListOfSubscriberIsQueried())
-                .then(PipeValidationBuilder.expectTheListOfAllSubscriber());
+                .when(theListOfSubscriberIsQueried())
+                .then(expectTheListOfAllSubscriber());
     }
 
     //unsubscribe
     @Test
     default void testPipe_canUnsubscribe(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig)
+        given(aConfiguredPipe(testConfig)
                 .withSeveralSubscriber(5))
-                .when(PipeActionBuilder.oneSubscriberUnsubscribes())
-                .then(PipeValidationBuilder.expectAllRemainingSubscribersToStillBeSubscribed());
+                .when(oneSubscriberUnsubscribes())
+                .then(expectAllRemainingSubscribersToStillBeSubscribed());
     }
 
     @Test
     default void testPipe_canUnsubscribeTwoSubscribers(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig)
+        given(aConfiguredPipe(testConfig)
                 .withSeveralSubscriber(5))
-                .when(PipeActionBuilder.oneSubscriberUnsubscribes()
-                        .andThen(PipeActionBuilder.oneSubscriberUnsubscribes()))
-                .then(PipeValidationBuilder.expectAllRemainingSubscribersToStillBeSubscribed());
+                .when(oneSubscriberUnsubscribes()
+                        .andThen(oneSubscriberUnsubscribes()))
+                .then(expectAllRemainingSubscribersToStillBeSubscribed());
     }
 
     @Test
     default void testPipe_canUnsubscribeTheSameSubscriberSeveralTimes(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig)
+        given(aConfiguredPipe(testConfig)
                 .withSeveralSubscriber(5))
-                .when(PipeActionBuilder.oneSubscriberUnsubscribesSeveralTimes(2))
-                .then(PipeValidationBuilder.expectAllRemainingSubscribersToStillBeSubscribed());
+                .when(oneSubscriberUnsubscribesSeveralTimes(2))
+                .then(expectAllRemainingSubscribersToStillBeSubscribed());
     }
 
     //pipeStatistics
     @Test
     default void testPipe_returnsCorrectNumberOfAcceptedMessages(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig)
+        given(aConfiguredPipe(testConfig)
                 .withASingleSubscriber())
-                .when(PipeActionBuilder.severalMessagesAreSendAsynchronously(3, 5)
-                        .andThen(PipeActionBuilder.theNumberOfAcceptedMessagesIsQueried()))
-                .then(PipeValidationBuilder.expectResultToBe(15));
+                .when(severalMessagesAreSendAsynchronously(3, 5)
+                        .andThen(theNumberOfAcceptedMessagesIsQueried()))
+                .then(expectResultToBe(15));
     }
 
     @Test
     default void testPipe_returnsCorrectNumberOfSuccessfulMessages(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig)
+        given(aConfiguredPipe(testConfig)
                 .withASingleSubscriber())
-                .when(PipeActionBuilder.severalMessagesAreSendAsynchronously(3, 5)
-                        .andThen(PipeActionBuilder.theNumberOfSuccessfulMessagesIsQueried()))
-                .then(PipeValidationBuilder.expectResultToBe(15));
+                .when(severalMessagesAreSendAsynchronously(3, 5)
+                        .andThen(theNumberOfSuccessfulMessagesIsQueried()))
+                .then(expectResultToBe(15));
     }
 
     @Test
     default void testPipe_returnsCorrectNumberOfDeliveryFailedMessages(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig)
+        given(aConfiguredPipe(testConfig)
                 .causingErrorsWhenDelivering())
-                .when(PipeActionBuilder.severalMessagesAreSendAsynchronously(3, 5)
-                        .andThen(PipeActionBuilder.theNumberOfFailedMessagesIsQueried()))
-                .then(PipeValidationBuilder.expectResultToBe(15));
+                .when(severalMessagesAreSendAsynchronously(3, 5)
+                        .andThen(theNumberOfFailedMessagesIsQueried()))
+                .then(expectResultToBe(15));
     }
 
     // statistic of waiting message config dependent
@@ -132,59 +133,59 @@ public interface PipeSpecs {
 
     @Test
     default void testPipe_returnsAValidTimestampForStatistics(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig)
+        given(aConfiguredPipe(testConfig)
                 .withoutASubscriber())
-                .when(PipeActionBuilder.theTimestampOfTheStatisticsIsQueried())
-                .then(PipeValidationBuilder.expectTimestampToBeInTheLastXSeconds(3));
+                .when(theTimestampOfTheStatisticsIsQueried())
+                .then(expectTimestampToBeInTheLastXSeconds(3));
     }
 
-    //exceptions handling
+    //exception handling
     @Test
     default void testPipe_canUseCustomErrorHandler(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig)
+        given(aConfiguredPipe(testConfig)
                 .withACustomErrorHandler())
-                .when(PipeActionBuilder.aMessageResultingInAnErrorIsSend())
-                .then(PipeValidationBuilder.expectTheExceptionToBeHandled());
+                .when(aMessageResultingInAnErrorIsSend())
+                .then(expectTheExceptionToBeHandled());
     }
 
     @Test
     default void testPipe_customErrorHandlerCanSuppressExceptionSoThatDeliveryCountsAsSuccessful(final PipeTestConfig config) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(config)
+        given(aConfiguredPipe(config)
                 .withACustomErrorHandlerThatSuppressesException())
-                .when(PipeActionBuilder.aMessageResultingInAnErrorIsSend())
-                .then(PipeValidationBuilder.expectTheDeliveryToBeStillSuccessful());
+                .when(aMessageResultingInAnErrorIsSend())
+                .then(expectTheDeliveryToBeStillSuccessful());
     }
 
     //shutdown
     @Test
     default void testPipe_canShutdown_evenIfIsBlocked(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig))
-                .when(PipeActionBuilder.severalMessagesAreSendAsynchronouslyBeforeThePipeIsShutdown()
-                        .andThen(PipeActionBuilder.thePipeShutdownIsExpectedForTimeoutInSeconds(1)))
-                .then(PipeValidationBuilder.expectThePipeToBeShutdownInTime());
+        given(aConfiguredPipe(testConfig))
+                .when(severalMessagesAreSendAsynchronouslyBeforeThePipeIsShutdown()
+                        .andThen(thePipeShutdownIsExpectedForTimeoutInSeconds(1)))
+                .then(expectThePipeToBeShutdownInTime());
     }
 
     @Test
     default void testPipe_shutdownCallIsIdempotent(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig)
+        given(aConfiguredPipe(testConfig)
                 .withASubscriberThatBlocksWhenAccepting())
-                .when(PipeActionBuilder.thePipeIsShutdownAsynchronouslyXTimes(6)
-                        .andThen(PipeActionBuilder.thePipeIsShutdown()))
-                .then(PipeValidationBuilder.expectThePipeToBeShutdown());
+                .when(thePipeIsShutdownAsynchronouslyXTimes(6)
+                        .andThen(thePipeIsShutdown()))
+                .then(expectThePipeToBeShutdown());
     }
 
     @Test
     default void testPipe_awaitReturnsAlwaysFalse_withoutACloseCall(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig))
-                .when(PipeActionBuilder.awaitWithoutACloseIsCalled())
-                .then(PipeValidationBuilder.expectTheResultToAlwaysBeFalse());
+        given(aConfiguredPipe(testConfig))
+                .when(awaitWithoutACloseIsCalled())
+                .then(expectTheResultToAlwaysBeFalse());
     }
 
     @Test
     default void testPipe_throwsExceptionWhenSendIsCalledOnAClosedPipe(final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig))
-                .when(PipeActionBuilder.aMessageIsSendAfterTheShutdown())
-                .then(PipeValidationBuilder.expectTheException(AlreadyClosedException.class));
+        given(aConfiguredPipe(testConfig))
+                .when(aMessageIsSendAfterTheShutdown())
+                .then(expectTheException(AlreadyClosedException.class));
     }
 
     // behaviour of clean up of messages is config dependent
@@ -193,9 +194,9 @@ public interface PipeSpecs {
     @Test
     default void testPipe_awaitsSucceedsWhenAllTasksCouldBeDone(final PipeTestConfig testConfig) {
         final int numberOfMessagesSend = PipeTestConfig.ASYNCHRONOUS_PIPE_POOL_SIZE;
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig))
-                .when(PipeActionBuilder.closeAndThenWaitForPendingTasksToFinished(numberOfMessagesSend))
-                .then(PipeValidationBuilder.expectTheAwaitToBeTerminatedSuccessful(numberOfMessagesSend));
+        given(aConfiguredPipe(testConfig))
+                .when(closeAndThenWaitForPendingTasksToFinished(numberOfMessagesSend))
+                .then(expectTheAwaitToBeTerminatedSuccessful(numberOfMessagesSend));
     }
 
     //await with unfinished tasks config dependent

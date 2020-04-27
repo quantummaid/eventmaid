@@ -112,6 +112,21 @@ public final class SharedTestValidations {
         }
     }
 
+    public static void assertExceptionThrown(final TestEnvironment testEnvironment,
+                                             final Exception expectedException) {
+        pollUntil(() -> testEnvironment.has(EXCEPTION));
+        final Exception exception = testEnvironment.getPropertyAsType(EXCEPTION, Exception.class);
+        boolean assertSucceeded = false;
+        try {
+            assertThat(exception, equalTo(expectedException));
+            assertSucceeded = true;
+        } finally {
+            if (!assertSucceeded) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
     public static void assertExceptionThrownOfTypeWithCause(final TestEnvironment testEnvironment,
                                                             final Class<?> expectedExceptionClass,
                                                             final Class<?> expectedCauseClass) {

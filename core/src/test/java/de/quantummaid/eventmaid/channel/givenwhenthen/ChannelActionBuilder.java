@@ -37,6 +37,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static de.quantummaid.eventmaid.channel.config.ChannelTestConfig.ASYNCHRONOUS_CHANNEL_CONFIG_POOL_SIZE;
+import static de.quantummaid.eventmaid.channel.givenwhenthen.ChannelTestActions.channelTestActions;
+import static de.quantummaid.eventmaid.channel.givenwhenthen.ChannelTestActions.sendMessage;
 import static de.quantummaid.eventmaid.channel.givenwhenthen.FilterPosition.*;
 import static de.quantummaid.eventmaid.processingcontext.ProcessingContext.processingContextForPayloadAndError;
 import static de.quantummaid.eventmaid.shared.environment.TestEnvironmentProperty.EXPECTED_RECEIVERS;
@@ -65,7 +67,7 @@ public final class ChannelActionBuilder {
     public static ChannelActionBuilder aMessageIsSend() {
         return anAction((channel, testEnvironment) -> {
             final TestMessageOfInterest message = ChannelTestActions.DEFAULT_TEST_MESSAGE;
-            final ProcessingContext<TestMessage> processingContext = ChannelTestActions.sendMessage(channel, testEnvironment, message);
+            final ProcessingContext<TestMessage> processingContext = sendMessage(channel, testEnvironment, message);
             testEnvironment.setPropertyIfNotSet(EXPECTED_RESULT, processingContext);
             return null;
         });
@@ -73,7 +75,7 @@ public final class ChannelActionBuilder {
 
     public static ChannelActionBuilder aMessageWithoutPayloadIsSend() {
         return anAction((channel, testEnvironment) -> {
-            final ProcessingContext<TestMessage> processingContext = ChannelTestActions.sendMessage(channel, testEnvironment, null);
+            final ProcessingContext<TestMessage> processingContext = sendMessage(channel, testEnvironment, null);
             testEnvironment.setPropertyIfNotSet(EXPECTED_RESULT, processingContext);
             return null;
         });
@@ -81,7 +83,7 @@ public final class ChannelActionBuilder {
 
     public static ChannelActionBuilder aMessageWithCorrelationIdIsSend() {
         return anAction((channel, testEnvironment) -> {
-            final ChannelTestActions testActions = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions testActions = channelTestActions(channel);
             sendMessageWithCorrelationId(testActions, testEnvironment);
             return null;
         });
@@ -89,7 +91,8 @@ public final class ChannelActionBuilder {
 
     public static ChannelActionBuilder aProcessingContextObjectIsSend() {
         return anAction((channel, testEnvironment) -> {
-            final ProcessingContext<TestMessage> processingContext = ChannelTestActions.sendMessage(channel, testEnvironment, ChannelTestActions.DEFAULT_TEST_MESSAGE);
+            final ProcessingContext<TestMessage> processingContext =
+                    sendMessage(channel, testEnvironment, ChannelTestActions.DEFAULT_TEST_MESSAGE);
             testEnvironment.setPropertyIfNotSet(EXPECTED_RESULT, processingContext);
             return null;
         });
@@ -101,7 +104,7 @@ public final class ChannelActionBuilder {
             final ProcessingContext<TestMessage> processingContext = processingContextForPayloadAndError(
                     eventType, null, null);
             testEnvironment.setPropertyIfNotSet(EXPECTED_RESULT, processingContext);
-            final ChannelTestActions testActions = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions testActions = channelTestActions(channel);
             sendProcessingContext(testActions, testEnvironment, processingContext);
             return null;
         });
@@ -109,7 +112,7 @@ public final class ChannelActionBuilder {
 
     public static ChannelActionBuilder severalMessagesAreSendAsynchronously(final int numberOfMessages) {
         return anAction((channel, testEnvironment) -> {
-            final ChannelTestActions sendingActions = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions sendingActions = channelTestActions(channel);
             sendValidMessagesAsynchronouslyNew(sendingActions, testEnvironment, numberOfMessages, 1, false);
             return null;
         });
@@ -117,7 +120,7 @@ public final class ChannelActionBuilder {
 
     public static ChannelActionBuilder severalMessagesAreSendAsynchronouslyThatWillBeBlocked(final int numberOfMessages) {
         return anAction((channel, testEnvironment) -> {
-            final ChannelTestActions sutActions = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions sutActions = channelTestActions(channel);
             final int expectedNumberOfBlockedThreads = determineExpectedNumberOfBlockedThreads(numberOfMessages, testEnvironment);
             addABlockingSubscriberAndThenSendXMessagesInEachThread(sutActions, numberOfMessages, expectedNumberOfBlockedThreads, testEnvironment);
             return null;
@@ -127,7 +130,7 @@ public final class ChannelActionBuilder {
     public static ChannelActionBuilder severalMessagesAreSendAsynchronouslyBeforeTheChannelIsClosedWithoutFinishingRemainingTasks(
             final int numberOfMessages) {
         return anAction((channel, testEnvironment) -> {
-            final ChannelTestActions testActions = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions testActions = channelTestActions(channel);
             final int expectedBlockedThreads = determineExpectedNumberOfBlockedThreads(numberOfMessages, testEnvironment);
             sendMessagesBeforeShutdownAsynchronously(testActions, testEnvironment, numberOfMessages, false, expectedBlockedThreads);
             return null;
@@ -147,7 +150,7 @@ public final class ChannelActionBuilder {
 
     public static ChannelActionBuilder sendMessagesBeforeTheShutdownIsAwaitedWithoutFinishingTasks(final int numberOfMessages) {
         return anAction((channel, testEnvironment) -> {
-            final ChannelTestActions testActions = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions testActions = channelTestActions(channel);
             callCloseThenAwaitWithBlockedSubscriberWithoutReleasingLock(testActions, testEnvironment, numberOfMessages,
                     ASYNCHRONOUS_CHANNEL_CONFIG_POOL_SIZE);
             return null;
@@ -159,7 +162,7 @@ public final class ChannelActionBuilder {
             final Channel<TestMessage> callTargetChannel = getCallTargetChannel(testEnvironment);
             ChannelTestActions.addFilterExecutingACall(channel, callTargetChannel);
 
-            final ProcessingContext<TestMessage> sendProcessingFrame = ChannelTestActions.sendMessage(channel, testEnvironment, ChannelTestActions.DEFAULT_TEST_MESSAGE);
+            final ProcessingContext<TestMessage> sendProcessingFrame = sendMessage(channel, testEnvironment, ChannelTestActions.DEFAULT_TEST_MESSAGE);
             testEnvironment.setPropertyIfNotSet(EXPECTED_RESULT, sendProcessingFrame);
             return null;
         });
@@ -188,7 +191,7 @@ public final class ChannelActionBuilder {
     private static ChannelActionBuilder addSeveralFilter(final int[] positions,
                                                          final FilterPosition filterPosition) {
         return anAction((channel, testEnvironment) -> {
-            final ChannelTestActions testActions1 = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions testActions1 = channelTestActions(channel);
             final List<Filter<ProcessingContext<TestMessage>>> expectedFilter = addSeveralNoopFilter(testActions1, positions, filterPosition);
             testEnvironment.setPropertyIfNotSet(EXPECTED_RESULT, expectedFilter);
             testEnvironment.setPropertyIfNotSet(FILTER_POSITION, filterPosition);
@@ -198,7 +201,7 @@ public final class ChannelActionBuilder {
 
     public static ChannelActionBuilder theFilterAreQueried() {
         return anAction((channel, testEnvironment) -> {
-            final ChannelTestActions testActions = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions testActions = channelTestActions(channel);
             final List<?> filter = queryFilter(testActions, testEnvironment);
             testEnvironment.setPropertyIfNotSet(RESULT, filter);
             return null;
@@ -208,7 +211,7 @@ public final class ChannelActionBuilder {
     @SuppressWarnings("unchecked")
     public static ChannelActionBuilder oneFilterIsRemoved() {
         return anAction((channel, testEnvironment) -> {
-            final ChannelTestActions testActions = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions testActions = channelTestActions(channel);
             removeAFilter(testActions, testEnvironment);
             return null;
         });
@@ -219,7 +222,7 @@ public final class ChannelActionBuilder {
             final String changedMetaDatum = "changed";
             ChannelTestActions.addAFilterChangingMetaData(channel, changedMetaDatum);
             testEnvironment.setPropertyIfNotSet(EXPECTED_RESULT, changedMetaDatum);
-            ChannelTestActions.sendMessage(channel, testEnvironment, messageOfInterest());
+            sendMessage(channel, testEnvironment, messageOfInterest());
             return null;
         });
     }
@@ -309,7 +312,7 @@ public final class ChannelActionBuilder {
     public static ChannelActionBuilder severalSubscriberAreAdded() {
         return anAction((channel, testEnvironment) -> {
             final int numberOfSubscribers = 5;
-            final ChannelTestActions testActions = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions testActions = channelTestActions(channel);
             addSeveralSubscriber(testActions, testEnvironment, numberOfSubscribers);
             return null;
         });
@@ -318,7 +321,7 @@ public final class ChannelActionBuilder {
     public static ChannelActionBuilder severalSubscriberWithAccessToProcessingContextAreAdded() {
         return anAction((channel, testEnvironment) -> {
             final int numberOfSubscribers = 5;
-            final ChannelTestActions channelTestActions = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions channelTestActions = channelTestActions(channel);
             addSeveralRawSubscriber(channelTestActions, testEnvironment, numberOfSubscribers);
             return null;
         });
@@ -328,7 +331,7 @@ public final class ChannelActionBuilder {
         return anAction((channel, testEnvironment) -> {
             final List<TestSubscriber<TestMessage>> currentReceiver = getExpectedReceivers(testEnvironment);
             final TestSubscriber<TestMessage> subscriberToRemove = currentReceiver.remove(0);
-            final ChannelTestActions testActions1 = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions testActions1 = channelTestActions(channel);
             SubscriptionTestUtils.unsubscribe(testActions1, subscriberToRemove);
             return null;
         });
@@ -341,7 +344,7 @@ public final class ChannelActionBuilder {
 
     public static ChannelActionBuilder theChannelIsClosedSeveralTimes() {
         return anAction((channel, testEnvironment) -> {
-            final ChannelTestActions sutActions = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions sutActions = channelTestActions(channel);
             final int shutdownCalls = 5;
             shutdownTheSutAsynchronouslyXTimes(sutActions, shutdownCalls);
             return null;
@@ -350,7 +353,7 @@ public final class ChannelActionBuilder {
 
     public static ChannelActionBuilder theChannelIsClosedAndTheShutdownIsAwaited() {
         return anAction((channel, testEnvironment) -> {
-            final ChannelTestActions sutActions = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions sutActions = channelTestActions(channel);
             closeAndThenAwaitTermination(sutActions, testEnvironment);
             return null;
         });
@@ -358,7 +361,7 @@ public final class ChannelActionBuilder {
 
     public static ChannelActionBuilder theShutdownIsAwaited() {
         return anAction((channel, testEnvironment) -> {
-            final ChannelTestActions testActions = ChannelTestActions.channelTestActions(channel);
+            final ChannelTestActions testActions = channelTestActions(channel);
             awaitTermination(testActions, testEnvironment);
             return null;
         });

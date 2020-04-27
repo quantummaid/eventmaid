@@ -25,7 +25,6 @@ import de.quantummaid.eventmaid.processingcontext.EventType;
 import de.quantummaid.eventmaid.processingcontext.ProcessingContext;
 import de.quantummaid.eventmaid.shared.environment.TestEnvironment;
 import de.quantummaid.eventmaid.shared.environment.TestEnvironmentProperty;
-import de.quantummaid.eventmaid.shared.eventtype.TestEventType;
 import de.quantummaid.eventmaid.shared.pipechannelmessagebus.testActions.RawSubscribeActions;
 import de.quantummaid.eventmaid.shared.pipechannelmessagebus.testActions.SubscribeActions;
 import de.quantummaid.eventmaid.shared.properties.SharedTestProperties;
@@ -41,6 +40,10 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import static de.quantummaid.eventmaid.shared.eventtype.TestEventType.testEventType;
+import static de.quantummaid.eventmaid.shared.subscriber.ExceptionThrowingTestSubscriber.exceptionThrowingTestSubscriber;
+import static de.quantummaid.eventmaid.shared.subscriber.SimpleTestSubscriber.deliveryPreemptingSubscriber;
+import static de.quantummaid.eventmaid.shared.subscriber.SimpleTestSubscriber.testSubscriber;
 import static lombok.AccessLevel.PRIVATE;
 
 @RequiredArgsConstructor(access = PRIVATE)
@@ -48,14 +51,14 @@ public final class SubscriptionTestUtils {
 
     public static void addASingleSubscriber(final SubscribeActions subscribeActions, final TestEnvironment testEnvironment) {
 
-        final EventType eventType = testEnvironment.getPropertyOrSetDefault(SharedTestProperties.EVENT_TYPE, TestEventType.testEventType());
+        final EventType eventType = testEnvironment.getPropertyOrSetDefault(SharedTestProperties.EVENT_TYPE, testEventType());
         addASingleSubscriber(subscribeActions, testEnvironment, eventType);
     }
 
     public static void addASingleSubscriber(final SubscribeActions subscribeActions,
                                             final TestEnvironment testEnvironment,
                                             final EventType eventType) {
-        final SimpleTestSubscriber<TestMessage> subscriber = SimpleTestSubscriber.testSubscriber();
+        final SimpleTestSubscriber<TestMessage> subscriber = testSubscriber();
         subscribeActions.subscribe(eventType, subscriber);
         testEnvironment.addToListProperty(TestEnvironmentProperty.EXPECTED_RECEIVERS, subscriber);
         testEnvironment.addToListProperty(SharedTestProperties.INITIAL_SUBSCRIBER, subscriber);
@@ -82,7 +85,7 @@ public final class SubscriptionTestUtils {
                                                              final TestEnvironment testEnvironment) {
         final Semaphore semaphore = new Semaphore(0);
         final BlockingTestSubscriber<TestMessage> subscriber = BlockingTestSubscriber.blockingTestSubscriber(semaphore);
-        final EventType eventType = testEnvironment.getPropertyOrSetDefault(SharedTestProperties.EVENT_TYPE, TestEventType.testEventType());
+        final EventType eventType = testEnvironment.getPropertyOrSetDefault(SharedTestProperties.EVENT_TYPE, testEventType());
         addASingleSubscriber(subscribeActions, testEnvironment, subscriber, eventType);
         testEnvironment.addToListProperty(TestEnvironmentProperty.EXPECTED_RECEIVERS, subscriber);
         testEnvironment.setPropertyIfNotSet(SharedTestProperties.EXECUTION_END_SEMAPHORE, semaphore);
@@ -90,8 +93,8 @@ public final class SubscriptionTestUtils {
 
     public static void addAnExceptionAcceptingSubscriber(final SubscribeActions subscribeActions,
                                                          final TestEnvironment testEnvironment) {
-        final SimpleTestSubscriber<TestMessage> errorSubscriber = SimpleTestSubscriber.testSubscriber();
-        final EventType eventType = testEnvironment.getPropertyOrSetDefault(SharedTestProperties.EVENT_TYPE, TestEventType.testEventType());
+        final SimpleTestSubscriber<TestMessage> errorSubscriber = testSubscriber();
+        final EventType eventType = testEnvironment.getPropertyOrSetDefault(SharedTestProperties.EVENT_TYPE, testEventType());
         addASingleSubscriber(subscribeActions, testEnvironment, errorSubscriber, eventType);
         testEnvironment.setPropertyIfNotSet(SharedTestProperties.ERROR_SUBSCRIBER, errorSubscriber);
     }
@@ -99,14 +102,14 @@ public final class SubscriptionTestUtils {
     public static TestSubscriber<TestMessage> addAnExceptionThrowingSubscriber(final SubscribeActions subscribeActions,
                                                                                final TestEnvironment testEnvironment) {
 
-        final EventType eventType = testEnvironment.getPropertyOrSetDefault(SharedTestProperties.EVENT_TYPE, TestEventType.testEventType());
+        final EventType eventType = testEnvironment.getPropertyOrSetDefault(SharedTestProperties.EVENT_TYPE, testEventType());
         return addAnExceptionThrowingSubscriber(subscribeActions, testEnvironment, eventType);
     }
 
     public static TestSubscriber<TestMessage> addAnExceptionThrowingSubscriber(final SubscribeActions subscribeActions,
                                                                                final TestEnvironment testEnvironment,
                                                                                final EventType eventType) {
-        final ExceptionThrowingTestSubscriber<TestMessage> subscriber = ExceptionThrowingTestSubscriber.exceptionThrowingTestSubscriber();
+        final ExceptionThrowingTestSubscriber<TestMessage> subscriber = exceptionThrowingTestSubscriber();
         addASingleSubscriber(subscribeActions, testEnvironment, subscriber, eventType);
         return subscriber;
     }
@@ -114,9 +117,9 @@ public final class SubscriptionTestUtils {
     public static void addSeveralDeliveryInterruptingSubscriber(final SubscribeActions subscribeActions,
                                                                 final TestEnvironment testEnvironment,
                                                                 final int numberOfReceivers) {
-        final EventType eventType = testEnvironment.getPropertyOrSetDefault(SharedTestProperties.EVENT_TYPE, TestEventType.testEventType());
+        final EventType eventType = testEnvironment.getPropertyOrSetDefault(SharedTestProperties.EVENT_TYPE, testEventType());
         for (int i = 0; i < numberOfReceivers; i++) {
-            final SimpleTestSubscriber<TestMessage> subscriber = SimpleTestSubscriber.deliveryPreemptingSubscriber();
+            final SimpleTestSubscriber<TestMessage> subscriber = deliveryPreemptingSubscriber();
             addASingleSubscriber(subscribeActions, testEnvironment, subscriber, eventType);
             testEnvironment.addToListProperty(SharedTestProperties.POTENTIAL_RECEIVERS, subscriber);
         }
@@ -124,7 +127,7 @@ public final class SubscriptionTestUtils {
 
     public static void addASingleRawSubscriber(final RawSubscribeActions rawSubscribeActions,
                                                final TestEnvironment testEnvironment) {
-        final EventType eventType = TestEventType.testEventType();
+        final EventType eventType = testEventType();
         testEnvironment.getPropertyOrSetDefault(SharedTestProperties.EVENT_TYPE, eventType);
         addASingleRawSubscriber(rawSubscribeActions, testEnvironment, eventType);
     }
@@ -132,7 +135,7 @@ public final class SubscriptionTestUtils {
     public static void addASingleRawSubscriber(final RawSubscribeActions rawSubscribeActions,
                                                final TestEnvironment testEnvironment,
                                                final EventType eventType) {
-        final SimpleTestSubscriber<ProcessingContext<TestMessage>> subscriber = SimpleTestSubscriber.testSubscriber();
+        final SimpleTestSubscriber<ProcessingContext<TestMessage>> subscriber = testSubscriber();
         addASingleRawSubscriber(rawSubscribeActions, testEnvironment, eventType, subscriber);
     }
 

@@ -48,7 +48,7 @@ public class ExceptionMapifier implements Mapifier<Exception> {
     @Override
     public Map<String, Object> map(final Exception exception) {
         final Map<String, Object> map = new HashMap<>();
-        map.put(DEFAULT_EXCEPTION_MAPIFIER_KEY, exception);
+        map.put(DEFAULT_EXCEPTION_MAPIFIER_KEY, exception.getMessage());
         return map;
     }
 }

@@ -52,8 +52,26 @@ public class UseCaseSpecialInvocationSpecs {
     @Test
     void testUseCaseAdapter_canAcceptTwoUseCases() {
         given(aUseCaseAdapter()
-                .withToUseCasesDefined())
+                .withTwoUseCasesDefined())
                 .when(whenBothUseCasesAreInvoked())
                 .then(expectedBothUseCaseToBeInvoked());
+    }
+
+    @Test
+    void testUseCaseAdapter_canHandleExceptionsInConstructorWhenUsingZeroArgsInstantiator() {
+        final TestException expectedException = new TestException();
+        given(aUseCaseAdapter()
+                .forAnUseCaseThrowingAnExceptionDuringZeroArgsConstructorWhenUsing0ArgsInstantiator(expectedException))
+                .when(whenTheUSeCaseIsInvoked())
+                .then(expectExecutionExceptionContainingAnZeroArgumentsConstructorExceptionContaining(expectedException));
+    }
+
+    @Test
+    void testUseCaseAdapter_zeroArgsInstantiatorFailsWhenClassCannotBeInstantiated() {
+        given(aUseCaseAdapter()
+                .forAnUseCaseThrowingAnExceptionDuringInstantiationWhenUsing0ArgsInstantiator())
+                .when(whenTheUSeCaseIsInvoked())
+                .then(expectExecutionExceptionContainingAn0ArgumentsConstructorExceptionContainingClass(
+                        InstantiationException.class));
     }
 }

@@ -19,16 +19,21 @@
  * under the License.
  */
 
-package de.quantummaid.eventmaid.internal.pipe.exceptions;
+package de.quantummaid.eventmaid.usecases.specialinvocations;
 
-import de.quantummaid.eventmaid.internal.exceptions.BubbleUpWrappedException;
+import lombok.Getter;
+import lombok.Setter;
 
-public interface PipeErrorHandler<T> {
-    boolean shouldErrorBeHandledAndDeliveryAborted(T message, Exception e);
+public class ExceptionInZeroArgsConstructorUseCase {
+    @Getter
+    @Setter
+    private static RuntimeException exceptionToThrow;
 
-    void handleException(T message, Exception e);
+    public ExceptionInZeroArgsConstructorUseCase() {
+        throw exceptionToThrow;
+    }
 
-    default void handleBubbledUpException(final T message, final BubbleUpWrappedException e) {
-        throw (RuntimeException) e.getCause();
+    public void method() {
+        throw new IllegalStateException("Should not be called");
     }
 }

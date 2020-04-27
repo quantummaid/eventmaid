@@ -23,12 +23,14 @@ package de.quantummaid.eventmaid.messagebus;
 
 import de.quantummaid.eventmaid.messagebus.config.AsynchronousDeliveryMessageBusConfigurationResolver;
 import de.quantummaid.eventmaid.messagebus.config.MessageBusTestConfig;
-import de.quantummaid.eventmaid.messagebus.givenwhenthen.Given;
-import de.quantummaid.eventmaid.messagebus.givenwhenthen.MessageBusActionBuilder;
-import de.quantummaid.eventmaid.messagebus.givenwhenthen.MessageBusSetupBuilder;
-import de.quantummaid.eventmaid.messagebus.givenwhenthen.MessageBusValidationBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import static de.quantummaid.eventmaid.messagebus.givenwhenthen.Given.given;
+import static de.quantummaid.eventmaid.messagebus.givenwhenthen.MessageBusActionBuilder.*;
+import static de.quantummaid.eventmaid.messagebus.givenwhenthen.MessageBusSetupBuilder.aConfiguredMessageBus;
+import static de.quantummaid.eventmaid.messagebus.givenwhenthen.MessageBusValidationBuilder.expectResultToBe;
+import static de.quantummaid.eventmaid.messagebus.givenwhenthen.MessageBusValidationBuilder.expectXMessagesToBeDelivered;
 
 @ExtendWith(AsynchronousDeliveryMessageBusConfigurationResolver.class)
 public class AsynchronousDeliveryMessageBusSpecs implements MessageBusSpecs {
@@ -38,10 +40,10 @@ public class AsynchronousDeliveryMessageBusSpecs implements MessageBusSpecs {
         final int expectedQueuedMessages = 5;
         final int messagesSendParallel = MessageBusTestConfig.ASYNCHRONOUS_DELIVERY_POOL_SIZE + expectedQueuedMessages;
         final int expectedNumberOfBlockedThreads = MessageBusTestConfig.ASYNCHRONOUS_DELIVERY_POOL_SIZE;
-        Given.given(MessageBusSetupBuilder.aConfiguredMessageBus(config))
-                .when(MessageBusActionBuilder.severalMessagesAreSendAsynchronouslyButWillBeBlocked(messagesSendParallel, expectedNumberOfBlockedThreads)
-                        .andThen(MessageBusActionBuilder.theNumberOfQueuedMessagesIsQueried()))
-                .then(MessageBusValidationBuilder.expectResultToBe(expectedQueuedMessages));
+        given(aConfiguredMessageBus(config))
+                .when(severalMessagesAreSendAsynchronouslyButWillBeBlocked(messagesSendParallel, expectedNumberOfBlockedThreads)
+                        .andThen(theNumberOfQueuedMessagesIsQueried()))
+                .then(expectResultToBe(expectedQueuedMessages));
     }
 
     //shutdown
@@ -49,9 +51,9 @@ public class AsynchronousDeliveryMessageBusSpecs implements MessageBusSpecs {
     public void testMessageBus_whenShutdownAllRemainingTasksAreFinished(final MessageBusTestConfig config) {
         final int numberOfParallelSendMessages = 10;
         final boolean finishRemainingTasks = true;
-        Given.given(MessageBusSetupBuilder.aConfiguredMessageBus(config))
-                .when(MessageBusActionBuilder.sendSeveralMessagesBeforeTheBusIsShutdown(numberOfParallelSendMessages, finishRemainingTasks))
-                .then(MessageBusValidationBuilder.expectXMessagesToBeDelivered(10));
+        given(aConfiguredMessageBus(config))
+                .when(sendSeveralMessagesBeforeTheBusIsShutdown(numberOfParallelSendMessages, finishRemainingTasks))
+                .then(expectXMessagesToBeDelivered(10));
     }
 
     @Test
@@ -59,8 +61,8 @@ public class AsynchronousDeliveryMessageBusSpecs implements MessageBusSpecs {
             final MessageBusTestConfig config) {
         final int numberOfParallelSendMessages = MessageBusTestConfig.ASYNCHRONOUS_DELIVERY_POOL_SIZE + 3;
         final boolean finishRemainingTasks = false;
-        Given.given(MessageBusSetupBuilder.aConfiguredMessageBus(config))
-                .when(MessageBusActionBuilder.sendSeveralMessagesBeforeTheBusIsShutdown(numberOfParallelSendMessages, finishRemainingTasks))
-                .then(MessageBusValidationBuilder.expectXMessagesToBeDelivered(MessageBusTestConfig.ASYNCHRONOUS_DELIVERY_POOL_SIZE));
+        given(aConfiguredMessageBus(config))
+                .when(sendSeveralMessagesBeforeTheBusIsShutdown(numberOfParallelSendMessages, finishRemainingTasks))
+                .then(expectXMessagesToBeDelivered(MessageBusTestConfig.ASYNCHRONOUS_DELIVERY_POOL_SIZE));
     }
 }

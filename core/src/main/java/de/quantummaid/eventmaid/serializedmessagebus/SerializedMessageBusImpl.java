@@ -43,6 +43,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static de.quantummaid.eventmaid.processingcontext.ProcessingContext.processingContextForPayloadAndError;
+import static de.quantummaid.eventmaid.serializedmessagebus.MissingErrorPayloadClassForDeserializationException.missingErrorPayloadClassForDeserializationException;
 import static de.quantummaid.eventmaid.usecases.payloadanderrorpayload.PayloadAndErrorPayload.payloadAndErrorPayload;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -278,7 +279,7 @@ public class SerializedMessageBusImpl implements SerializedMessageBus {
             if (errorPayloadClass != null) {
                 errorPayload = responseDeserializer.deserialize(errorPayloadClass, errorPayloadMap);
             } else {
-                throw MissingErrorPayloadClassForDeserialization.missingErrorPayloadClassForDeserialization();
+                throw missingErrorPayloadClassForDeserializationException();
             }
         } else {
             errorPayload = null;

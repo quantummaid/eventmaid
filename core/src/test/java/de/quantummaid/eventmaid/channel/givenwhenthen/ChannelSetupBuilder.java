@@ -47,6 +47,7 @@ import static de.quantummaid.eventmaid.channel.action.Consume.consumeMessage;
 import static de.quantummaid.eventmaid.channel.action.Jump.jumpTo;
 import static de.quantummaid.eventmaid.channel.action.Return.aReturn;
 import static de.quantummaid.eventmaid.channel.action.Subscription.subscription;
+import static de.quantummaid.eventmaid.channel.givenwhenthen.ChannelTestActions.channelTestActions;
 import static de.quantummaid.eventmaid.channel.givenwhenthen.FilterPosition.*;
 import static de.quantummaid.eventmaid.channel.givenwhenthen.TestChannelErrorHandler.*;
 import static de.quantummaid.eventmaid.shared.environment.TestEnvironment.emptyTestEnvironment;
@@ -54,7 +55,7 @@ import static de.quantummaid.eventmaid.shared.environment.TestEnvironmentPropert
 import static de.quantummaid.eventmaid.shared.environment.TestEnvironmentProperty.*;
 import static de.quantummaid.eventmaid.shared.properties.SharedTestProperties.*;
 import static de.quantummaid.eventmaid.shared.subscriber.SimpleTestSubscriber.deliveryPreemptingSubscriber;
-import static de.quantummaid.eventmaid.shared.utils.FilterTestUtils.addSeveralNoopFilter;
+import static de.quantummaid.eventmaid.shared.utils.FilterTestUtils.*;
 
 public final class ChannelSetupBuilder {
     private final TestEnvironment testEnvironment;
@@ -228,7 +229,7 @@ public final class ChannelSetupBuilder {
     private void addFilterThatBlocksMessages(final FilterPosition filterPosition) {
         alreadyBuiltChannel = channelBuilder.withDefaultAction(consumeAsFinalResult(testEnvironment))
                 .build();
-        final ChannelTestActions channelTestActions = ChannelTestActions.channelTestActions(alreadyBuiltChannel);
+        final ChannelTestActions channelTestActions = channelTestActions(alreadyBuiltChannel);
         FilterTestUtils.addFilterThatBlocksMessages(channelTestActions, filterPosition);
     }
 
@@ -250,7 +251,7 @@ public final class ChannelSetupBuilder {
     private void addFilterThatForgetsMessages(final FilterPosition filterPosition) {
         alreadyBuiltChannel = channelBuilder.withDefaultAction(consumeAsFinalResult(testEnvironment))
                 .build();
-        final ChannelTestActions testActions = ChannelTestActions.channelTestActions(alreadyBuiltChannel);
+        final ChannelTestActions testActions = channelTestActions(alreadyBuiltChannel);
         FilterTestUtils.addFilterThatForgetsMessages(testActions, filterPosition);
     }
 
@@ -307,18 +308,26 @@ public final class ChannelSetupBuilder {
         try {
             alreadyBuiltChannel = channelBuilder.withDefaultAction(consumeAsFinalResult(testEnvironment))
                     .build();
-            final ChannelTestActions testActions = ChannelTestActions.channelTestActions(alreadyBuiltChannel);
-            FilterTestUtils.addANoopFilterAtPosition(testActions, filterPosition, position);
+            final ChannelTestActions testActions = channelTestActions(alreadyBuiltChannel);
+            addANoopFilterAtPosition(testActions, filterPosition, position);
         } catch (final Exception e) {
             testEnvironment.setProperty(EXCEPTION, e);
         }
     }
 
+    public ChannelSetupBuilder withAnErrorThrowingFilter(final RuntimeException e) {
+        alreadyBuiltChannel = channelBuilder.withDefaultAction(consumeAsFinalResult(testEnvironment))
+                .build();
+        final ChannelTestActions testActions = channelTestActions(alreadyBuiltChannel);
+        addFilterThatThrowsException(testActions, PROCESS, e);
+        return this;
+    }
+
     public ChannelSetupBuilder withAnErrorThrowingFilter() {
         alreadyBuiltChannel = channelBuilder.withDefaultAction(consumeAsFinalResult(testEnvironment))
                 .build();
-        final ChannelTestActions testActions = ChannelTestActions.channelTestActions(alreadyBuiltChannel);
-        FilterTestUtils.addFilterThatThrowsException(testActions, PROCESS);
+        final ChannelTestActions testActions = channelTestActions(alreadyBuiltChannel);
+        addFilterThatThrowsException(testActions, PROCESS);
         return this;
     }
 
@@ -326,7 +335,7 @@ public final class ChannelSetupBuilder {
         final Action<TestMessage> unknownAction = UnknownAction.unknownAction();
         alreadyBuiltChannel = channelBuilder.withDefaultAction(unknownAction)
                 .build();
-        final ChannelTestActions testActions = ChannelTestActions.channelTestActions(alreadyBuiltChannel);
+        final ChannelTestActions testActions = channelTestActions(alreadyBuiltChannel);
         final List<Filter<ProcessingContext<TestMessage>>> expectedFilter = addSeveralNoopFilter(testActions, positions, pipe);
         testEnvironment.setProperty(EXPECTED_FILTER, expectedFilter);
         testEnvironment.setProperty(FILTER_POSITION, pipe);

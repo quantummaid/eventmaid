@@ -19,15 +19,22 @@
  * under the License.
  */
 
-package de.quantummaid.eventmaid.usecases.specialinvocations;
+package de.quantummaid.eventmaid.serializedmessagebus.config;
 
-public class ExceptionDuringInitializationUseCase {
+import de.quantummaid.eventmaid.serializedmessagebus.givenwhenthen.SerializedMessageBusTestConfig;
+import de.quantummaid.eventmaid.shared.config.AbstractTestConfigProvider;
 
-    public static ExceptionDuringInitializationUseCase init(final RuntimeException e) {
-        throw e;
+import static de.quantummaid.eventmaid.serializedmessagebus.givenwhenthen.SerializedMessageBusTestConfig.asynchronousMessageBusTestConfig;
+
+public class AsynchronousSerializedMessageBusConfigurationResolver extends AbstractTestConfigProvider {
+
+    @Override
+    protected Class<?> forConfigClass() {
+        return SerializedMessageBusTestConfig.class;
     }
 
-    public void method() {
-        throw new RuntimeException("Should not be called");
+    @Override
+    protected Object testConfig() {
+        return asynchronousMessageBusTestConfig();
     }
 }

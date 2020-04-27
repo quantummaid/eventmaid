@@ -25,12 +25,14 @@ import de.quantummaid.eventmaid.channel.action.CallNotAllowedAsFinalChannelActio
 import de.quantummaid.eventmaid.channel.action.NoHandlerForUnknownActionException;
 import de.quantummaid.eventmaid.channel.action.ReturnWithoutCallException;
 import de.quantummaid.eventmaid.channel.config.ChannelTestConfig;
-import de.quantummaid.eventmaid.channel.givenwhenthen.ChannelActionBuilder;
 import de.quantummaid.eventmaid.channel.givenwhenthen.ChannelSetupBuilder;
-import de.quantummaid.eventmaid.channel.givenwhenthen.ChannelValidationBuilder;
-import de.quantummaid.eventmaid.channel.givenwhenthen.Given;
 import de.quantummaid.eventmaid.shared.exceptions.TestException;
 import org.junit.jupiter.api.Test;
+
+import static de.quantummaid.eventmaid.channel.givenwhenthen.ChannelActionBuilder.*;
+import static de.quantummaid.eventmaid.channel.givenwhenthen.ChannelSetupBuilder.aConfiguredChannel;
+import static de.quantummaid.eventmaid.channel.givenwhenthen.ChannelValidationBuilder.*;
+import static de.quantummaid.eventmaid.channel.givenwhenthen.Given.given;
 
 public interface ChannelSpecs {
 
@@ -38,350 +40,350 @@ public interface ChannelSpecs {
     //actions: consume
     @Test
     default void testChannel_canConsumeMessage(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withDefaultActionConsume())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheMessageToBeConsumed());
+                .when(aMessageIsSend())
+                .then(expectTheMessageToBeConsumed());
     }
 
     //actions: jump
     @Test
     default void testChannel_letMessagesJumpToDifferentChannel(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withDefaultActionJumpToDifferentChannel())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheMessageToBeConsumedByTheSecondChannel());
+                .when(aMessageIsSend())
+                .then(expectTheMessageToBeConsumedByTheSecondChannel());
     }
 
     @Test
     default void testChannel_continuesHistoryWhenChannelsAreChanged(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.threeChannelsConnectedWithJumps(channelTestConfig))
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectAllChannelsToBeContainedInTheHistory());
+        given(ChannelSetupBuilder.threeChannelsConnectedWithJumps(channelTestConfig))
+                .when(aMessageIsSend())
+                .then(expectAllChannelsToBeContainedInTheHistory());
     }
 
     //actions: call and return
     @Test
     default void testChannel_canReturnFromACall(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aChannelCallingASecondThatReturnsBack(channelTestConfig))
-                .when(ChannelActionBuilder.aCallToTheSecondChannelIsExecuted())
-                .then(ChannelValidationBuilder.expectTheMessageToHaveReturnedSuccessfully());
+        given(ChannelSetupBuilder.aChannelCallingASecondThatReturnsBack(channelTestConfig))
+                .when(aCallToTheSecondChannelIsExecuted())
+                .then(expectTheMessageToHaveReturnedSuccessfully());
     }
 
     @Test
     default void testChannel_canExecuteNestedCalls(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aChannelSetupWithNestedCalls(channelTestConfig))
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheMessageToHaveReturnedFromAllCalls());
+        given(ChannelSetupBuilder.aChannelSetupWithNestedCalls(channelTestConfig))
+                .when(aMessageIsSend())
+                .then(expectTheMessageToHaveReturnedFromAllCalls());
     }
 
     @Test
     default void testChannel_failsForReturnWithoutACall(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withDefaultActionReturn()
                 .withAnExceptionCatchingHandler())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectADeliveryExceptionOfType(ReturnWithoutCallException.class));
+                .when(aMessageIsSend())
+                .then(expectADeliveryExceptionOfType(ReturnWithoutCallException.class));
     }
 
     @Test
     default void testChannel_failsForCallAsFinalAction(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withDefaultActionCall()
                 .withAnExceptionCatchingHandler())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectADeliveryExceptionOfType(CallNotAllowedAsFinalChannelAction.class));
+                .when(aMessageIsSend())
+                .then(expectADeliveryExceptionOfType(CallNotAllowedAsFinalChannelAction.class));
     }
 
     @Test
     default void testChannel_failsForUnknownAction(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAnUnknownAction()
                 .withAnExceptionCatchingHandler())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectAExceptionOfType(NoHandlerForUnknownActionException.class));
+                .when(aMessageIsSend())
+                .then(expectAExceptionOfType(NoHandlerForUnknownActionException.class));
     }
 
     //actions: subscription
     @Test
     default void testChannel_subscriptionActionSendsToAllSubscriber(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withSubscriptionAsAction())
-                .when(ChannelActionBuilder.severalSubscriberAreAdded()
-                        .andThen(ChannelActionBuilder.aMessageIsSend()))
-                .then(ChannelValidationBuilder.expectTheMessageToBeReceivedByAllSubscriber());
+                .when(severalSubscriberAreAdded()
+                        .andThen(aMessageIsSend()))
+                .then(expectTheMessageToBeReceivedByAllSubscriber());
     }
 
     @Test
     default void testChannel_subscriptionCanUnsubscribeSubscriber(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withSubscriptionAsAction())
-                .when(ChannelActionBuilder.severalSubscriberAreAdded()
-                        .andThen(ChannelActionBuilder.oneSubscriberIsRemoved())
-                        .andThen(ChannelActionBuilder.aMessageIsSend()))
-                .then(ChannelValidationBuilder.expectRemainingSubscriber()
-                        .and(ChannelValidationBuilder.expectTheMessageToBeReceivedByAllRemainingSubscriber()));
+                .when(severalSubscriberAreAdded()
+                        .andThen(oneSubscriberIsRemoved())
+                        .andThen(aMessageIsSend()))
+                .then(expectRemainingSubscriber()
+                        .and(expectTheMessageToBeReceivedByAllRemainingSubscriber()));
     }
 
     @Test
     default void testChannel_subscriptionCanStopDeliveryEarly(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withOnPreemptiveSubscriberAndOneSubscriberThatShouldNeverBeCalled())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectOnlyTheFirstSubscriberToBeCalled());
+                .when(aMessageIsSend())
+                .then(expectOnlyTheFirstSubscriberToBeCalled());
     }
 
     @Test
     default void testChannel_subscriptionActionGetsAccessToProcessingContextObject(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withSubscriptionAsAction())
-                .when(ChannelActionBuilder.severalSubscriberWithAccessToProcessingContextAreAdded()
-                        .andThen(ChannelActionBuilder.aProcessingContextObjectIsSend()))
-                .then(ChannelValidationBuilder.expectTheProcessingContextObjectToBeReceivedByAllSubscriber());
+                .when(severalSubscriberWithAccessToProcessingContextAreAdded()
+                        .andThen(aProcessingContextObjectIsSend()))
+                .then(expectTheProcessingContextObjectToBeReceivedByAllSubscriber());
     }
 
     //send
     @Test
     default void testChannel_canSendNull(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withDefaultActionConsume())
-                .when(ChannelActionBuilder.aMessageWithoutPayloadIsSend())
-                .then(ChannelValidationBuilder.expectTheMessageToBeConsumed());
+                .when(aMessageWithoutPayloadIsSend())
+                .then(expectTheMessageToBeConsumed());
     }
 
     @Test
     default void testChannel_canSendBothNormalAndErrorPayload(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withDefaultActionConsume())
-                .when(ChannelActionBuilder.aMessageWithoutPayloadAndErrorPayloadIsSend())
-                .then(ChannelValidationBuilder.expectTheMessageToBeConsumed());
+                .when(aMessageWithoutPayloadAndErrorPayloadIsSend())
+                .then(expectTheMessageToBeConsumed());
     }
 
     //filter
     @Test
     default void testChannel_allowsFilterToChangeAction_forPreFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAPreFilterThatChangesTheAction())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheChangedActionToBeExecuted());
+                .when(aMessageIsSend())
+                .then(expectTheChangedActionToBeExecuted());
     }
 
     @Test
     default void testChannel_allowsFilterToBlockMessage_forPreFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAPreFilterThatBlocksMessages())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectNoMessageToBeDelivered());
+                .when(aMessageIsSend())
+                .then(expectNoMessageToBeDelivered());
     }
 
     @Test
     default void testChannel_dropsMessageWhenMessageIsForgotten_forPreFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAPreFilterThatForgetsMessages())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectNoMessageToBeDelivered());
+                .when(aMessageIsSend())
+                .then(expectNoMessageToBeDelivered());
     }
 
     @Test
     default void testChannel_allowsAddingFilterWithPosition_forPreFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig))
-                .when(ChannelActionBuilder.severalPreFilterOnDifferentPositionAreAdded())
-                .then(ChannelValidationBuilder.expectAllFilterToBeInCorrectOrderInChannel());
+        given(aConfiguredChannel(channelTestConfig))
+                .when(severalPreFilterOnDifferentPositionAreAdded())
+                .then(expectAllFilterToBeInCorrectOrderInChannel());
     }
 
     @Test
     default void testChannel_canQueryFilter_forPreFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withSeveralPreFilter())
-                .when(ChannelActionBuilder.theFilterAreQueried())
-                .then(ChannelValidationBuilder.expectTheFilterInOrderAsAdded());
+                .when(theFilterAreQueried())
+                .then(expectTheFilterInOrderAsAdded());
     }
 
     @Test
     default void testChannel_canRemoveAFilter_forPreFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withSeveralPreFilter())
-                .when(ChannelActionBuilder.oneFilterIsRemoved())
-                .then(ChannelValidationBuilder.expectTheAllRemainingFilter());
+                .when(oneFilterIsRemoved())
+                .then(expectTheAllRemainingFilter());
     }
 
     @Test
     default void testChannel_throwsExceptionForPositionBelowZero_forPreFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAPreFilterAtAnInvalidPosition(-1))
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheException(IndexOutOfBoundsException.class));
+                .when(aMessageIsSend())
+                .then(expectTheExceptionClass(IndexOutOfBoundsException.class));
     }
 
     @Test
     default void testChannel_throwsExceptionForPositionGreaterThanAllowed_forPreFilter(final ChannelTestConfig config) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(config)
+        given(aConfiguredChannel(config)
                 .withAPreFilterAtAnInvalidPosition(100))
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheException(IndexOutOfBoundsException.class));
+                .when(aMessageIsSend())
+                .then(expectTheExceptionClass(IndexOutOfBoundsException.class));
     }
 
     @Test
     default void testChannel_allowsFilterToChangeAction_forProcessFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAProcessFilterThatChangesTheAction())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheChangedActionToBeExecuted());
+                .when(aMessageIsSend())
+                .then(expectTheChangedActionToBeExecuted());
     }
 
     @Test
     default void testChannel_allowsFilterToBlockMessage_forProcessFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAProcessFilterThatBlocksMessages())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectNoMessageToBeDelivered());
+                .when(aMessageIsSend())
+                .then(expectNoMessageToBeDelivered());
     }
 
     @Test
     default void testChannel_dropsMessageWhenMessageIsForgotten_forProcessFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAProcessFilterThatForgetsMessages())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectNoMessageToBeDelivered());
+                .when(aMessageIsSend())
+                .then(expectNoMessageToBeDelivered());
     }
 
     @Test
     default void testChannel_allowsAddingFilterWithPosition_forProcessFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig))
-                .when(ChannelActionBuilder.severalProcessFilterOnDifferentPositionAreAdded())
-                .then(ChannelValidationBuilder.expectAllFilterToBeInCorrectOrderInChannel());
+        given(aConfiguredChannel(channelTestConfig))
+                .when(severalProcessFilterOnDifferentPositionAreAdded())
+                .then(expectAllFilterToBeInCorrectOrderInChannel());
     }
 
     @Test
     default void testChannel_canQueryFilter_forProcessFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withSeveralProcessFilter())
-                .when(ChannelActionBuilder.theFilterAreQueried())
-                .then(ChannelValidationBuilder.expectTheFilterInOrderAsAdded());
+                .when(theFilterAreQueried())
+                .then(expectTheFilterInOrderAsAdded());
     }
 
     @Test
     default void testChannel_canRemoveAFilter_forProcessFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withSeveralProcessFilter())
-                .when(ChannelActionBuilder.oneFilterIsRemoved())
-                .then(ChannelValidationBuilder.expectTheAllRemainingFilter());
+                .when(oneFilterIsRemoved())
+                .then(expectTheAllRemainingFilter());
     }
 
     @Test
     default void testChannel_throwsExceptionForPositionBelowZero_forProcessFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAProcessFilterAtAnInvalidPosition(-1))
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheException(IndexOutOfBoundsException.class));
+                .when(aMessageIsSend())
+                .then(expectTheExceptionClass(IndexOutOfBoundsException.class));
     }
 
     @Test
     default void testChannel_throwsExceptionForPositionGreaterThanAllowed_forProcessFilter(final ChannelTestConfig config) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(config)
+        given(aConfiguredChannel(config)
                 .withAProcessFilterAtAnInvalidPosition(100))
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheException(IndexOutOfBoundsException.class));
+                .when(aMessageIsSend())
+                .then(expectTheExceptionClass(IndexOutOfBoundsException.class));
     }
 
     @Test
     default void testChannel_allowsFilterToChangeAction_forPostFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAPostFilterThatChangesTheAction())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheChangedActionToBeExecuted());
+                .when(aMessageIsSend())
+                .then(expectTheChangedActionToBeExecuted());
     }
 
     @Test
     default void testChannel_allowsFilterToBlockMessage_forPostFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAPostFilterThatBlocksMessages())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectNoMessageToBeDelivered());
+                .when(aMessageIsSend())
+                .then(expectNoMessageToBeDelivered());
     }
 
     @Test
     default void testChannel_dropsMessageWhenMessageIsForgotten_forPostFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAPostFilterThatForgetsMessages())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectNoMessageToBeDelivered());
+                .when(aMessageIsSend())
+                .then(expectNoMessageToBeDelivered());
     }
 
     @Test
     default void testChannel_allowsAddingFilterWithPosition_forPostFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig))
-                .when(ChannelActionBuilder.severalPostFilterOnDifferentPositionAreAdded())
-                .then(ChannelValidationBuilder.expectAllFilterToBeInCorrectOrderInChannel());
+        given(aConfiguredChannel(channelTestConfig))
+                .when(severalPostFilterOnDifferentPositionAreAdded())
+                .then(expectAllFilterToBeInCorrectOrderInChannel());
     }
 
     @Test
     default void testChannel_canQueryFilter_forPostFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withSeveralPostFilter())
-                .when(ChannelActionBuilder.theFilterAreQueried())
-                .then(ChannelValidationBuilder.expectTheFilterInOrderAsAdded());
+                .when(theFilterAreQueried())
+                .then(expectTheFilterInOrderAsAdded());
     }
 
     @Test
     default void testChannel_canRemoveAFilter_forPostFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withSeveralPostFilter())
-                .when(ChannelActionBuilder.oneFilterIsRemoved())
-                .then(ChannelValidationBuilder.expectTheAllRemainingFilter());
+                .when(oneFilterIsRemoved())
+                .then(expectTheAllRemainingFilter());
     }
 
     @Test
     default void testChannel_throwsExceptionForPositionBelowZero_forPostFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAPostFilterAtAnInvalidPosition(-1))
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheException(IndexOutOfBoundsException.class));
+                .when(aMessageIsSend())
+                .then(expectTheExceptionClass(IndexOutOfBoundsException.class));
     }
 
     @Test
     default void testChannel_throwsExceptionForPositionGreaterThanAllowed_forPostFilter(final ChannelTestConfig config) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(config)
+        given(aConfiguredChannel(config)
                 .withAPostFilterAtAnInvalidPosition(100))
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheException(IndexOutOfBoundsException.class));
+                .when(aMessageIsSend())
+                .then(expectTheExceptionClass(IndexOutOfBoundsException.class));
     }
 
     //correlationId
     @Test
     default void testChannel_sendMessageHasConstantMessageIdAndCanGenerateMatchingCorrelationId(final ChannelTestConfig config) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(config)
+        given(aConfiguredChannel(config)
                 .withDefaultActionConsume())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheMessageToHaveTheSameMessageIdAndAMatchingGeneratedCorrelationId());
+                .when(aMessageIsSend())
+                .then(expectTheMessageToHaveTheSameMessageIdAndAMatchingGeneratedCorrelationId());
     }
 
     @Test
     default void testChannel_canSetCorrelationIdWhenSend(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withDefaultActionConsume())
-                .when(ChannelActionBuilder.aMessageWithCorrelationIdIsSend())
-                .then(ChannelValidationBuilder.expectTheCorrelationIdToBeSetWhenReceived());
+                .when(aMessageWithCorrelationIdIsSend())
+                .then(expectTheCorrelationIdToBeSetWhenReceived());
     }
 
     //metadata
     @Test
     default void testChannel_filterCanModifyMetaData(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withDefaultActionConsume())
-                .when(ChannelActionBuilder.whenTheMetaDataIsModified())
-                .then(ChannelValidationBuilder.expectTheMetaDataChangePersist());
+                .when(whenTheMetaDataIsModified())
+                .then(expectTheMetaDataChangePersist());
     }
 
     //statistics
     @Test
     default void testChannel_canQueryAcceptedMessages(final ChannelTestConfig channelTestConfig) {
         final int numberOfSendMessages = 5;
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withNoopConsumeAsDefaultAction())
-                .when(ChannelActionBuilder.severalMessagesAreSendAsynchronously(numberOfSendMessages)
-                        .andThen(ChannelActionBuilder.theNumberOfAcceptedMessagesIsQueried()))
-                .then(ChannelValidationBuilder.expectTheResult(numberOfSendMessages));
+                .when(severalMessagesAreSendAsynchronously(numberOfSendMessages)
+                        .andThen(theNumberOfAcceptedMessagesIsQueried()))
+                .then(expectTheResult(numberOfSendMessages));
     }
 
     // queued statistics config dependent
@@ -389,131 +391,131 @@ public interface ChannelSpecs {
     @Test
     default void testChannel_canQueryBlockedMessages_whenDroppedInPreFilter(final ChannelTestConfig channelTestConfig) {
         final int numberOfSendMessages = 5;
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAPreFilterThatBlocksMessages())
-                .when(ChannelActionBuilder.severalMessagesAreSendAsynchronously(numberOfSendMessages)
-                        .andThen(ChannelActionBuilder.theNumberOfBlockedMessagesIsQueried()))
-                .then(ChannelValidationBuilder.expectTheResult(numberOfSendMessages));
+                .when(severalMessagesAreSendAsynchronously(numberOfSendMessages)
+                        .andThen(theNumberOfBlockedMessagesIsQueried()))
+                .then(expectTheResult(numberOfSendMessages));
     }
 
     @Test
     default void testChannel_canQueryBlockedMessages_whenDroppedInProcessFilter(final ChannelTestConfig channelTestConfig) {
         final int numberOfSendMessages = 5;
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAProcessFilterThatBlocksMessages())
-                .when(ChannelActionBuilder.severalMessagesAreSendAsynchronously(numberOfSendMessages)
-                        .andThen(ChannelActionBuilder.theNumberOfBlockedMessagesIsQueried()))
-                .then(ChannelValidationBuilder.expectTheResult(numberOfSendMessages));
+                .when(severalMessagesAreSendAsynchronously(numberOfSendMessages)
+                        .andThen(theNumberOfBlockedMessagesIsQueried()))
+                .then(expectTheResult(numberOfSendMessages));
     }
 
     @Test
     default void testChannel_canQueryBlockedMessages_whenDroppedInPostFilter(final ChannelTestConfig channelTestConfig) {
         final int numberOfSendMessages = 5;
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAPostFilterThatBlocksMessages())
-                .when(ChannelActionBuilder.severalMessagesAreSendAsynchronously(numberOfSendMessages)
-                        .andThen(ChannelActionBuilder.theNumberOfBlockedMessagesIsQueried()))
-                .then(ChannelValidationBuilder.expectTheResult(numberOfSendMessages));
+                .when(severalMessagesAreSendAsynchronously(numberOfSendMessages)
+                        .andThen(theNumberOfBlockedMessagesIsQueried()))
+                .then(expectTheResult(numberOfSendMessages));
     }
 
     @Test
     default void testChannel_canQueryForgottenMessages_whenForgottenInPreFilter(final ChannelTestConfig channelTestConfig) {
         final int numberOfSendMessages = 5;
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAPreFilterThatForgetsMessages())
-                .when(ChannelActionBuilder.severalMessagesAreSendAsynchronously(numberOfSendMessages)
-                        .andThen(ChannelActionBuilder.theNumberOfForgottenMessagesIsQueried()))
-                .then(ChannelValidationBuilder.expectTheResult(numberOfSendMessages));
+                .when(severalMessagesAreSendAsynchronously(numberOfSendMessages)
+                        .andThen(theNumberOfForgottenMessagesIsQueried()))
+                .then(expectTheResult(numberOfSendMessages));
     }
 
     @Test
     default void testChannel_canQueryForgottenMessages_whenForgottenInProcessFilter(final ChannelTestConfig channelTestConfig) {
         final int numberOfSendMessages = 5;
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAProcessFilterThatForgetsMessages())
-                .when(ChannelActionBuilder.severalMessagesAreSendAsynchronously(numberOfSendMessages)
-                        .andThen(ChannelActionBuilder.theNumberOfForgottenMessagesIsQueried()))
-                .then(ChannelValidationBuilder.expectTheResult(numberOfSendMessages));
+                .when(severalMessagesAreSendAsynchronously(numberOfSendMessages)
+                        .andThen(theNumberOfForgottenMessagesIsQueried()))
+                .then(expectTheResult(numberOfSendMessages));
     }
 
     @Test
     default void testChannel_canQueryForgottenMessages_whenForgottenInPostFilter(final ChannelTestConfig channelTestConfig) {
         final int numberOfSendMessages = 5;
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAPostFilterThatForgetsMessages())
-                .when(ChannelActionBuilder.severalMessagesAreSendAsynchronously(numberOfSendMessages)
-                        .andThen(ChannelActionBuilder.theNumberOfForgottenMessagesIsQueried()))
-                .then(ChannelValidationBuilder.expectTheResult(numberOfSendMessages));
+                .when(severalMessagesAreSendAsynchronously(numberOfSendMessages)
+                        .andThen(theNumberOfForgottenMessagesIsQueried()))
+                .then(expectTheResult(numberOfSendMessages));
     }
 
     @Test
     default void testChannel_canQuerySuccessfulDeliveredMessages(final ChannelTestConfig channelTestConfig) {
         final int numberOfSendMessages = 5;
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withNoopConsumeAsDefaultAction())
-                .when(ChannelActionBuilder.severalMessagesAreSendAsynchronously(numberOfSendMessages)
-                        .andThen(ChannelActionBuilder.theNumberOfSuccessfulDeliveredMessagesIsQueried()))
-                .then(ChannelValidationBuilder.expectTheResult(numberOfSendMessages));
+                .when(severalMessagesAreSendAsynchronously(numberOfSendMessages)
+                        .andThen(theNumberOfSuccessfulDeliveredMessagesIsQueried()))
+                .then(expectTheResult(numberOfSendMessages));
     }
 
     @Test
     default void testChannel_canQueryFailedDeliveredMessages_forErrorInSubscriber(final ChannelTestConfig channelTestConfig) {
         final int numberOfSendMessages = 5;
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAnExceptionInFinalAction()
                 .withAnExceptionHandlerIgnoringExceptions())
-                .when(ChannelActionBuilder.severalMessagesAreSendAsynchronously(numberOfSendMessages)
-                        .andThen(ChannelActionBuilder.theNumberOfFailedDeliveredMessagesIsQueried()))
-                .then(ChannelValidationBuilder.expectTheResult(numberOfSendMessages));
+                .when(severalMessagesAreSendAsynchronously(numberOfSendMessages)
+                        .andThen(theNumberOfFailedDeliveredMessagesIsQueried()))
+                .then(expectTheResult(numberOfSendMessages));
     }
 
     @Test
     default void testChannel_canQueryFailedDeliveredMessages_forErrorInFilter(final ChannelTestConfig channelTestConfig) {
         final int numberOfSendMessages = 5;
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAnExceptionHandlerIgnoringExceptions()
                 .withAnErrorThrowingFilter())
-                .when(ChannelActionBuilder.severalMessagesAreSendAsynchronously(numberOfSendMessages)
-                        .andThen(ChannelActionBuilder.theNumberOfFailedDeliveredMessagesIsQueried()))
-                .then(ChannelValidationBuilder.expectTheResult(numberOfSendMessages));
+                .when(severalMessagesAreSendAsynchronously(numberOfSendMessages)
+                        .andThen(theNumberOfFailedDeliveredMessagesIsQueried()))
+                .then(expectTheResult(numberOfSendMessages));
     }
 
-    //errors
+    //error handling
     @Test
     default void testChannel_callsErrorHandler_forErrorInSubscriber(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAnExceptionInFinalAction()
                 .withACustomErrorHandler())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheDeliveryExceptionCatched(TestException.class));
+                .when(aMessageIsSend())
+                .then(expectTheDeliveryExceptionCatched(TestException.class));
     }
 
     @Test
     default void testChannel_callsErrorHandler_forErrorInFilter(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withACustomErrorHandler()
                 .withAnErrorThrowingFilter())
-                .when(ChannelActionBuilder.aMessageIsSend())
-                .then(ChannelValidationBuilder.expectTheFilterExceptionCatched(TestException.class));
+                .when(aMessageIsSend())
+                .then(expectTheFilterExceptionCatched(TestException.class));
     }
 
     @Test
     default void testChannel_errorHandlerCanDeclareExceptionAsIgnoredDuringDelivery(final ChannelTestConfig channelTestConfig) {
         final int numberOfSendMessages = 5;
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig)
+        given(aConfiguredChannel(channelTestConfig)
                 .withAnExceptionInFinalAction()
                 .withAnErrorHandlerDeclaringErrorsInDeliveryAsNotDeliveryAborting())
-                .when(ChannelActionBuilder.severalMessagesAreSendAsynchronously(numberOfSendMessages)
-                        .andThen(ChannelActionBuilder.theNumberOfSuccessfulDeliveredMessagesIsQueried()))
-                .then(ChannelValidationBuilder.expectTheResult(numberOfSendMessages));
+                .when(severalMessagesAreSendAsynchronously(numberOfSendMessages)
+                        .andThen(theNumberOfSuccessfulDeliveredMessagesIsQueried()))
+                .then(expectTheResult(numberOfSendMessages));
     }
 
     //shutdown
     @Test
     default void testChannel_shutdownCallIsIdempotent(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig))
-                .when(ChannelActionBuilder.theChannelIsClosedSeveralTimes())
-                .then(ChannelValidationBuilder.expectTheChannelToBeShutdown());
+        given(aConfiguredChannel(channelTestConfig))
+                .when(theChannelIsClosedSeveralTimes())
+                .then(expectTheChannelToBeShutdown());
     }
 
     // close without finishRemainingTasks config dependent
@@ -521,9 +523,9 @@ public interface ChannelSpecs {
     //await
     @Test
     default void testChannel_awaitsIsSuccessfulWhenAllTasksAreFinished(final ChannelTestConfig channelTestConfig) {
-        Given.given(ChannelSetupBuilder.aConfiguredChannel(channelTestConfig))
-                .when(ChannelActionBuilder.theChannelIsClosedAndTheShutdownIsAwaited())
-                .then(ChannelValidationBuilder.expectTheShutdownToBeSucceededInTime());
+        given(aConfiguredChannel(channelTestConfig))
+                .when(theChannelIsClosedAndTheShutdownIsAwaited())
+                .then(expectTheShutdownToBeSucceededInTime());
     }
 
     //provoking await returning false config dependent

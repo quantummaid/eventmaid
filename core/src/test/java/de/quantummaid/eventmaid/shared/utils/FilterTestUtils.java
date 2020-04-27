@@ -98,6 +98,13 @@ public final class FilterTestUtils {
         filterTestActions.addFilter(filter, filterPosition);
     }
 
+    public static void addFilterThatThrowsException(final FilterTestActions filterTestActions,
+                                                    final FilterPosition filterPosition,
+                                                    final RuntimeException e) {
+        final Filter<ProcessingContext<TestMessage>> filter = TestFilter.anErrorThrowingFilter(e);
+        filterTestActions.addFilter(filter, filterPosition);
+    }
+
     public static void removeAFilter(final FilterTestActions filterTestActions, final TestEnvironment testEnvironment) {
         final FilterPosition filterPosition = getFilterPositionOrNull(testEnvironment);
         final List<?> filters = filterTestActions.getFilter(filterPosition);

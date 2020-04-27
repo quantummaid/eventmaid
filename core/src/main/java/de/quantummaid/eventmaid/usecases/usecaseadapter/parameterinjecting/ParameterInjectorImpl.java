@@ -40,11 +40,7 @@ public final class ParameterInjectorImpl implements ParameterInjector {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getParameterFor(final Class<T> parameterClass, final ParameterInjectionInformation injectionInformation) {
-        if (hasValueFor(parameterClass)) {
-            final Function<ParameterInjectionInformation, ?> injection = injectionMap.get(parameterClass);
-            return (T) injection.apply(injectionInformation);
-        } else {
-            throw new NoInjectionDefinedException(parameterClass);
-        }
+        final Function<ParameterInjectionInformation, ?> injection = injectionMap.get(parameterClass);
+        return (T) injection.apply(injectionInformation);
     }
 }

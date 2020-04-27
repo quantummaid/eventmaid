@@ -86,7 +86,7 @@ public final class PipeBuilder<T> {
         try {
             transportMechanism = transportMechanism(pipeType, actualEventListener, errorHandler,
                     subscribers, asynchronousConfiguration);
-            return new PipeImpl<>(transportMechanism, statisticsCollector, subscribers);
+            return new PipeImpl<>(transportMechanism, statisticsCollector, subscribers, errorHandler);
         } catch (final RuntimeException e) {
             if (transportMechanism != null) {
                 transportMechanism.close(false);

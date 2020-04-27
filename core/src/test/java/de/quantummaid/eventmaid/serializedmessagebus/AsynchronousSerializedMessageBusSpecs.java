@@ -19,12 +19,12 @@
  * under the License.
  */
 
-package de.quantummaid.eventmaid.serializedmessagebus.synchronous;
+package de.quantummaid.eventmaid.serializedmessagebus;
 
-import de.quantummaid.eventmaid.serializedmessagebus.SerializedMessageBusSpecs;
+import de.quantummaid.eventmaid.serializedmessagebus.config.AsynchronousSerializedMessageBusConfigurationResolver;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-@ExtendWith(SynchronousSerializedMessageBusConfigurationResolver.class)
-public class SynchronousSerializedMessageBusSpecs implements SerializedMessageBusSpecs {
+@ExtendWith(AsynchronousSerializedMessageBusConfigurationResolver.class)
+public class AsynchronousSerializedMessageBusSpecs implements SerializedMessageBusSpecs {
 
 }

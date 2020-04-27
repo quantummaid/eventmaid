@@ -23,13 +23,14 @@ package de.quantummaid.eventmaid.messagebus;
 
 import de.quantummaid.eventmaid.messagebus.config.MessageBusTestConfig;
 import de.quantummaid.eventmaid.messagebus.config.SynchronisedMessageBusConfigurationResolver;
-import de.quantummaid.eventmaid.messagebus.givenwhenthen.Given;
-import de.quantummaid.eventmaid.messagebus.givenwhenthen.MessageBusActionBuilder;
-import de.quantummaid.eventmaid.messagebus.givenwhenthen.MessageBusSetupBuilder;
-import de.quantummaid.eventmaid.messagebus.givenwhenthen.MessageBusValidationBuilder;
 import de.quantummaid.eventmaid.shared.exceptions.TestException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import static de.quantummaid.eventmaid.messagebus.givenwhenthen.Given.given;
+import static de.quantummaid.eventmaid.messagebus.givenwhenthen.MessageBusActionBuilder.*;
+import static de.quantummaid.eventmaid.messagebus.givenwhenthen.MessageBusSetupBuilder.aConfiguredMessageBus;
+import static de.quantummaid.eventmaid.messagebus.givenwhenthen.MessageBusValidationBuilder.*;
 
 @ExtendWith(SynchronisedMessageBusConfigurationResolver.class)
 public class SynchronisedMessageBusSpecs implements MessageBusSpecs {
@@ -39,10 +40,10 @@ public class SynchronisedMessageBusSpecs implements MessageBusSpecs {
     public void testMessageBus_queryingNumberOfQueuedMessages_alwaysReturnsZero(
             final MessageBusTestConfig config) {
         final int messagesSend = 3;
-        Given.given(MessageBusSetupBuilder.aConfiguredMessageBus(config))
-                .when(MessageBusActionBuilder.severalMessagesAreSendAsynchronouslyButWillBeBlocked(messagesSend)
-                        .andThen(MessageBusActionBuilder.theNumberOfQueuedMessagesIsQueried()))
-                .then(MessageBusValidationBuilder.expectResultToBe(0));
+        given(aConfiguredMessageBus(config))
+                .when(severalMessagesAreSendAsynchronouslyButWillBeBlocked(messagesSend)
+                        .andThen(theNumberOfQueuedMessagesIsQueried()))
+                .then(expectResultToBe(0));
     }
 
     //shutdown
@@ -50,9 +51,9 @@ public class SynchronisedMessageBusSpecs implements MessageBusSpecs {
     public void testMessageBus_whenShutdownAllRemainingTasksAreFinished(final MessageBusTestConfig config) {
         final int numberOfParallelSendMessages = 10;
         final boolean finishRemainingTasks = true;
-        Given.given(MessageBusSetupBuilder.aConfiguredMessageBus(config))
-                .when(MessageBusActionBuilder.sendSeveralMessagesBeforeTheBusIsShutdown(numberOfParallelSendMessages, finishRemainingTasks))
-                .then(MessageBusValidationBuilder.expectXMessagesToBeDelivered(10));
+        given(aConfiguredMessageBus(config))
+                .when(sendSeveralMessagesBeforeTheBusIsShutdown(numberOfParallelSendMessages, finishRemainingTasks))
+                .then(expectXMessagesToBeDelivered(10));
     }
 
     @Test
@@ -60,28 +61,28 @@ public class SynchronisedMessageBusSpecs implements MessageBusSpecs {
             final MessageBusTestConfig config) {
         final int numberOfParallelSendMessages = 10;
         final boolean finishRemainingTasks = false;
-        Given.given(MessageBusSetupBuilder.aConfiguredMessageBus(config))
-                .when(MessageBusActionBuilder.sendSeveralMessagesBeforeTheBusIsShutdown(numberOfParallelSendMessages, finishRemainingTasks))
-                .then(MessageBusValidationBuilder.expectXMessagesToBeDelivered(10));
+        given(aConfiguredMessageBus(config))
+                .when(sendSeveralMessagesBeforeTheBusIsShutdown(numberOfParallelSendMessages, finishRemainingTasks))
+                .then(expectXMessagesToBeDelivered(10));
     }
 
-    //errors
+    //error handling
     @Test
     public void testMessageBus_dynamicErrorHandlerIsCalledOnceIfMessageBusExceptionHandlerRethrowsException(
             final MessageBusTestConfig config) {
-        Given.given(MessageBusSetupBuilder.aConfiguredMessageBus(config)
+        given(aConfiguredMessageBus(config)
                 .withAnExceptionThrowingSubscriber()
                 .withADynamicErrorListenerAndAnErrorThrowingExceptionHandler())
-                .when(MessageBusActionBuilder.aSingleMessageIsSend())
-                .then(MessageBusValidationBuilder.expectTheExceptionHandledAndTheErrorToBeThrown(TestException.class));
+                .when(aSingleMessageIsSend())
+                .then(expectTheExceptionHandledAndTheErrorToBeThrown(TestException.class));
     }
 
     @Test
     public void testMessageBus_exceptionIsAlsoThrownBySendMethod(final MessageBusTestConfig config) {
-        Given.given(MessageBusSetupBuilder.aConfiguredMessageBus(config)
+        given(aConfiguredMessageBus(config)
                 .withAnExceptionThrowingSubscriber()
                 .withAnErrorThrowingExceptionHandler())
-                .when(MessageBusActionBuilder.aSingleMessageIsSend())
-                .then(MessageBusValidationBuilder.expectTheException(TestException.class));
+                .when(aSingleMessageIsSend())
+                .then(expectTheException(TestException.class));
     }
 }
