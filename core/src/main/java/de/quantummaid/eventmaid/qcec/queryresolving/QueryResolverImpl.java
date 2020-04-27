@@ -21,16 +21,16 @@
 
 package de.quantummaid.eventmaid.qcec.queryresolving;
 
-import de.quantummaid.eventmaid.processingContext.EventType;
-import de.quantummaid.eventmaid.messageBus.MessageBus;
+import de.quantummaid.eventmaid.messagebus.MessageBus;
+import de.quantummaid.eventmaid.processingcontext.EventType;
 import de.quantummaid.eventmaid.subscribing.PreemptiveSubscriber;
 import de.quantummaid.eventmaid.subscribing.SubscriptionId;
 
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static de.quantummaid.eventmaid.processingContext.EventType.eventTypeFromClass;
-import static de.quantummaid.eventmaid.processingContext.EventType.eventTypeFromObjectClass;
+import static de.quantummaid.eventmaid.processingcontext.EventType.eventTypeFromClass;
+import static de.quantummaid.eventmaid.processingcontext.EventType.eventTypeFromObjectClass;
 
 public class QueryResolverImpl implements QueryResolver {
     private final MessageBus messageBus;
@@ -45,13 +45,11 @@ public class QueryResolverImpl implements QueryResolver {
             @SuppressWarnings("unchecked")
             final T query = (T) t;
             responder.accept(query);
-            final boolean continueDelivery = !query.finished();
-            return continueDelivery;
+            return !query.finished();
         });
         final EventType eventType = eventTypeFromClass(queryClass);
         messageBus.subscribe(eventType, subscriber);
-        final SubscriptionId subscriptionId = subscriber.getSubscriptionId();
-        return subscriptionId;
+        return subscriber.getSubscriptionId();
     }
 
     @Override

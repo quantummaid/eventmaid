@@ -22,8 +22,8 @@
 package de.quantummaid.eventmaid.qcec.querying.givenWhenThen;
 
 import de.quantummaid.eventmaid.shared.environment.TestEnvironment;
-import de.quantummaid.eventmaid.shared.givenWhenThen.TestValidation;
 import de.quantummaid.eventmaid.shared.environment.TestEnvironmentProperty;
+import de.quantummaid.eventmaid.shared.givenwhenthen.TestValidation;
 import lombok.RequiredArgsConstructor;
 
 import java.util.regex.Matcher;

@@ -22,9 +22,9 @@
 package de.quantummaid.eventmaid.internal.pipe.transport;
 
 import de.quantummaid.eventmaid.internal.exceptions.BubbleUpWrappedException;
-import de.quantummaid.eventmaid.internal.pipe.error.PipeErrorHandler;
 import de.quantummaid.eventmaid.internal.pipe.events.PipeEventListener;
-import de.quantummaid.eventmaid.internal.pipe.excepions.NoSuitableSubscriberException;
+import de.quantummaid.eventmaid.internal.pipe.exceptions.NoSuitableSubscriberException;
+import de.quantummaid.eventmaid.internal.pipe.exceptions.PipeErrorHandler;
 import de.quantummaid.eventmaid.subscribing.AcceptingBehavior;
 import de.quantummaid.eventmaid.subscribing.Subscriber;
 import lombok.RequiredArgsConstructor;
@@ -64,32 +64,38 @@ public final class SynchronousDelivery<T> {
 
     private boolean deliveryMessageTo(final T message, final Subscriber<T> subscriber) {
         try {
-            final AcceptingBehavior acceptingBehavior = subscriber.accept(message);
-            final boolean proceedWithDelivery = acceptingBehavior.continueDelivery();
-            if (!proceedWithDelivery) {
-                eventListener.messageDeliverySucceeded(message);
+            return deliverMessage(message, subscriber);
+        } catch (final BubbleUpWrappedException e) {
+            throw e;
+        } catch (final Exception e) {
+            return handleException(message, e);
+        }
+    }
+
+    private boolean deliverMessage(final T message, final Subscriber<T> subscriber) {
+        final AcceptingBehavior acceptingBehavior = subscriber.accept(message);
+        final boolean proceedWithDelivery = acceptingBehavior.continueDelivery();
+        if (!proceedWithDelivery) {
+            eventListener.messageDeliverySucceeded(message);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean handleException(final T message, final Exception e) {
+        try {
+            if (pipeErrorHandler.shouldErrorBeHandledAndDeliveryAborted(message, e)) {
+                eventListener.messageDeliveryFailed(message, e);
+                pipeErrorHandler.handleException(message, e);
                 return false;
             } else {
                 return true;
             }
-        } catch (final Exception e) {
-            if (e instanceof BubbleUpWrappedException) {
-                throw e;
-            } else {
-                try {
-                    if (pipeErrorHandler.shouldErrorBeHandledAndDeliveryAborted(message, e)) {
-                        eventListener.messageDeliveryFailed(message, e);
-                        pipeErrorHandler.handleException(message, e);
-                        return false;
-                    } else {
-                        return true;
-                    }
-                } catch (final BubbleUpWrappedException bubbledException) {
-                    throw bubbledException;
-                } catch (final Exception rethrownException) {
-                    throw new BubbleUpWrappedException(rethrownException);
-                }
-            }
+        } catch (final BubbleUpWrappedException bubbledException) {
+            throw bubbledException;
+        } catch (final Exception rethrownException) {
+            throw new BubbleUpWrappedException(rethrownException);
         }
     }
 }

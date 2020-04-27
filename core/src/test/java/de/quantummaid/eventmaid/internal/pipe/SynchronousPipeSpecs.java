@@ -23,12 +23,14 @@ package de.quantummaid.eventmaid.internal.pipe;
 
 import de.quantummaid.eventmaid.internal.pipe.config.PipeTestConfig;
 import de.quantummaid.eventmaid.internal.pipe.config.SynchronisedPipeConfigurationResolver;
-import de.quantummaid.eventmaid.internal.pipe.givenWhenThen.Given;
-import de.quantummaid.eventmaid.internal.pipe.givenWhenThen.PipeActionBuilder;
-import de.quantummaid.eventmaid.internal.pipe.givenWhenThen.PipeSetupBuilder;
-import de.quantummaid.eventmaid.internal.pipe.givenWhenThen.PipeValidationBuilder;
+import de.quantummaid.eventmaid.shared.exceptions.TestException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import static de.quantummaid.eventmaid.internal.pipe.givenwhenthen.Given.given;
+import static de.quantummaid.eventmaid.internal.pipe.givenwhenthen.PipeActionBuilder.*;
+import static de.quantummaid.eventmaid.internal.pipe.givenwhenthen.PipeSetupBuilder.aConfiguredPipe;
+import static de.quantummaid.eventmaid.internal.pipe.givenwhenthen.PipeValidationBuilder.*;
 
 @ExtendWith(SynchronisedPipeConfigurationResolver.class)
 public class SynchronousPipeSpecs implements PipeSpecs {
@@ -38,56 +40,64 @@ public class SynchronousPipeSpecs implements PipeSpecs {
     public void testPipe_withBlockingSubscriber_whenNumberOfSuccessfulDeliveredMessagesIsQueried_returnsZero(
             final PipeTestConfig testConfig) {
         final int numberOfMessages = 5;
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig))
-                .when(PipeActionBuilder.severalMessagesAreSendAsynchronouslyButWillBeBlocked(numberOfMessages)
-                        .andThen(PipeActionBuilder.theNumberOfSuccessfulMessagesIsQueriedWhenSubscriberBlocked()))
-                .then(PipeValidationBuilder.expectResultToBe(0));
+        given(aConfiguredPipe(testConfig))
+                .when(severalMessagesAreSendAsynchronouslyButWillBeBlocked(numberOfMessages)
+                        .andThen(theNumberOfSuccessfulMessagesIsQueriedWhenSubscriberBlocked()))
+                .then(expectResultToBe(0));
     }
 
     @Test
     public void testPipe_withBlockingSubscriber_whenNumberOfAcceptedMessagesIsQueried_returnsNumberOfThreads(
             final PipeTestConfig testConfig) {
         final int numberOfMessages = 3;
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig))
-                .when(PipeActionBuilder.severalMessagesAreSendAsynchronouslyButWillBeBlocked(numberOfMessages)
-                        .andThen(PipeActionBuilder.theNumberOfAcceptedMessagesIsQueried()))
-                .then(PipeValidationBuilder.expectResultToBe(numberOfMessages));
+        given(aConfiguredPipe(testConfig))
+                .when(severalMessagesAreSendAsynchronouslyButWillBeBlocked(numberOfMessages)
+                        .andThen(theNumberOfAcceptedMessagesIsQueried()))
+                .then(expectResultToBe(numberOfMessages));
     }
 
     @Test
     public void testPipe_withBlockingSubscriber_whenNumberOfQueuedMessagesIsQueried_returnsNumberOfThreads(
             final PipeTestConfig testConfig) {
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig))
-                .when(PipeActionBuilder.severalMessagesAreSendAsynchronouslyButWillBeBlocked(5)
-                        .andThen(PipeActionBuilder.theNumberOfQueuedMessagesIsQueried()))
-                .then(PipeValidationBuilder.expectResultToBe(0));
+        given(aConfiguredPipe(testConfig))
+                .when(severalMessagesAreSendAsynchronouslyButWillBeBlocked(5)
+                        .andThen(theNumberOfQueuedMessagesIsQueried()))
+                .then(expectResultToBe(0));
+    }
+
+    //exception handling
+    @Test
+    public void testPipe_defaultErrorHandlerThrowsException(final PipeTestConfig testConfig) {
+        given(aConfiguredPipe(testConfig))
+                .when(aMessageResultingInAnErrorIsSend())
+                .then(expectTheException(TestException.class));
     }
 
     //shutdown
     @Test
     public void testPipe_whenShutdown_deliversRemainingMessagesButNoNewAdded(final PipeTestConfig testConfig) {
         final int numberOfParallelSendMessagesBeforeShutdown = 5;
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig))
-                .when(PipeActionBuilder.thePipeIsShutdownAfterHalfOfTheMessagesWereDelivered(10))
-                .then(PipeValidationBuilder.expectXMessagesToBeDelivered_despiteTheChannelClosed(numberOfParallelSendMessagesBeforeShutdown));
+        given(aConfiguredPipe(testConfig))
+                .when(thePipeIsShutdownAfterHalfOfTheMessagesWereDelivered(10))
+                .then(expectXMessagesToBeDelivered_despiteTheChannelClosed(numberOfParallelSendMessagesBeforeShutdown));
         //because waiting senders wait on synchronised send -> they never entered the Pipe and do not count as remaining
     }
 
     @Test
     public void testPipe_whenShutdownWithoutFinishingRemainingTasksIsCalled_noTasksAreFinished(final PipeTestConfig testConfig) {
         final int numberOfParallelSendMessagesBeforeShutdown = 5;
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig))
-                .when(PipeActionBuilder.thePipeIsShutdownAfterHalfOfTheMessagesWereDelivered_withoutFinishingRemainingTasks(10))
-                .then(PipeValidationBuilder.expectXMessagesToBeDelivered_despiteTheChannelClosed(numberOfParallelSendMessagesBeforeShutdown));
+        given(aConfiguredPipe(testConfig))
+                .when(thePipeIsShutdownAfterHalfOfTheMessagesWereDelivered_withoutFinishingRemainingTasks(10))
+                .then(expectXMessagesToBeDelivered_despiteTheChannelClosed(numberOfParallelSendMessagesBeforeShutdown));
     }
 
     //await
     @Test
     public void testPipe_awaitsSucceedsEvenIfTasksCouldNotBeFinished(final PipeTestConfig testConfig) {
         final int numberOfMessagesSend = 5;
-        Given.given(PipeSetupBuilder.aConfiguredPipe(testConfig))
-                .when(PipeActionBuilder.awaitIsCalledWithoutAllowingRemainingTasksToFinish(numberOfMessagesSend))
-                .then(PipeValidationBuilder.expectTheAwaitToBeTerminatedSuccessful());
+        given(aConfiguredPipe(testConfig))
+                .when(awaitIsCalledWithoutAllowingRemainingTasksToFinish(numberOfMessagesSend))
+                .then(expectTheAwaitToBeTerminatedSuccessful());
         //await returns always true, as it's not feasible to check whether there are still Threads waiting in the pipe
     }
 

@@ -75,6 +75,9 @@
     <suppress checks="IllegalCatch" files="UseCaseRequestExecutingSubscriber.java"/>
     <suppress checks="IllegalCatch" files="ErrorListenerDelegatingMessageBusExceptionHandler.java"/>
     <suppress checks="IllegalCatch" files="MessageFunctionImpl.java"/>
+    <suppress checks="IllegalCatch" files="ChannelBuilder.java"/>
+    <suppress checks="IllegalCatch" files="PipeBuilder.java"/>
+    <suppress checks="IllegalCatch" files="MessageBusBuilder.java"/>
 
     <suppress checks="VisibilityModifierCheck" files="AbstractSharedAnswerImpl.java"/>
 
@@ -115,6 +118,13 @@
     <suppress checks="[IllegalCatch|FileLength]" files="ChannelSetupBuilde.java"/>
 
     <suppress checks="ClassFanOutComplexity" files="UseCaseInvocationBuilder.java"/>
+    <suppress checks="ClassFanOutComplexity" files="ChannelImpl.java"/>
 
     <suppress checks="MethodLength" files="SpecialInvocationUseCaseBuilder.java"/>
+
+    <suppress checks="TrailingComment" files="SerializedMessageBusImpl.java"/>
+    <suppress checks="TrailingComment" files="Caller.java"/>
+    <suppress checks="TrailingComment" files="UseCaseMethodInvoker.java"/>
+    <suppress checks="TrailingComment" files="DelegatingChannelExceptionHandler.java"/>
+    <suppress checks="TrailingComment" files="ChannelBuilder.java"/>
 </suppressions>

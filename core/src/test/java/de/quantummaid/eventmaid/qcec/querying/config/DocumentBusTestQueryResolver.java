@@ -21,8 +21,8 @@
 
 package de.quantummaid.eventmaid.qcec.querying.config;
 
-import de.quantummaid.eventmaid.qcec.domainBus.DocumentBus;
-import de.quantummaid.eventmaid.qcec.domainBus.DocumentBusBuilder;
+import de.quantummaid.eventmaid.qcec.domainbus.DocumentBus;
+import de.quantummaid.eventmaid.qcec.domainbus.DocumentBusBuilder;
 import de.quantummaid.eventmaid.qcec.queryresolving.Query;
 import de.quantummaid.eventmaid.subscribing.SubscriptionId;
 

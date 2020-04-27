@@ -21,14 +21,14 @@
 
 package de.quantummaid.eventmaid.qcec.constraining.givenWhenThen;
 
-import de.quantummaid.eventmaid.messageBus.MessageBus;
-import de.quantummaid.eventmaid.qcec.constraintEnforcing.ConstraintEnforcer;
+import de.quantummaid.eventmaid.messagebus.MessageBus;
+import de.quantummaid.eventmaid.qcec.constraintenforcing.ConstraintEnforcer;
 import de.quantummaid.eventmaid.subscribing.SubscriptionId;
 
 import java.util.function.Consumer;
 
-import static de.quantummaid.eventmaid.messageBus.MessageBusBuilder.aMessageBus;
-import static de.quantummaid.eventmaid.qcec.constraintEnforcing.ConstraintEnforcerFactory.aConstraintEnforcer;
+import static de.quantummaid.eventmaid.messagebus.MessageBusBuilder.aMessageBus;
+import static de.quantummaid.eventmaid.qcec.constraintenforcing.ConstraintEnforcerFactory.aConstraintEnforcer;
 
 public final class ConstraintEnforcingTestConstraintEnforcer extends TestConstraintEnforcer {
     private final ConstraintEnforcer constraintEnforcer;

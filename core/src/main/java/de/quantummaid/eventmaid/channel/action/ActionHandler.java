@@ -21,7 +21,7 @@
 
 package de.quantummaid.eventmaid.channel.action;
 
-import de.quantummaid.eventmaid.processingContext.ProcessingContext;
+import de.quantummaid.eventmaid.processingcontext.ProcessingContext;
 
 /**
  * {@code ActionHandler} are responsible to handle the execution of the final {@code Action} of a {@code Channel}.

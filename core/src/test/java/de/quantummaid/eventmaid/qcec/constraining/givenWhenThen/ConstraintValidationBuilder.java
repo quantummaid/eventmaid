@@ -21,11 +21,11 @@
 
 package de.quantummaid.eventmaid.qcec.constraining.givenWhenThen;
 
-import de.quantummaid.eventmaid.shared.environment.TestEnvironment;
 import de.quantummaid.eventmaid.qcec.shared.TestReceiver;
-import de.quantummaid.eventmaid.shared.givenWhenThen.TestValidation;
 import de.quantummaid.eventmaid.qcec.shared.testConstraints.TestConstraint;
+import de.quantummaid.eventmaid.shared.environment.TestEnvironment;
 import de.quantummaid.eventmaid.shared.environment.TestEnvironmentProperty;
+import de.quantummaid.eventmaid.shared.givenwhenthen.TestValidation;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

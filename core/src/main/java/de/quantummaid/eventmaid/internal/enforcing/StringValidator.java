@@ -45,7 +45,6 @@ public final class StringValidator {
         } else {
             singleWhiteSpaced = value;
         }
-        final String cleanString = singleWhiteSpaced.trim();
-        return cleanString;
+        return singleWhiteSpaced.trim();
     }
 }

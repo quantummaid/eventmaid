@@ -21,21 +21,21 @@
 
 package de.quantummaid.eventmaid.shared.utils;
 
+import de.quantummaid.eventmaid.identification.CorrelationId;
+import de.quantummaid.eventmaid.identification.MessageId;
+import de.quantummaid.eventmaid.processingcontext.EventType;
+import de.quantummaid.eventmaid.processingcontext.ProcessingContext;
 import de.quantummaid.eventmaid.shared.environment.TestEnvironment;
-import de.quantummaid.eventmaid.shared.eventType.TestEventType;
-import de.quantummaid.eventmaid.shared.pipeChannelMessageBus.testActions.CorrelationIdSendingActions;
-import de.quantummaid.eventmaid.shared.pipeChannelMessageBus.testActions.ProcessingContextSendingActions;
-import de.quantummaid.eventmaid.shared.pipeChannelMessageBus.testActions.SendingActions;
-import de.quantummaid.eventmaid.shared.pipeChannelMessageBus.testActions.SubscribeActions;
+import de.quantummaid.eventmaid.shared.eventtype.TestEventType;
+import de.quantummaid.eventmaid.shared.pipechannelmessagebus.testActions.CorrelationIdSendingActions;
+import de.quantummaid.eventmaid.shared.pipechannelmessagebus.testActions.ProcessingContextSendingActions;
+import de.quantummaid.eventmaid.shared.pipechannelmessagebus.testActions.SendingActions;
+import de.quantummaid.eventmaid.shared.pipechannelmessagebus.testActions.SubscribeActions;
 import de.quantummaid.eventmaid.shared.polling.PollingUtils;
 import de.quantummaid.eventmaid.shared.properties.SharedTestProperties;
 import de.quantummaid.eventmaid.shared.subscriber.BlockingTestSubscriber;
-import de.quantummaid.eventmaid.shared.testMessages.TestMessage;
-import de.quantummaid.eventmaid.shared.testMessages.TestMessageOfInterest;
-import de.quantummaid.eventmaid.identification.CorrelationId;
-import de.quantummaid.eventmaid.identification.MessageId;
-import de.quantummaid.eventmaid.processingContext.EventType;
-import de.quantummaid.eventmaid.processingContext.ProcessingContext;
+import de.quantummaid.eventmaid.shared.testmessages.TestMessage;
+import de.quantummaid.eventmaid.shared.testmessages.TestMessageOfInterest;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -43,9 +43,8 @@ import java.util.List;
 import java.util.concurrent.*;
 
 import static de.quantummaid.eventmaid.identification.CorrelationId.newUniqueCorrelationId;
-import static de.quantummaid.eventmaid.processingContext.ProcessingContext.processingContext;
-import static de.quantummaid.eventmaid.processingContext.ProcessingContext.processingContextForError;
-import static de.quantummaid.eventmaid.shared.testMessages.TestMessageOfInterest.messageOfInterest;
+import static de.quantummaid.eventmaid.processingcontext.ProcessingContext.processingContext;
+import static de.quantummaid.eventmaid.processingcontext.ProcessingContext.processingContextForError;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static lombok.AccessLevel.PRIVATE;

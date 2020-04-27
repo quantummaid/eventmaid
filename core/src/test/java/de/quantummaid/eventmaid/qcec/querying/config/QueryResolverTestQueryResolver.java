@@ -21,7 +21,7 @@
 
 package de.quantummaid.eventmaid.qcec.querying.config;
 
-import de.quantummaid.eventmaid.messageBus.MessageBus;
+import de.quantummaid.eventmaid.messagebus.MessageBus;
 import de.quantummaid.eventmaid.qcec.queryresolving.Query;
 import de.quantummaid.eventmaid.qcec.queryresolving.QueryResolver;
 import de.quantummaid.eventmaid.qcec.queryresolving.QueryResolverFactory;
@@ -30,8 +30,8 @@ import de.quantummaid.eventmaid.subscribing.SubscriptionId;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static de.quantummaid.eventmaid.messageBus.MessageBusBuilder.aMessageBus;
-import static de.quantummaid.eventmaid.messageBus.MessageBusType.SYNCHRONOUS;
+import static de.quantummaid.eventmaid.messagebus.MessageBusBuilder.aMessageBus;
+import static de.quantummaid.eventmaid.messagebus.MessageBusType.SYNCHRONOUS;
 
 public final class QueryResolverTestQueryResolver extends TestQueryResolver {
     private final QueryResolver queryResolver;

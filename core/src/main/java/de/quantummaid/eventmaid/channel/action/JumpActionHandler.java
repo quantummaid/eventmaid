@@ -23,7 +23,7 @@ package de.quantummaid.eventmaid.channel.action;
 
 import de.quantummaid.eventmaid.channel.Channel;
 import de.quantummaid.eventmaid.channel.ChannelProcessingFrame;
-import de.quantummaid.eventmaid.processingContext.ProcessingContext;
+import de.quantummaid.eventmaid.processingcontext.ProcessingContext;
 import lombok.RequiredArgsConstructor;
 
 import static lombok.AccessLevel.PRIVATE;

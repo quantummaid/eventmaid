@@ -36,12 +36,12 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 @ToString
 @EqualsAndHashCode
-public class AsynchronousConfiguration {
+public final class AsynchronousConfiguration {
     public static final int DEFAULT_CORE_POOL_SIZE = 2;
     public static final int DEFAULT_MAXIMUM_POOL_SIZE = 2;
     public static final int DEFAULT_MAXIMUM_TIMEOUT = 60;
     public static final TimeUnit DEFAULT_TIMEUNIT = SECONDS;
-    public static final LinkedBlockingQueue<Runnable> DEFAULT_WORKING_QUEUE = new LinkedBlockingQueue<>();
+
     @Getter
     @Setter
     private int corePoolSize = DEFAULT_CORE_POOL_SIZE;
@@ -56,7 +56,7 @@ public class AsynchronousConfiguration {
     private TimeUnit timeoutTimeUnit = DEFAULT_TIMEUNIT;
     @Getter
     @Setter
-    private BlockingQueue<Runnable> threadPoolWorkingQueue = DEFAULT_WORKING_QUEUE;
+    private BlockingQueue<Runnable> threadPoolWorkingQueue = defaultWorkingQueue();
 
     public AsynchronousConfiguration() {
     }
@@ -79,6 +79,10 @@ public class AsynchronousConfiguration {
                                                                                       final int waitingQueueBound) {
         final ArrayBlockingQueue<Runnable> threadPoolWorkingQueue = new ArrayBlockingQueue<>(waitingQueueBound);
         return new AsynchronousConfiguration(poolSize, poolSize, MAX_VALUE, SECONDS, threadPoolWorkingQueue);
+    }
+
+    public static BlockingQueue<Runnable> defaultWorkingQueue() {
+        return new LinkedBlockingQueue<>();
     }
 
 }
