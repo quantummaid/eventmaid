@@ -26,6 +26,7 @@ import de.quantummaid.eventmaid.usecases.building.MissingExceptionSerializationE
 import java.util.Map;
 
 import static de.quantummaid.eventmaid.mapping.ExceptionMapifier.defaultExceptionMapifier;
+import static de.quantummaid.eventmaid.usecases.building.MissingExceptionSerializationException.missingExceptionSerializationException;
 import static java.lang.String.format;
 
 /**
@@ -38,7 +39,7 @@ public class MissingExceptionMappingExceptionMapifier implements Mapifier<Except
     /**
      * All {@link Exception} objects are stored under this key in the {@link Map}
      */
-    public static final String DEFAULT_EXCEPTION_MAPIFIER_KEY = "Exception";
+    public static final String DEFAULT_EXCEPTION_MAPIFIER_KEY = ExceptionMapifier.DEFAULT_EXCEPTION_MAPIFIER_KEY;
 
     private final ExceptionMapifier exceptionMapifier = defaultExceptionMapifier();
 
@@ -55,7 +56,7 @@ public class MissingExceptionMappingExceptionMapifier implements Mapifier<Except
     public Map<String, Object> map(final Exception cause) {
         final Class<? extends Exception> causeClass = cause.getClass();
         final String message = format("No response mapper found for exception of class %s.", causeClass);
-        final MissingExceptionSerializationException exception = MissingExceptionSerializationException.missingExceptionSerializationException(message);
+        final MissingExceptionSerializationException exception = missingExceptionSerializationException(message);
         return exceptionMapifier.map(exception);
     }
 }

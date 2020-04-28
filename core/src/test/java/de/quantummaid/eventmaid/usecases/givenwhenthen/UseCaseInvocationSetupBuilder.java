@@ -33,6 +33,7 @@ import de.quantummaid.eventmaid.usecases.shared.UseCaseInvocationConfiguration;
 import java.util.Map;
 
 import static de.quantummaid.eventmaid.configuration.AsynchronousConfiguration.constantPoolSizeAsynchronousConfiguration;
+import static de.quantummaid.eventmaid.mapping.MissingExceptionMappingExceptionMapifier.DEFAULT_EXCEPTION_MAPIFIER_KEY;
 import static de.quantummaid.eventmaid.messagebus.MessageBusBuilder.aMessageBus;
 import static de.quantummaid.eventmaid.messagebus.MessageBusType.ASYNCHRONOUS;
 import static de.quantummaid.eventmaid.shared.environment.TestEnvironment.emptyTestEnvironment;
@@ -140,9 +141,8 @@ public final class UseCaseInvocationSetupBuilder {
         extraInvocationConfiguration.addResponseDeserializationDefinitions(responseDeserializationStep1Builder -> {
             responseDeserializationStep1Builder.deserializingUseCaseResponsesOfType(MissingExceptionSerializationException.class)
                     .using((targetType, map) -> {
-                        final String message =
-                                (String) ((Map<Object, Object>) map).get(MissingExceptionMappingExceptionMapifier.DEFAULT_EXCEPTION_MAPIFIER_KEY);
-                        return missingExceptionSerializationException(message);
+                        final Object value = ((Map<Object, Object>) map).get(DEFAULT_EXCEPTION_MAPIFIER_KEY);
+                        return (MissingExceptionSerializationException) value;
                     });
         });
         return this;
