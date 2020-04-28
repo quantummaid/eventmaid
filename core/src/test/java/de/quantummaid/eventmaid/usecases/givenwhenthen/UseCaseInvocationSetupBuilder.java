@@ -22,7 +22,6 @@
 package de.quantummaid.eventmaid.usecases.givenwhenthen;
 
 import de.quantummaid.eventmaid.configuration.AsynchronousConfiguration;
-import de.quantummaid.eventmaid.mapping.MissingExceptionMappingExceptionMapifier;
 import de.quantummaid.eventmaid.messagebus.MessageBus;
 import de.quantummaid.eventmaid.messagebus.MessageBusBuilder;
 import de.quantummaid.eventmaid.shared.environment.TestEnvironment;
@@ -38,7 +37,6 @@ import static de.quantummaid.eventmaid.messagebus.MessageBusBuilder.aMessageBus;
 import static de.quantummaid.eventmaid.messagebus.MessageBusType.ASYNCHRONOUS;
 import static de.quantummaid.eventmaid.shared.environment.TestEnvironment.emptyTestEnvironment;
 import static de.quantummaid.eventmaid.shared.environment.TestEnvironmentProperty.MOCK;
-import static de.quantummaid.eventmaid.usecases.building.MissingExceptionSerializationException.missingExceptionSerializationException;
 import static de.quantummaid.eventmaid.usecases.building.MissingRequestDeserializationException.missingDeserializationException;
 import static de.quantummaid.eventmaid.usecases.building.MissingResponseSerializationException.missingResponseSerializationException;
 import static de.quantummaid.eventmaid.usecases.givenwhenthen.ExtraInvocationConfiguration.extraInvocationConfiguration;
