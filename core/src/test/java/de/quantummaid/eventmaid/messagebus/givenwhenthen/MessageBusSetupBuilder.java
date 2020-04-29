@@ -22,7 +22,6 @@
 package de.quantummaid.eventmaid.messagebus.givenwhenthen;
 
 import de.quantummaid.eventmaid.channel.Channel;
-import de.quantummaid.eventmaid.channel.ChannelBuilder;
 import de.quantummaid.eventmaid.configuration.AsynchronousConfiguration;
 import de.quantummaid.eventmaid.identification.CorrelationId;
 import de.quantummaid.eventmaid.messagebus.MessageBus;

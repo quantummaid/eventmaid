@@ -22,7 +22,6 @@
 package de.quantummaid.eventmaid.messagebus.channelcreating;
 
 import de.quantummaid.eventmaid.channel.Channel;
-import de.quantummaid.eventmaid.channel.ChannelBuilder;
 import de.quantummaid.eventmaid.channel.action.Subscription;
 import de.quantummaid.eventmaid.messagebus.exception.MessageBusExceptionHandler;
 import de.quantummaid.eventmaid.messagebus.internal.exception.DelegatingChannelExceptionHandler;

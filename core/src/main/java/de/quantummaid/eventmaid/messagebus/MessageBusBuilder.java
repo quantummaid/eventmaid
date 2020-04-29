@@ -22,7 +22,6 @@
 package de.quantummaid.eventmaid.messagebus;
 
 import de.quantummaid.eventmaid.channel.Channel;
-import de.quantummaid.eventmaid.channel.ChannelBuilder;
 import de.quantummaid.eventmaid.channel.ChannelType;
 import de.quantummaid.eventmaid.configuration.AsynchronousConfiguration;
 import de.quantummaid.eventmaid.messagebus.channelcreating.MessageBusChannelFactory;
