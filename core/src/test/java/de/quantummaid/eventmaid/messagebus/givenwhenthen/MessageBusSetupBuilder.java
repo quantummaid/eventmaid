@@ -38,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.LinkedList;
 import java.util.List;
 
+import static de.quantummaid.eventmaid.channel.ChannelBuilder.aChannel;
 import static de.quantummaid.eventmaid.channel.action.Subscription.subscription;
 import static de.quantummaid.eventmaid.identification.CorrelationId.newUniqueCorrelationId;
 import static de.quantummaid.eventmaid.messagebus.givenwhenthen.MessageBusTestActions.addARawFilterThatChangesTheContentOfEveryMessage;
@@ -83,7 +84,7 @@ public final class MessageBusSetupBuilder {
 
     public MessageBusSetupBuilder withACustomChannelFactory() {
         messageBusBuilder.withAChannelFactory((eventType, subscriber, exceptionHandler) -> {
-            final Channel<Object> channel = ChannelBuilder.aChannel(Object.class)
+            final Channel<Object> channel = aChannel()
                     .withDefaultAction(subscription())
                     .build();
             testEnvironment.setPropertyIfNotSet(EXPECTED_RESULT, channel);
