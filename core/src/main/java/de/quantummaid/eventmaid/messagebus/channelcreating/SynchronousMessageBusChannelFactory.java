@@ -30,6 +30,7 @@ import de.quantummaid.eventmaid.processingcontext.EventType;
 import de.quantummaid.eventmaid.subscribing.Subscriber;
 import lombok.RequiredArgsConstructor;
 
+import static de.quantummaid.eventmaid.channel.ChannelBuilder.aChannel;
 import static de.quantummaid.eventmaid.messagebus.internal.exception.DelegatingChannelExceptionHandler.delegatingChannelExceptionHandlerForDeliveryChannel;
 import static lombok.AccessLevel.PRIVATE;
 
@@ -56,7 +57,7 @@ public final class SynchronousMessageBusChannelFactory implements MessageBusChan
                                          final MessageBusExceptionHandler messageBusExceptionHandler) {
         final DelegatingChannelExceptionHandler<Object> delegatingChannelExceptionHandler =
                 delegatingChannelExceptionHandlerForDeliveryChannel(messageBusExceptionHandler);
-        final Channel<Object> channel = ChannelBuilder.aChannel(Object.class)
+        final Channel<Object> channel = aChannel()
                 .withDefaultAction(Subscription.subscription())
                 .withChannelExceptionHandler(delegatingChannelExceptionHandler)
                 .build();

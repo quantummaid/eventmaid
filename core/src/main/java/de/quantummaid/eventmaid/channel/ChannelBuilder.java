@@ -95,6 +95,7 @@ public class ChannelBuilder<T> {
      * @param <T>              type of messages of the created {@code Channel}
      * @return a new {@code ChannelBuilder}
      */
+    @SuppressWarnings("unused")
     public static <T> ChannelBuilder<T> aChannel(final Class<T> channelTypeClass) {
         return new ChannelBuilder<>();
     }

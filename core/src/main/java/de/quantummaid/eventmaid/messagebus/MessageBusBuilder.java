@@ -36,6 +36,7 @@ import de.quantummaid.eventmaid.messagebus.internal.exception.DelegatingChannelE
 import de.quantummaid.eventmaid.messagebus.internal.exception.ExceptionListenerHandlerImpl;
 import lombok.RequiredArgsConstructor;
 
+import static de.quantummaid.eventmaid.channel.ChannelBuilder.aChannel;
 import static de.quantummaid.eventmaid.messagebus.MessageBusConsumeAction.messageBusConsumeAction;
 import static de.quantummaid.eventmaid.messagebus.exception.ErrorThrowingMessageBusExceptionHandler.errorThrowingMessageBusExceptionHandler;
 import static de.quantummaid.eventmaid.messagebus.internal.correlationids.CorrelationBasedSubscriptionsImpl.correlationBasedSubscriptions;
@@ -158,7 +159,7 @@ public final class MessageBusBuilder {
         final ChannelType channelType = map(type);
         final DelegatingChannelExceptionHandler<Object> acceptingPipeExceptionHandler =
                 DelegatingChannelExceptionHandler.delegatingChannelExceptionHandlerForAcceptingChannel(exceptionHandler);
-        final Channel<Object> acceptingChannel = ChannelBuilder.aChannel(Object.class)
+        final Channel<Object> acceptingChannel = aChannel()
                 .forType(channelType)
                 .withAsynchronousConfiguration(asynchronousConfiguration)
                 .withChannelExceptionHandler(acceptingPipeExceptionHandler)
