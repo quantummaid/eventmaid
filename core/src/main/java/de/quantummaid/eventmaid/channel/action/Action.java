@@ -26,5 +26,6 @@ package de.quantummaid.eventmaid.channel.action;
  *
  * @param <T> the type of the {@code Channels} messages
  */
+@SuppressWarnings("java:S2326")
 public interface Action<T> {
 }

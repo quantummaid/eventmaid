@@ -26,5 +26,6 @@ package de.quantummaid.eventmaid.internal.pipe.exceptions;
  */
 public class NoSuitableSubscriberException extends Exception {
     public NoSuitableSubscriberException() {
+        super();
     }
 }

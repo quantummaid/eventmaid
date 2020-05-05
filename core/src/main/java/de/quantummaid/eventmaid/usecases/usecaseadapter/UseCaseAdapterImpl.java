@@ -41,6 +41,7 @@ import static lombok.AccessLevel.PRIVATE;
 @ToString
 @EqualsAndHashCode
 @RequiredArgsConstructor(access = PRIVATE)
+@SuppressWarnings("java:S107")
 final class UseCaseAdapterImpl implements UseCaseAdapter {
     private final List<UseCaseCallingInformation<?>> useCaseCallingInformations;
     private final UseCaseInstantiator useCaseInstantiator;

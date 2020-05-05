@@ -44,6 +44,7 @@ import static lombok.AccessLevel.PRIVATE;
  * @see <a href="https://github.com/quantummaid/eventmaid#subscription">EventMaid Documentation</a>
  */
 @RequiredArgsConstructor(access = PRIVATE)
+@SuppressWarnings("java:S1452")
 public final class Subscription<T> implements Action<T> {
     /* Use CopyOnWriteArrayList, because
      - concurrent collection

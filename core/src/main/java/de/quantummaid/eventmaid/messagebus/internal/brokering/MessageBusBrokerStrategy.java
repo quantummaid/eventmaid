@@ -30,6 +30,7 @@ import de.quantummaid.eventmaid.subscribing.SubscriptionId;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("java:S1452")
 public interface MessageBusBrokerStrategy {
 
     Channel<Object> getDeliveringChannelFor(EventType eventType);
