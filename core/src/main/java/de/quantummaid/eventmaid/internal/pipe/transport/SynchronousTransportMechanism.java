@@ -44,7 +44,7 @@ public final class SynchronousTransportMechanism<T> implements TransportMechanis
 
     @Override
     public void close(final boolean finishRemainingTasks) {
-
+        // do nothing
     }
 
     @Override

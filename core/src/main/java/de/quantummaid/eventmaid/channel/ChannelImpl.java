@@ -50,6 +50,7 @@ import static de.quantummaid.eventmaid.processingcontext.EventType.eventTypeFrom
 import static de.quantummaid.eventmaid.processingcontext.ProcessingContext.processingContext;
 import static lombok.AccessLevel.PRIVATE;
 
+@SuppressWarnings("java:S107")
 final class ChannelImpl<T> implements Channel<T> {
     private final Pipe<ProcessingContext<T>> acceptingPipe;
     private final List<Filter<ProcessingContext<T>>> preFilter;

@@ -36,6 +36,7 @@ import java.util.Map;
  * @see <a href="https://github.com/quantummaid/eventmaid#messagebus-statistics">EventMaid Documentation</a>
  * @see <a href="https://github.com/quantummaid/eventmaid#querying-subscriber">EventMaid Documentation</a>
  */
+@SuppressWarnings("java:S1452")
 public interface MessageBusStatusInformation {
 
     /**

@@ -65,6 +65,7 @@ import static de.quantummaid.eventmaid.identification.MessageId.newUniqueMessage
 
 @ToString
 @EqualsAndHashCode
+@SuppressWarnings("java:S107")
 public final class ProcessingContext<T> {
     private final EventType eventType;
     private final MessageId messageId;

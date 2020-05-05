@@ -31,5 +31,6 @@ import de.quantummaid.eventmaid.messagefunction.MessageFunction;
  */
 public class AlreadyClosedException extends RuntimeException {
     public AlreadyClosedException() {
+        super();
     }
 }
