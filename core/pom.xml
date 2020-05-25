@@ -26,11 +26,11 @@
     <parent>
         <groupId>de.quantummaid.eventmaid</groupId>
         <artifactId>eventmaid-parent</artifactId>
-        <version>1.0.43</version>
+        <version>1.0.43-SNAPSHOT</version>
     </parent>
 
     <artifactId>core</artifactId>
-    <version>1.0.43</version>
+    <version>1.0.43-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>EventMaid - Core Library</name>
@@ -45,6 +45,18 @@
 
         <plugin-update-file-checksum>35fe547b725ca8e71b0d13c8c21894df</plugin-update-file-checksum>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>bom</artifactId>
+                <version>2.13.20</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -71,5 +83,26 @@
             <version>2.2</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-dynamodb -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>dynamodb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>sqs</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-lambda-java-events</artifactId>
+            <version>2.2.7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-lambda-java-core</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
     </dependencies>
 </project>
