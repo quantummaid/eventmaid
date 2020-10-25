@@ -26,12 +26,12 @@
     <parent>
         <groupId>de.quantummaid</groupId>
         <artifactId>quantummaid-opensource-parent</artifactId>
-        <version>0.9.61</version>
+        <version>0.9.63</version>
     </parent>
 
     <groupId>de.quantummaid.eventmaid</groupId>
     <artifactId>eventmaid-parent</artifactId>
-    <version>1.0.60</version>
+    <version>1.0.61</version>
     <packaging>pom</packaging>
 
     <name>EventMaid</name>
